@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mapeador Expresivo Pro 3 - Official Manual</title>
+<style>
+    @page {
+        size: A4;
+        margin: 0.8cm 1.2cm 0.8cm 1.2cm;
+        @bottom-right {
+            content: counter(page);
+        }
+    }
+    body {
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+        color: #1e293b;
+        background-color: #ffffff;
+        line-height: 1.35;
+        font-size: 10px;
+        margin: 0;
+        padding: 0;
+    }
+    div.page {
+        page-break-before: always;
+        break-before: page;
+        page-break-after: always;
+        break-after: page;
+        box-sizing: border-box;
+    }
+    div.page:first-of-type {
+        page-break-before: avoid;
+        break-before: avoid;
+    }
+    @media print {
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        div.page {
+            page-break-before: always !important;
+            break-before: page !important;
+            page-break-after: always !important;
+            break-after: page !important;
+            min-height: 25.5cm !important;
+            display: block !important;
+        }
+        div.page:first-of-type {
+            page-break-before: avoid !important;
+            break-before: avoid !important;
+        }
+    }
+    .page-last {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+    .header-banner {
+        background: #0f172a;
+        color: #ffffff;
+        padding: 16px 20px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        border-left: 5px solid #4f46e5;
+    }
+    .header-banner h1 {
+        font-size: 19px;
+        margin: 0 0 3px 0;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #f8fafc;
+    }
+    .header-banner .subtitle {
+        font-size: 11.5px;
+        color: #94a3b8;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+    .meta-grid {
+        display: flex;
+        gap: 14px;
+        font-size: 9.5px;
+        border-top: 1px solid #334155;
+        padding-top: 6px;
+        color: #cbd5e1;
+    }
+    .meta-item strong {
+        color: #f8fafc;
+    }
+    .section-block {
+        margin-bottom: 10px;
+    }
+    .section-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #0f172a;
+        border-bottom: 2px solid #4f46e5;
+        padding-bottom: 3px;
+        margin-top: 10px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .intro-text {
+        font-size: 10.5px;
+        color: #334155;
+        margin-bottom: 10px;
+    }
+    .toc-container {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 14px 18px;
+        margin-top: 12px;
+    }
+    .toc-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #0f172a;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #4f46e5;
+        padding-bottom: 4px;
+    }
+    .toc-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .toc-item {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        font-size: 10px;
+        margin-bottom: 7px;
+        color: #334155;
+    }
+    .toc-item strong {
+        color: #0f172a;
+    }
+    .toc-dots {
+        flex-grow: 1;
+        border-bottom: 1px dashed #94a3b8;
+        margin: 0 8px;
+    }
+    .toc-page {
+        font-weight: 700;
+        color: #4f46e5;
+        min-width: 24px;
+        text-align: right;
+    }
+    .dual-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    .card {
+        border-radius: 5px;
+        padding: 9px 13px;
+        border: 1px solid #cbd5e1;
+    }
+    .card-simple {
+        background-color: #f8fafc;
+        border-left: 4px solid #059669;
+    }
+    .card-simple .card-header {
+        color: #065f46;
+        font-weight: 700;
+        font-size: 10.5px;
+        margin-bottom: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    .card-extended {
+        background-color: #f1f5f9;
+        border-left: 4px solid #2563eb;
+    }
+    .card-extended .card-header {
+        color: #1e40af;
+        font-weight: 700;
+        font-size: 10.5px;
+        margin-bottom: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    .card-body {
+        font-size: 10px;
+        color: #334155;
+        line-height: 1.35;
+    }
+    .card-body ul {
+        margin: 3px 0 0 0;
+        padding-left: 16px;
+    }
+    .card-body li {
+        margin-bottom: 2px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        margin-bottom: 10px;
+        font-size: 9px;
+    }
+    th, td {
+        padding: 4px 6px;
+        text-align: left;
+        border: 1px solid #cbd5e1;
+    }
+    th {
+        background-color: #0f172a;
+        color: #ffffff;
+        font-weight: 600;
+    }
+    tr:nth-child(even) {
+        background-color: #f8fafc;
+    }
+    code {
+        font-family: 'Consolas', 'Courier New', monospace;
+        background-color: #e2e8f0;
+        color: #0f172a;
+        padding: 1px 3px;
+        border-radius: 3px;
+        font-size: 9.5px;
+    }
+    .formula-box {
+        background-color: #0f172a;
+        color: #38bdf8;
+        font-family: 'Consolas', monospace;
+        padding: 6px 10px;
+        border-radius: 4px;
+        margin: 6px 0;
+        font-size: 9.5px;
+    }
+    .diagram-box {
+        background-color: #f1f5f9;
+        color: #334155;
+        border: 1px solid #cbd5e1;
+        font-family: 'Consolas', monospace;
+        padding: 6px 10px;
+        border-radius: 4px;
+        margin: 6px 0;
+        font-size: 9.5px;
+        white-space: pre;
+    }
+    .six-lore-tag {
+        background-color: #0f172a;
+        color: #a5b4fc;
+        font-family: 'Consolas', 'Courier New', monospace;
+        font-size: 9.5px;
+        padding: 7px 10px;
+        border-radius: 5px;
+        border-left: 4px solid #818cf8;
+        margin-top: 6px;
+        margin-bottom: 6px;
+        line-height: 1.35;
+    }
+    .six-lore-tag span {
+        color: #f43f5e;
+        font-weight: 700;
+    }
+    .secret-ascii {
+        color: #0f172a;
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        font-family: 'Consolas', 'Courier New', monospace;
+        font-size: 2.6pt;
+        line-height: 2.7pt;
+        letter-spacing: -0.1px;
+        margin: 6px 0 0 0;
+        padding: 4px;
+        text-align: center;
+        white-space: pre;
+        user-select: text;
+        -webkit-user-select: text;
+        pointer-events: auto;
+    }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: COVER & INDEX -->
+<div class="page">
+    <div class="header-banner">
+        <h1>Mapeador Expresivo Pro 3</h1>
+        <div class="subtitle">Official User Manual and Algorithmic Specification — Synthesizer V Studio 2 PRO</div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Author:</strong> Nyoru.X</div>
+            <div class="meta-item"><strong>Version:</strong> v3.6.1 (DOD Engine)</div>
+            <div class="meta-item"><strong>Minimum Environment:</strong> SynthV Studio 2 PRO v2.2.1+ (Build 67072)</div>
+            <div class="meta-item"><strong>Runtime Allocation:</strong> 0 B GC Alloc</div>
+        </div>
+    </div>
+
+    <p class="intro-text">
+        This manual presents the comprehensive documentation of the <strong>Mapeador Expresivo Pro 3</strong> system. Each function is organized into two layers: a <strong>Simple Summary</strong> oriented towards quick workflow comprehension, followed by an <strong>Extended Technical Specification</strong> targeted at advanced producers and audio engineers.
+    </p>
+
+    <div class="toc-container">
+        <div class="toc-title">Manual Index</div>
+        <ul class="toc-list">
+            <li class="toc-item">
+                <span><strong>1. Installation and System Requirements</strong> — SVClient configuration and JSON persistence</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">Page 2</span>
+            </li>
+            <li class="toc-item">
+                <span><strong>2. Mode 0: RAE Prosody and Automatic Vocal Expression</strong> — Diphthongs, hiatuses, scales and contours</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">Page 3 - 4</span>
+            </li>
+            <li class="toc-item">
+                <span><strong>3. Mode 1: Hermite Curves / TCB Splines Automation</strong> — TCB, RDP and S-Curves parameters</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">Page 5</span>
+            </li>
+            <li class="toc-item">
+                <span><strong>4. Mode 2: Vocal Harmonies and Just Intonation</strong> — Pure diatonic micro-tuning and choir presets</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">Page 6 - 7</span>
+            </li>
+            <li class="toc-item">
+                <span><strong>5. Mode 3: Strict Fuxian Counterpoint</strong> — Fuxian species and parallelisms avoidance</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">Page 8</span>
+            </li>
+            <li class="toc-item">
+                <span><strong>6. Mode 4: Progressions, Synchronization and Scale Quantization</strong> — Voice Leading, choirs and rhythm patterns</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">Page 9 - 10</span>
+            </li>
+            <li class="toc-item">
+                <span><strong>7. Vocal Expressiveness Presets Catalog</strong> — Detailed table of the 21 real styles with vibrato and vocal modes</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">Page 11 - 12</span>
+            </li>
+            <li class="toc-item">
+                <span><strong>8. Data-Oriented Design (DOD) Architecture and Performance</strong> — 0 B GC Alloc and static buffers</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">Page 13</span>
+            </li>
+            <li class="toc-item">
+                <span><strong>9. Consciousness Log and System Shutdown</strong> — Six's message and final ASCII Art</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">Page 14</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- PAGE 2: REQUIREMENTS & INSTALLATION -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">1. Installation and System Requirements</div>
+        <div class="dual-container">
+            <div class="card card-simple">
+                <div class="card-header">Simple Summary (Practical Use)</div>
+                <div class="card-body">
+                    To install the script in Synthesizer V Studio Pro:
+                    <ul>
+                        <li>Open the program and navigate to the top menu <code>Scripts</code> &rarr; <code>Open Scripts Folder</code>.</li>
+                        <li>Copy the compiled file <code>MapeadorExpresivo.lua</code> into that directory.</li>
+                        <li>In the SynthV editor, select <code>Scripts</code> &rarr; <code>Rescan Scripts</code>. The panel will be ready to execute from the scripts menu.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card card-extended">
+                <div class="card-header">Extended Technical Specification</div>
+                <div class="card-body">
+                    Execution environment, lifecycle and integration with the Dreamtonics API:
+                    <ul>
+                        <li><strong>Engine Architecture:</strong> Developed on Lua 5.4 / LuaJIT in the <code>SVClient</code> client layer. It interacts directly with the main <code>SV</code> object for project, track, group, and automation control.</li>
+                        <li><strong>Configuration Persistence:</strong> Reads and writes interface preferences (ComboBoxes, CheckBoxes and Sliders) in structured JSON format at <code>%APPDATA%\\Dreamtonics\\Synthesizer V Studio 2\\scripts\\mapeador_user_config.json</code> using native Lua I/O functions without external libraries.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="intro-text"><strong>JSON Configuration File Structure:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>JSON Parameter</th>
+                    <th>Type</th>
+                    <th>Default Value</th>
+                    <th>Purpose / Interface Control</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>"idiomaUI"</code></td>
+                    <td>Numeric (Int)</td>
+                    <td><code>0</code> (Spanish)</td>
+                    <td>Determines the translation selected for labels and messages (0: ES, 1: EN, 2: JA).</td>
+                </tr>
+                <tr>
+                    <td><code>"modo"</code></td>
+                    <td>Numeric (Int)</td>
+                    <td><code>0</code></td>
+                    <td>Selected operating mode (0: Generate from Text, 1: Express Notes, 2: Harmony, etc.).</td>
+                </tr>
+                <tr>
+                    <td><code>"preset"</code></td>
+                    <td>Numeric (Int)</td>
+                    <td><code>0</code></td>
+                    <td>Index of the selected vocal expressiveness preset in the list.</td>
+                </tr>
+                <tr>
+                    <td><code>"intensidad"</code></td>
+                    <td>Numeric (Int)</td>
+                    <td><code>100</code></td>
+                    <td>Automation effect multiplier percentage (0% to 200%).</td>
+                </tr>
+                <tr>
+                    <td><code>"letra"</code></td>
+                    <td>String</td>
+                    <td><code>"ah~ oo~"</code></td>
+                    <td>Syllables separated by spaces for melody generation.</td>
+                </tr>
+                <tr>
+                    <td><code>"basePitch"</code></td>
+                    <td>Numeric (Int)</td>
+                    <td><code>60</code> (C4)</td>
+                    <td>Starting base MIDI note in the note editor (range 36 to 84).</td>
+                </tr>
+                <tr>
+                    <td><code>"targetNotesMode"</code></td>
+                    <td>Numeric (Int)</td>
+                    <td><code>0</code></td>
+                    <td>Generation target (0: Create new notes, 1: Replace selected notes).</td>
+                </tr>
+                <tr>
+                    <td><code>"armoniaIntervalosCustom"</code></td>
+                    <td>String</td>
+                    <td><code>"+3, +7, -5"</code></td>
+                    <td>Custom list of diatonic (d) or chromatic (c) intervals.</td>
+                </tr>
+                <tr>
+                    <td><code>"rangoNotaMin"</code></td>
+                    <td>Numeric (Int)</td>
+                    <td><code>48</code> (C3)</td>
+                    <td>Lower limit for note pitch generation (range 36 to 84).</td>
+                </tr>
+                <tr>
+                    <td><code>"rangoNotaMax"</code></td>
+                    <td>Numeric (Int)</td>
+                    <td><code>72</code> (C5)</td>
+                    <td>Upper limit for note pitch generation (range 36 to 84).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="diagram-box">
+[Synthesizer V Editor Folder]
+ └── %APPDATA%\\Dreamtonics\\Synthesizer V Studio 2\\
+      └── scripts\\
+           ├── MapeadorExpresivo.lua                <-- Main unified script
+           └── mapeador_user_config.json            <-- User configuration JSON file
+        </div>
+    </div>
+</div>
+
+<!-- PAGE 3: MODE 0 -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">2. Mode 0: RAE Prosody and Automatic Vocal Expression (Part 1)</div>
+        <div class="dual-container">
+            <div class="card card-simple">
+                <div class="card-header">Simple Summary (Practical Use)</div>
+                <div class="card-body">
+                    Analyzes the lyrics of songs to automatically modulate pitch and tension based on speech stress rules. Generates natural pitch fluctuations on stressed syllables and phrase endings.
+                </div>
+            </div>
+            <div class="card card-extended">
+                <div class="card-header">Extended Technical Specification</div>
+                <div class="card-body">
+                    Multilingual tokenizer and prosodic pitch engine based on linguistic analysis:
+                    <ul>
+                        <li><strong>Tokenization and Syllabification:</strong> Scans double-byte UTF-8 graphemes in Spanish, English, and Japanese to identify diphthongs, hiatuses, stressed syllables, and phrase inflections. Supports manual separation using hyphens (<code>-</code>) and vertical bars (<code>|</code>).</li>
+                        <li><strong>Generation Modes:</strong> Allows free note generation from the playhead or replacing the text/pitch of <strong>Selected Notes</strong> in the editor while keeping alignment.</li>
+                        <li><strong>Parametric Melodic Algorithms:</strong> Incorporates geometric patterns like <em>Ascending / Descending Arpeggio</em>, <em>Consonant Jumps</em> (3rds/4ths/5ths), and <em>Random Scale Step</em>, bounded strictly by the configured note range.</li>
+                        <li><strong>Key Auto-Detection (Krumhansl-Kessler Alg.):</strong> Calculates note duration weights and applies statistical correlation coefficients. Incorporates metric weighting (1.5x multiplier on beat 1 and strong beats) to find the correct diatonic key.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="intro-text"><strong>Pearson Correlation Coefficient Formula for Key Detection:</strong></p>
+        <div class="formula-box">
+            {formula_pearson}
+        </div>
+        <p class="intro-text">{desc_pearson}</p>
+
+        <p class="intro-text"><strong>Phonemic Prosodic Modulation Rules:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Syllable / Context Class</th>
+                    <th>Pitch Modulation</th>
+                    <th>Tension Modulation</th>
+                    <th>Loudness Modulation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Stressed Syllable (RAE Accent: á, é, í, ó, ú)</strong></td>
+                    <td>Subtle rise (+$15$ to $25$ cents)</td>
+                    <td>Tension increase (+15%)</td>
+                    <td>Volume punch (+1.2 dB)</td>
+                </tr>
+                <tr>
+                    <td><strong>Exclamative Phrase Ending</strong></td>
+                    <td>Late progressive rise</td>
+                    <td>High (+20%)</td>
+                    <td>Sustained loudness</td>
+                </tr>
+                <tr>
+                    <td><strong>Interrogative Phrase Ending</strong></td>
+                    <td>Sharp final rise (+$80$ cents)</td>
+                    <td>Soft tension drop</td>
+                    <td>Decaying volume</td>
+                </tr>
+                <tr>
+                    <td><strong>Initial Unstressed Syllable</strong></td>
+                    <td>Flat pitch on baseline</td>
+                    <td>Neutral / low tension</td>
+                    <td>Soft attack</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PAGE 4: MODE 0 (Part 2) -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">2. Mode 0: RAE Prosody and Automatic Vocal Expression (Part 2)</div>
+
+        <p class="intro-text"><strong>Catalog of the 15 Musical Scales (MIDI Degrees from Root):</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Scale Name</th>
+                    <th>Diatonic Degrees (Semitones)</th>
+                    <th>Notes in C (Example)</th>
+                    <th>Notes Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><code>[0]</code></td><td><strong>Major Pentatonic</strong></td><td>0, 2, 4, 7, 9</td><td>C D E G A</td><td>5</td></tr>
+                <tr><td><code>[1]</code></td><td><strong>Minor Pentatonic</strong></td><td>0, 3, 5, 7, 10</td><td>C Eb F G Bb</td><td>5</td></tr>
+                <tr><td><code>[2]</code></td><td><strong>Natural Major (Ionian)</strong></td><td>0, 2, 4, 5, 7, 9, 11</td><td>C D E F G A B</td><td>7</td></tr>
+                <tr><td><code>[3]</code></td><td><strong>Natural Minor (Aeolian)</strong></td><td>0, 2, 3, 5, 7, 8, 10</td><td>C D Eb F G Ab Bb</td><td>7</td></tr>
+                <tr><td><code>[4]</code></td><td><strong>Harmonic Minor</strong></td><td>0, 2, 3, 5, 7, 8, 11</td><td>C D Eb F G Ab B</td><td>7</td></tr>
+                <tr><td><code>[5]</code></td><td><strong>Melodic Minor</strong></td><td>0, 2, 3, 5, 7, 9, 11</td><td>C D Eb F G A B</td><td>7</td></tr>
+                <tr><td><code>[6]</code></td><td><strong>Dorian</strong></td><td>0, 2, 3, 5, 7, 9, 10</td><td>C D Eb F G A Bb</td><td>7</td></tr>
+                <tr><td><code>[7]</code></td><td><strong>Phrygian</strong></td><td>0, 1, 3, 5, 7, 8, 10</td><td>C Db Eb F G Ab Bb</td><td>7</td></tr>
+                <tr><td><code>[8]</code></td><td><strong>Lydian</strong></td><td>0, 2, 4, 6, 7, 9, 11</td><td>C D E F# G A B</td><td>7</td></tr>
+                <tr><td><code>[9]</code></td><td><strong>Mixolydian</strong></td><td>0, 2, 4, 5, 7, 9, 10</td><td>C D E F G A Bb</td><td>7</td></tr>
+                <tr><td><code>[10]</code></td><td><strong>Locrian</strong></td><td>0, 1, 3, 5, 6, 8, 10</td><td>C Db Eb F Gb Ab Bb</td><td>7</td></tr>
+                <tr><td><code>[11]</code></td><td><strong>Blues</strong></td><td>0, 3, 5, 6, 7, 10</td><td>C Eb F F# G Bb</td><td>6</td></tr>
+                <tr><td><code>[12]</code></td><td><strong>Chromatic</strong></td><td>0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11</td><td>All semitones</td><td>12</td></tr>
+                <tr><td><code>[13]</code></td><td><strong>Hungarian Minor</strong></td><td>0, 2, 3, 6, 7, 8, 11</td><td>C D Eb F# G Ab B</td><td>7</td></tr>
+                <tr><td><code>[14]</code></td><td><strong>Double Harmonic (Byzantine)</strong></td><td>0, 1, 4, 5, 7, 8, 11</td><td>C Db E F G Ab B</td><td>7</td></tr>
+            </tbody>
+        </table>
+
+        <p class="intro-text"><strong>Catalog of the 9 Parametric Melodic Contours:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Contour Name</th>
+                    <th>Movement Algorithm Description</th>
+                    <th>Typical Usage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><code>[0]</code></td><td><strong>Prosodic Arc</strong></td><td>Scales the stressed syllable to the peak of the phrase and decays.</td><td>Ballads, expressive pop.</td></tr>
+                <tr><td><code>[1]</code></td><td><strong>Pentatonic with Leaps</strong></td><td>Moves by pentatonic 3rds and 4ths prioritizing active scale notes.</td><td>J-Pop, anime themes.</td></tr>
+                <tr><td><code>[2]</code></td><td><strong>Harmonic Wave</strong></td><td>Smooth oscillation between base note and its diatonic 5th via quadratic wave.</td><td>Pop, smooth R&amp;B.</td></tr>
+                <tr><td><code>[3]</code></td><td><strong>Chaotic Chromatic Glitch</strong></td><td>Bounded random shifts in chromatic semitones up to ±3 st.</td><td>Breakcore, glitchcore.</td></tr>
+                <tr><td><code>[4]</code></td><td><strong>Expressive Flat</strong></td><td>Repeats the base note with micro prosodic variations of ±1 semitone.</td><td>Chiptune, robotic AI voice.</td></tr>
+                <tr><td><code>[5]</code></td><td><strong>Ascending Arpeggio</strong></td><td>Progresses step-by-step towards the maximum range note.</td><td>Trance build-ups, fanfares.</td></tr>
+                <tr><td><code>[6]</code></td><td><strong>Descending Arpeggio</strong></td><td>Progresses step-by-step from maximum to minimum range note.</td><td>Final cadences, dramatic falls.</td></tr>
+                <tr><td><code>[7]</code></td><td><strong>Random Scale Step</strong></td><td>Movement by step on active scale with random direction per syllable.</td><td>Generative improvisation.</td></tr>
+                <tr><td><code>[8]</code></td><td><strong>Consonant Leaps</strong></td><td>Selects closest consonant interval (3rd, 4th, 5th) on diatonic scale.</td><td>Counterpoint, classical harmony.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PAGE 5: MODE 1 -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">3. Mode 1: Hermite Curves / TCB Splines Automation</div>
+        <div class="dual-container">
+            <div class="card card-simple">
+                <div class="card-header">Simple Summary (Practical Use)</div>
+                <div class="card-body">
+                    Draws smooth transitions for singer parameters (tension, breath, vibrato, volume) instead of sudden jumps. Simplifies created nodes to keep the project clean, and applies continuous curves on large note intervals.
+                </div>
+            </div>
+            <div class="card card-extended">
+                <div class="card-header">Extended Technical Specification</div>
+                <div class="card-body">
+                    Geometric interpolation engine and automation nodes reduction:
+                    <ul>
+                        <li><strong>Kochanek-Bartels Splines (TCB):</strong> Independent Tension ($T$), Continuity ($C$) and Bias ($B$) controls on tangent estimations to prevent overshoots and oscillations.</li>
+                        <li><strong>Ramer-Douglas-Peucker Algorithm (RDP):</strong> Redundant points simplification and filtering based on relative tolerances (scaled dynamically to 0.2% of the active parameter range).</li>
+                        <li><strong>Sigmoid Portamento Curves (S-Curves):</strong> Smooth pitch transitions calculated with a cubic function proportional to the melodic step size.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="intro-text"><strong>TCB Tangent Estimation and Cubic Hermite Interpolation:</strong></p>
+        <div class="formula-box">
+            {formula_hermite}
+        </div>
+        <div class="formula-box">
+            {formula_tcb_in}<br>
+            {formula_tcb_out}
+        </div>
+
+        <p class="intro-text">{desc_tcb}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>TCB Parameter</th>
+                    <th>Value</th>
+                    <th>Visual Curve Impact</th>
+                    <th>Acoustic Singer Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Tension ($T$)</strong></td>
+                    <td>High (1.0)</td>
+                    <td>Tight curve, sharp corners</td>
+                    <td>Fast vocal transitions, agile inflections.</td>
+                </tr>
+                <tr>
+                    <td><strong>Continuity ($C$)</strong></td>
+                    <td>Low (-1.0)</td>
+                    <td>Sharp break at control node</td>
+                    <td>Simulates harsh attacks in timbral shifts.</td>
+                </tr>
+                <tr>
+                    <td><strong>Bias ($B$)</strong></td>
+                    <td>Positive (1.0)</td>
+                    <td>Curve skewed to next node</td>
+                    <td>Vocal anticipation / fast articulation.</td>
+                </tr>
+                <tr>
+                    <td><strong>Bias ($B$)</strong></td>
+                    <td>Negative (-1.0)</td>
+                    <td>Curve skewed to previous node</td>
+                    <td>Delayed articulation / smooth note release.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PAGE 6: MODE 2 -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">4. Mode 2: Vocal Harmonies and Just Intonation (Part 1)</div>
+        <div class="dual-container">
+            <div class="card card-simple">
+                <div class="card-header">Simple Summary (Practical Use)</div>
+                <div class="card-body">
+                    Creates vocal harmonies (duos, trios, full choirs) on new tracks based on the original melody. It applies micro-tuning to notes so chords sound perfectly in-tune (pure intonation) without beating.
+                </div>
+            </div>
+            <div class="card card-extended">
+                <div class="card-header">Extended Technical Specification</div>
+                <div class="card-body">
+                    Diatonic pitch transpose engine and vocal anti-phase processor:
+                    <ul>
+                        <li><strong>Just Intonation (JI):</strong> Real-time micro-pitch correction applying frequency ratio tuning (e.g. 5:4 for major 3rds) instead of 12-Tone Equal Temperament (12-TET), reducing acoustic beating.</li>
+                        <li><strong>Vocal Anti-Phase (Haas Effect):</strong> Generates timing delays (12 to 28 ms) and micro detuning (±8 to 15 cents) on generated harmony tracks using a Gaussian distribution, widening the stereo image.</li>
+                        <li><strong>Automatic AI Retakes:</strong> Triggers AI Retakes on generated notes (cloning singer vocal mode settings) to ensure unique acoustic variations on each harmony voice.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="intro-text"><strong>Gaussian Density Function for Timing and Pitch Shifts (Anti-Phase):</strong></p>
+        <div class="formula-box">
+            {formula_gauss}
+        </div>
+        <p class="intro-text">{desc_gauss}</p>
+
+        <p class="intro-text"><strong>Micro-Tuning adjustments for Pure Just Intonation:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Physical Interval</th>
+                    <th>Pure Frequency Ratio</th>
+                    <th>Pure Tuning (Cents)</th>
+                    <th>Equal Temperament (Cents)</th>
+                    <th>Micro-Deviation Applied</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Unison / Octave</strong></td>
+                    <td>1:1 / 2:1</td>
+                    <td>$0.0$ / $1200.0$</td>
+                    <td>$0$ / $1200$</td>
+                    <td><code>0.00 c</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Minor Third</strong></td>
+                    <td>6:5</td>
+                    <td>$315.64$</td>
+                    <td>$300$</td>
+                    <td><code>+15.64 c</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Major Third</strong></td>
+                    <td>5:4</td>
+                    <td>$386.31$</td>
+                    <td>$400$</td>
+                    <td><code>-13.69 c</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Perfect Fifth</strong></td>
+                    <td>3:2</td>
+                    <td>$701.96$</td>
+                    <td>$700$</td>
+                    <td><code>+1.96 c</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Major Sixth</strong></td>
+                    <td>5:3</td>
+                    <td>$884.36$</td>
+                    <td>$900$</td>
+                    <td><code>-15.64 c</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PAGE 7: MODE 2 (Part 2) -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">4. Mode 2: Vocal Harmonies and Just Intonation (Part 2)</div>
+
+        <p class="intro-text"><strong>Choir Presets and Multi-Track Vocal Setup:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Choir Preset Name</th>
+                    <th>Diatonic Intervals</th>
+                    <th>Generated Voices</th>
+                    <th>New Tracks Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><code>[0]</code></td><td><strong>Upper 3rd Duo</strong></td><td>+2 diat. degrees</td><td>Voice 2 (3rd Up)</td><td>1</td></tr>
+                <tr><td><code>[1]</code></td><td><strong>Lower 3rd Duo</strong></td><td>-2 diat. degrees</td><td>Voice 2 (3rd Down)</td><td>1</td></tr>
+                <tr><td><code>[2]</code></td><td><strong>Pop Trio (3rds &amp; 5ths)</strong></td><td>+2, +4 diat. degrees</td><td>Voice 2 (3rd), Voice 3 (5th)</td><td>2</td></tr>
+                <tr><td><code>[3]</code></td><td><strong>SATB Choir Quartet</strong></td><td>+4, +2, -4, -7 diat. degrees</td><td>Soprano, Alto, Tenor, Bass</td><td>4</td></tr>
+                <tr><td><code>[4]</code></td><td><strong>Power Duo (5ths &amp; Octaves)</strong></td><td>+4, +7 diat. degrees</td><td>Power 5th, Octave</td><td>2</td></tr>
+                <tr><td><code>[5]</code></td><td><strong>Anti-Phase Unison Choir</strong></td><td>0, 0 (unison)</td><td>Double A, Double B</td><td>2</td></tr>
+            </tbody>
+        </table>
+
+        <div class="diagram-box">
+[Voice Structure: SATB Choir Quartet (Preset [3])]
+
+Soprano  [+4 diatonic degrees from base melody]  -- New Track 1
+Alto     [+2 diatonic degrees from base melody]  -- New Track 2
+Melody   [Original Track / Cantus Firmus]        -- Original Track (unmodified)
+Tenor    [-4 diatonic degrees from base melody]  -- New Track 3
+Bass     [-7 diatonic degrees from base melody]  -- New Track 4
+
+Each track clones: Singer voice + vocalModeParams + triggers auto AI Retakes.
+        </div>
+    </div>
+</div>
+
+<!-- PAGE 8: MODE 3 -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">5. Mode 3: Strict Fuxian Counterpoint</div>
+        <div class="dual-container">
+            <div class="card card-simple">
+                <div class="card-header">Simple Summary (Practical Use)</div>
+                <div class="card-body">
+                    Generates an independent accompanying melody that interacts with the main voice. The countermelody moves in the opposite direction of the solo voice and follows classical rules to avoid clashing.
+                </div>
+            </div>
+            <div class="card card-extended">
+                <div class="card-header">Extended Technical Specification</div>
+                <div class="card-body">
+                    Algorithmic countermelody engine based on Johann Joseph Fux counterpoint rules:
+                    <ul>
+                        <li><strong>Counterpoint Species:</strong> First species (1:1), second species (2:1), and third species (4:1) with consonant notes on downbeats and passing tones on weak beats.</li>
+                        <li><strong>Strict Voice Leading Constraints:</strong> Strict prohibition of consecutive parallel fifths and octaves. Prevents and penalizes Voice Crossing and consecutive jumps in the same direction.</li>
+                        <li><strong>Leaps Compensation and Climax:</strong> Score bonuses when a voice compensates a wide leap (&ge;5 semitones) by moving in the opposite direction, and limits the melodic climax to a single event.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="intro-text"><strong>Weights and Penalties Table of the Fux Decision Matrix:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Counterpoint Rule</th>
+                    <th>Evaluated Condition</th>
+                    <th>Score Weight</th>
+                    <th>Algorithmic Effect</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Imperfect Consonance</strong></td>
+                    <td>Interval of 3rd or 6th with Cantus</td>
+                    <td><code>+60</code></td>
+                    <td>Favors flow and vocal harmonic blend.</td>
+                </tr>
+                <tr>
+                    <td><strong>Perfect Consonance</strong></td>
+                    <td>Interval of 5th or Octave</td>
+                    <td><code>+35</code></td>
+                    <td>Harmonic stability permitted at cadences.</td>
+                </tr>
+                <tr>
+                    <td><strong>Parallelism Avoidance</strong></td>
+                    <td>Consecutive parallel 5ths or 8ves</td>
+                    <td><code>-300</code></td>
+                    <td>Proscribes empty classical movements.</td>
+                </tr>
+                <tr>
+                    <td><strong>Leap Compensation</strong></td>
+                    <td>Opposite step after wide leap (&ge;5 semitones)</td>
+                    <td><code>+45</code></td>
+                    <td>Stabilizes melody and avoids voice drift.</td>
+                </tr>
+                <tr>
+                    <td><strong>Voice Crossing</strong></td>
+                    <td>Countermelody crosses below Cantus</td>
+                    <td><code>-150</code></td>
+                    <td>Maintains hierarchy and clarity in mix.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="diagram-box">
+[Contrary Motion (Preferred)]                 [Forbidden Parallel Motion (5ths/8ves)]
+   Cantus Firmus (High Voice)                 Cantus Firmus
+      (A4) -----> (B4)                         (D4) -----> (E4)
+       \\          /                             |           |  <-- 5th Interval (7 semitones)
+        \\        /                              |           |      on both notes
+         v      v                                v           v
+   Counterpoint (Low Voice)                       Counterpoint
+      (F4) -----> (D4)                          (G3) -----> (A3)
+        </div>
+    </div>
+</div>
+
+<!-- PAGE 9: MODE 4 -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">6. Mode 4: Progressions, Synchronization and Scale (Part 1)</div>
+        <div class="dual-container">
+            <div class="card card-simple">
+                <div class="card-header">Simple Summary (Practical Use)</div>
+                <div class="card-body">
+                    Creates chord progressions automatically in various genres (Pop, J-Pop, Jazz, Dark Ambient, Breakcore). Arranges chord inversions so voices move as little as possible, ensuring smooth transitions.
+                </div>
+            </div>
+            <div class="card card-extended">
+                <div class="card-header">Extended Technical Specification</div>
+                <div class="card-body">
+                    Matrix calculation of voice leading by quadratic cost optimization:
+                    <ul>
+                        <li><strong>Minimal Energy Voice Leading:</strong> Analyzes all inversions and octave placements of a new chord relative to the previous one and selects the setup minimizing the sum of squared pitch changes.</li>
+                        <li><strong>Accompaniment Rhythms and Structure:</strong> Builds chords of 3 to 6 notes (triads, 7ths, 9ths, 13ths, altered dominants). Generates structured rhythm patterns: legato pad, syncopated quarter note comping, eighth note arpeggios, or sixteenth note chops.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="intro-text"><strong>Accumulated Quadratic Cost Formula (Displacement Energy):</strong></p>
+        <div class="formula-box">
+            {formula_energy}
+        </div>
+        <p class="intro-text">{desc_energy}</p>
+
+        <p class="intro-text"><strong>Sample Harmonic Progressions in the Database:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Progression Style</th>
+                    <th>Diatonic Cadence / Degrees</th>
+                    <th>Application Genre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>[1]</code></td>
+                    <td>J-Pop / Anime Royal</td>
+                    <td>IVmaj7 &rarr; V7 &rarr; iii7 &rarr; vi</td>
+                    <td>Bright Japanese pop, anime soundtracks.</td>
+                </tr>
+                <tr>
+                    <td><code>[2]</code></td>
+                    <td>Pop / EDM Anthem</td>
+                    <td>Iadd9 &rarr; V &rarr; vi7 &rarr; IVmaj7</td>
+                    <td>Electronic anthems, commercial pop.</td>
+                </tr>
+                <tr>
+                    <td><code>[3]</code></td>
+                    <td>Neo-Soul / R&B Lounge</td>
+                    <td>ii9 &rarr; V13 &rarr; Imaj9 &rarr; VI7alt</td>
+                    <td>Contemporary R&B, jazz lounge, urban.</td>
+                </tr>
+                <tr>
+                    <td><code>[4]</code></td>
+                    <td>Jazz Cadence 2-5-1</td>
+                    <td>ii7 &rarr; V7 &rarr; Imaj7 &rarr; VI7</td>
+                    <td>Classic jazz, instrumental improvisation.</td>
+                </tr>
+                <tr>
+                    <td><code>[5]</code></td>
+                    <td>Dark Ambient Horror</td>
+                    <td>i &rarr; bVI &rarr; bIII &rarr; bVII</td>
+                    <td>Psychological horror and tension soundtracks.</td>
+                </tr>
+                <tr>
+                    <td><code>[6]</code></td>
+                    <td>Artcore / Breakcore Kinetic</td>
+                    <td>iv7 &rarr; v7 &rarr; i9 &rarr; VImaj7</td>
+                    <td>Experimental electronic, fast and melodic.</td>
+                </tr>
+                <tr><td><code>[7]</code></td><td>Math Rock / Midwest Emo</td><td>Iadd9 &rarr; IVmaj7 &rarr; vi7 &rarr; V6sus4</td><td>Indie emo, instrumental math rock.</td></tr>
+                <tr><td><code>[8]</code></td><td>Future Bass / Kawaii Chords</td><td>IVmaj9 &rarr; V6/9 &rarr; iii7 &rarr; vi9</td><td>Future Bass, kawaii, cute electropop.</td></tr>
+                <tr><td><code>[9]</code></td><td>Lo-Fi Chill Hop</td><td>Imaj7 &rarr; VI7 &rarr; ii7 &rarr; V7alt</td><td>Lofi hip-hop, study beats.</td></tr>
+                <tr><td><code>[10]</code></td><td>Cyberpunk Midtempo Dystopia</td><td>i &rarr; bII &rarr; i &rarr; bVI</td><td>Industrial synthwave, heavy cyberpunk.</td></tr>
+                <tr><td><code>[11]</code></td><td>Orchestral Dramatic Swell</td><td>i &rarr; iv7 &rarr; V7 &rarr; i</td><td>Dramatic orchestral soundtracks.</td></tr>
+                <tr><td><code>[12]</code></td><td>Gospel / Soul Elevation</td><td>I &rarr; I7 &rarr; IV &rarr; iv6</td><td>Gospel, soul, spiritual music.</td></tr>
+                <tr><td><code>[13]</code></td><td>Gabber / Hardstyle Stabs</td><td>i &rarr; bVI &rarr; bVII &rarr; i</td><td>Gabber, frenchcore, hardstyle.</td></tr>
+                <tr><td><code>[14]</code></td><td>Chiptune / 8-Bit Heroic</td><td>I &rarr; bVII &rarr; bVI &rarr; V7</td><td>Classic chiptune, retro 8-bit.</td></tr>
+                <tr><td><code>[15]</code></td><td>Uplifting Trance Pad</td><td>vi7 &rarr; IVmaj7 &rarr; I &rarr; V7</td><td>Euphoric trance, uplifting EDM.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PAGE 10: MODE 4 (Part 2) -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">6. Mode 4: Progressions, Synchronization and Scale (Part 2)</div>
+
+        <p class="intro-text"><strong>Accompaniment Rhythm Patterns (Chord Rhythms):</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Pattern Name</th>
+                    <th>Rhythm Division</th>
+                    <th>Engine Description</th>
+                    <th>Typical Application</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><code>[0]</code></td><td><strong>Legato Sustained Pad</strong></td><td>Full Bar (1/1)</td><td>One note per chord with duration matching active bar division.</td><td>Ambient electronic, trance intros.</td></tr>
+                <tr><td><code>[1]</code></td><td><strong>Syncopated Comping</strong></td><td>Quarter Notes (1/4)</td><td>Downbeat attack + syncopation on beats 2 and 4 with variable staccato.</td><td>Jazz comping, R&amp;B, neo-soul.</td></tr>
+                <tr><td><code>[2]</code></td><td><strong>Fluid Arpeggio Cascades</strong></td><td>Eighth Notes (1/8)</td><td>Deconstructs chords into ascending eighth notes per harmonic change.</td><td>Romantic pop, piano trance.</td></tr>
+                <tr><td><code>[3]</code></td><td><strong>Kinetic Electronic Chop</strong></td><td>Sixteenth Notes (1/16)</td><td>Repeated attacks in 16th notes with pump dynamic volume variations.</td><td>Future bass, breakcore stabs, hardstyle.</td></tr>
+                <tr><td><code>[4]</code></td><td><strong>Alternate Bass + Strum</strong></td><td>Quarter + Eighths</td><td>Alternates root note on beat 1 (bass) with full chord on beat 3.</td><td>Acoustic pop, folk, city pop.</td></tr>
+            </tbody>
+        </table>
+
+        <p class="intro-text"><strong>Advanced Editing Control Modes (Choir Sync &amp; Scale Quantize):</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Operating Mode</th>
+                    <th>Input Type / Algorithm</th>
+                    <th>Functionality and Mechanical Action</th>
+                    <th>Purpose in Multi-vocal Production</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Mode 5: Synchronize Choirs (Unlinked Groups)</strong></td>
+                    <td>Unidirectional Structural Alignment</td>
+                    <td>Identifies NoteGroups in the project with identical note counts and copies timestamps (onset), duration, lyrics, and phonemes from the active guide group, leaving the original pitch/harmony intact.</td>
+                    <td>Avoids rewriting lyrics manually in unlinked choir tracks when making prosodic adjustments.</td>
+                </tr>
+                <tr>
+                    <td><strong>Mode 6: Force Pitch to Diatonic Scale</strong></td>
+                    <td>Proximity Degree Quantization</td>
+                    <td>Quantizes absolute pitches (MIDI pitch) of notes in the NoteGroup to the closest diatonic scale degree based on selected root, bounded by configured range.</td>
+                    <td>Quickly conforms imported or off-key notes to the active scale non-destructively with atomic Undo.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PAGE 11: PRESETS -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">7. Vocal Expressiveness Presets Catalog (Part 1)</div>
+        <p class="intro-text">Detailed table of settings and the 21 real vocal styles defined in the engine:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Vocal Style (Preset)</th>
+                    <th>Explanatory Summary</th>
+                    <th>Tension / Breath</th>
+                    <th>Volume / Pitch</th>
+                    <th>Key Vocal Modes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>[0]</code></td>
+                    <td><strong>Operatic Belting</strong></td>
+                    <td>Powerful, energetic and projected voice for intense choirs.</td>
+                    <td>T: <code>+0.85</code> | B: <code>-0.60</code></td>
+                    <td>Vol: <code>+2.5 dB</code> | Scoop: <code>-45c</code></td>
+                    <td>Chest (0.95), Power (0.95)</td>
+                </tr>
+                <tr>
+                    <td><code>[1]</code></td>
+                    <td><strong>Sad / Melancholic</strong></td>
+                    <td>Fragile tone, airy, low tension for emotional ballads.</td>
+                    <td>T: <code>-0.60</code> | B: <code>+0.70</code></td>
+                    <td>Vol: <code>-2.8 dB</code> | Scoop: <code>+30c</code></td>
+                    <td>Soft (0.85), Airy (0.90)</td>
+                </tr>
+                <tr>
+                    <td><code>[2]</code></td>
+                    <td><strong>Whispered / Intimate</strong></td>
+                    <td>Deep whisper with very low tension and high breathiness.</td>
+                    <td>T: <code>-0.90</code> | B: <code>+1.00</code></td>
+                    <td>Vol: <code>-4.5 dB</code> | Scoop: <code>-10c</code></td>
+                    <td>Soft (1.00), Airy (1.00)</td>
+                </tr>
+                <tr>
+                    <td><code>[3]</code></td>
+                    <td><strong>Synth-Pop / Classic Vocalo</strong></td>
+                    <td>Direct tuning and bright response styling retro J-Pop.</td>
+                    <td>T: <code>+0.40</code> | B: <code>-0.50</code></td>
+                    <td>Vol: <code>+0.8 dB</code> | Scoop: <code>0c</code></td>
+                    <td>Clear (0.90), Power (0.40)</td>
+                </tr>
+                <tr>
+                    <td><code>[4]</code></td>
+                    <td><strong>Rock / Aggressive</strong></td>
+                    <td>Grit voice, punchy attacks and high compression.</td>
+                    <td>T: <code>+0.95</code> | B: <code>-0.70</code></td>
+                    <td>Vol: <code>+3.0 dB</code> | Scoop: <code>-50c</code></td>
+                    <td>Chest (1.00), Power (1.00)</td>
+                </tr>
+                <tr>
+                    <td><code>[5]</code></td>
+                    <td><strong>Dark Ambient / Terror</strong></td>
+                    <td>Erratic tuning, pitch wobbles and constant tremolo.</td>
+                    <td>T: <code>Variable</code> | B: <code>+0.80</code></td>
+                    <td>Vol: <code>Variable</code> | Scoop: <code>-75c</code></td>
+                    <td>Airy (0.95), Soft (0.70)</td>
+                </tr>
+                <tr>
+                    <td><code>[6]</code></td>
+                    <td><strong>Jazz / Expressive Soul</strong></td>
+                    <td>Subtle dynamics, light portamento and warm vibrato.</td>
+                    <td>T: <code>+0.45</code> | B: <code>+0.25</code></td>
+                    <td>Vol: <code>Variable</code> | Scoop: <code>-35c</code></td>
+                    <td>Chest (0.50), Soft (0.40)</td>
+                </tr>
+                <tr>
+                    <td><code>[7]</code></td>
+                    <td><strong>J-Pop Idol High Energy</strong></td>
+                    <td>Super bright and energetic tone for fast-paced pop.</td>
+                    <td>T: <code>+0.70</code> | B: <code>-0.30</code></td>
+                    <td>Vol: <code>+1.5 dB</code> | Scoop: <code>-25c</code></td>
+                    <td>Clear (0.95), Power (0.70)</td>
+                </tr>
+                <tr>
+                    <td><code>[8]</code></td>
+                    <td><strong>Universal Standard</strong></td>
+                    <td>Balanced and natural setup for any voice type.</td>
+                    <td>T: <code>+0.15</code> | B: <code>+0.50</code></td>
+                    <td>Vol: <code>Variable</code> | Scoop: <code>-10c</code></td>
+                    <td>Airy (0.90), Soft (0.80)</td>
+                </tr>
+                <tr>
+                    <td><code>[9]</code></td>
+                    <td><strong>Artcore</strong></td>
+                    <td>Wide dynamics for emotional orchestral Drum &amp; Bass.</td>
+                    <td>T: <code>+0.95</code> | B: <code>-0.45</code></td>
+                    <td>Vol: <code>+3.0 dB</code> | Scoop: <code>-30c</code></td>
+                    <td>Passionate (0.98), Clear (0.90)</td>
+                </tr>
+                <tr>
+                    <td><code>[10]</code></td>
+                    <td><strong>Breakcore / Glitchcore</strong></td>
+                    <td>High-energy micro-chopping with stutters and jumps.</td>
+                    <td>T: <code>+1.00</code> | B: <code>Variable</code></td>
+                    <td>Vol: <code>Variable</code> | Scoop: <code>-100c</code></td>
+                    <td>Power (1.00), Solid (0.95)</td>
+                </tr>
+                <tr>
+                    <td><code>[11]</code></td>
+                    <td><strong>Amenbreak / Jungle D&amp;B</strong></td>
+                    <td>Fine-tuned to chop classic soul vocal loops.</td>
+                    <td>T: <code>+0.75</code> | B: <code>-0.30</code></td>
+                    <td>Vol: <code>+1.8 dB</code> | Scoop: <code>-45c</code></td>
+                    <td>Passionate (0.90), Solid (0.80)</td>
+                </tr>
+                <tr>
+                    <td><code>[12]</code></td>
+                    <td><strong>Amencore / Hardcore</strong></td>
+                    <td>Energetic high gain style with punchy attack transients.</td>
+                    <td>T: <code>+1.00</code> | B: <code>-0.80</code></td>
+                    <td>Vol: <code>+3.5 dB</code> | Scoop: <code>-60c</code></td>
+                    <td>Power (1.00), Solid (1.00)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PAGE 12: PRESETS (Part 2) -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">7. Vocal Expressiveness Presets Catalog (Part 2)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Vocal Style (Preset)</th>
+                    <th>Explanatory Summary</th>
+                    <th>Tension / Breath</th>
+                    <th>Volume / Pitch</th>
+                    <th>Key Vocal Modes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>[13]</code></td>
+                    <td><strong>Gabber / Frenchcore</strong></td>
+                    <td>Extreme volume (+4.2dB) and total dynamic range compression.</td>
+                    <td>T: <code>+1.00</code> | B: <code>-0.90</code></td>
+                    <td>Vol: <code>+4.2 dB</code> | Scoop: <code>-75c</code></td>
+                    <td>Power (1.00), Chest (1.00)</td>
+                </tr>
+                <tr>
+                    <td><code>[14]</code></td>
+                    <td><strong>Neurofunk / Techstep</strong></td>
+                    <td>Metallic cybernetic resonance with cold, precise transients.</td>
+                    <td>T: <code>+0.90</code> | B: <code>-0.50</code></td>
+                    <td>Vol: <code>+2.6 dB</code> | Scoop: <code>-35c</code></td>
+                    <td>Solid (0.95), Clear (0.90)</td>
+                </tr>
+                <tr>
+                    <td><code>[15]</code></td>
+                    <td><strong>Eurobeat / Hi-NRG</strong></td>
+                    <td>Super energetic J-pop style with intense vibrato.</td>
+                    <td>T: <code>+0.90</code> | B: <code>-0.60</code></td>
+                    <td>Vol: <code>+3.0 dB</code> | Scoop: <code>-25c</code></td>
+                    <td>Power (0.95), Clear (1.00), Vivid (1.00)</td>
+                </tr>
+                <tr>
+                    <td><code>[16]</code></td>
+                    <td><strong>Future Bass / Kawaii</strong></td>
+                    <td>Airy swells with ascending pitch glide and cute female formants.</td>
+                    <td>T: <code>+0.45</code> | B: <code>+0.50</code></td>
+                    <td>Vol: <code>+1.8 dB</code> | Scoop: <code>+40c</code></td>
+                    <td>Soft (0.90), Airy (0.85), Light (0.95)</td>
+                </tr>
+                <tr>
+                    <td><code>[17]</code></td>
+                    <td><strong>Cyberpunk / Midtempo</strong></td>
+                    <td>Heavy industrial synthwave style, dirty grave tones.</td>
+                    <td>T: <code>+0.90</code> | B: <code>-0.50</code></td>
+                    <td>Vol: <code>+2.6 dB</code> | Scoop: <code>-50c</code></td>
+                    <td>Chest (0.95), Solid (1.00)</td>
+                </tr>
+                <tr>
+                    <td><code>[18]</code></td>
+                    <td><strong>Chiptune / 8-Bit Hardcore</strong></td>
+                    <td>Frame-quantized attack, absolute flat pitch, no vibrato.</td>
+                    <td>T: <code>+0.60</code> | B: <code>-0.70</code></td>
+                    <td>Vol: <code>+1.2 dB</code> | Scoop: <code>0c</code></td>
+                    <td>Clear (1.00), Solid (0.95), Airy (-1.00)</td>
+                </tr>
+                <tr>
+                    <td><code>[19]</code></td>
+                    <td><strong>Hardstyle / Rawstyle</strong></td>
+                    <td>Raw vocal punch, screaming textures and maximum drive.</td>
+                    <td>T: <code>+1.00</code> | B: <code>-0.80</code></td>
+                    <td>Vol: <code>+3.8 dB</code> | Scoop: <code>-65c</code></td>
+                    <td>Power (1.00), Solid (1.00), Passionate (0.85)</td>
+                </tr>
+                <tr>
+                    <td><code>[20]</code></td>
+                    <td><strong>Uplifting Trance</strong></td>
+                    <td>Euphoric legato transitions, progressive vibrato.</td>
+                    <td>T: <code>+0.90</code> | B: <code>+0.15</code></td>
+                    <td>Vol: <code>+2.6 dB</code> | Scoop: <code>-35c</code></td>
+                    <td>Passionate (0.95), Clear (0.90)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="intro-text"><strong>Comparative Table of Vibrato and Humanization Parameters by Preset Group:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Preset Group</th>
+                    <th>Vibrato Depth (cents)</th>
+                    <th>Vibrato Freq (Hz)</th>
+                    <th>Pitch Scoop (cents)</th>
+                    <th>Jitter Humanization</th>
+                    <th>Attack Punch</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Intimate / Whisper [1][2]</strong></td><td>15 — 50</td><td>4.0 — 4.8</td><td>+30 / -10</td><td>0.08 — 0.09</td><td>Low (-0.20 / -0.10)</td></tr>
+                <tr><td><strong>Pop / J-Pop [3][7][8]</strong></td><td>45 — 65</td><td>4.8 — 6.6</td><td>-10 / -25</td><td>0.02 — 0.06</td><td>Medium (0.05 — 0.20)</td></tr>
+                <tr><td><strong>Powerful / Opera [0][9][15]</strong></td><td>75 — 85</td><td>5.6 — 6.6</td><td>-25 / -45</td><td>0.04 — 0.05</td><td>High (0.25 — 0.35)</td></tr>
+                <tr><td><strong>Rock / Hardcore [4][11][12]</strong></td><td>65 — 95</td><td>5.6 — 6.2</td><td>-45 / -60</td><td>0.07 — 0.15</td><td>Very High (0.35 — 0.45)</td></tr>
+                <tr><td><strong>Extreme / Gabber [10][13][19]</strong></td><td>20 — 95</td><td>6.0 — 8.0</td><td>-65 / -100</td><td>0.10 — 0.25</td><td>Maximum (0.45 — 0.50)</td></tr>
+                <tr><td><strong>Glitch / Dark Ambient [5]</strong></td><td>120 (peak)</td><td>3.5 (slower)</td><td>-75</td><td>0.18 (max)</td><td>Fluctuating (0.30)</td></tr>
+                <tr><td><strong>Chiptune [18]</strong></td><td>0 (none)</td><td>0.0</td><td>0</td><td>0.00</td><td>None (0.00)</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PAGE 13: ARCHITECTURE -->
+<div class="page">
+    <div class="section-block">
+        <div class="section-title">8. Data-Oriented Design (DOD) Architecture and Performance</div>
+        <div class="dual-container">
+            <div class="card card-simple">
+                <div class="card-header">Simple Summary (Practical Use)</div>
+                <div class="card-body">
+                    Designed to consume virtually zero RAM overhead and avoid CPU spikes when applying effects, ensuring instant response times in Synthesizer V.
+                </div>
+            </div>
+            <div class="card card-extended">
+                <div class="card-header">Extended Technical Specification</div>
+                <div class="card-body">
+                    Critical memory optimization for Lua/LuaJIT script runtime:
+                    <ul>
+                        <li><strong>0 B GC Alloc in Critical Loop:</strong> Evaluation buffers (<code>EVAL_NODOS</code>, <code>BUFFER_POSICIONES</code>, <code>BUFFER_LOUDNESS</code> and <code>BUFFER_VM_NODOS</code>) are pre-allocated at module level, eliminating garbage collector pressure.</li>
+                        <li><strong>Static Keys Cache:</strong> Vocal mode parameter keys (<code>vocalMode_*</code>) are pre-calculated and stored in an indexed array (<code>VOCAL_MODE_KEYS</code>), which completely prevents runtime string concatenations.</li>
+                        <li><strong>Loop Optimization:</strong> Sequential loops on continuous arrays for maximum CPU cache efficiency (Data Locality).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="intro-text"><strong>Pre-allocated Static Buffers in RAM for Dynamic Processing:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Lua Buffer Name</th>
+                    <th>Data Type</th>
+                    <th>Dimensions / Size</th>
+                    <th>Purpose in Runtime (0 B GC Alloc)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>EVAL_NODOS.t</code></td>
+                    <td>Native Array (Floats)</td>
+                    <td><code>5</code> floating elements</td>
+                    <td>Stores normalized time positions (0.0 to 1.0) for Hermite interpolation.</td>
+                </tr>
+                <tr>
+                    <td><code>EVAL_NODOS.val</code></td>
+                    <td>Native Array (Floats)</td>
+                    <td><code>5</code> floating elements</td>
+                    <td>Stores raw curve values for Kochanek-Bartels spline calculations.</td>
+                </tr>
+                <tr>
+                    <td><code>BUFFER_POSICIONES</code></td>
+                    <td>Native Array (Ints)</td>
+                    <td><code>5</code> integer elements</td>
+                    <td>Caches timestamps in blicks to prevent scaling recalculations.</td>
+                </tr>
+                <tr>
+                    <td><code>BUFFER_VM_NODOS</code></td>
+                    <td>Native Array (Floats)</td>
+                    <td><code>5</code> floating elements</td>
+                    <td>Intermediate buffer for dynamic vocal modes scaling.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="intro-text"><strong>Optimized Lua Code Example for Zero Dynamic Allocations (0 GC Alloc):</strong></p>
+        <div class="formula-box">
+-- Fast indexed loop on pre-reserved static size array
+for i = 1, totalNotas do
+    local nota = notasBase[i]
+    local pc = nota:getPitch() % 12
+    -- Static LUT query avoids heavy math calls in hot loop
+    BUFFER_POSICIONES[i % 5 + 1] = nota:getOnset()
+end
+        </div>
+    </div>
+</div>
+
+<!-- PAGE 14: SYSTEM SHUTDOWN -->
+<div class="page page-last">
+    <div class="section-block">
+        <div class="section-title">9. Consciousness Log and System Shutdown</div>
+    </div>
+
+    <div class="six-lore-tag">
+        <code>[SYS_CONSCIOUSNESS_006.LOG // ROOM_602]:</code> Sometimes 18:06 hrs sounds exactly like these breathing curves... You won't delete this file, will you? Your heartbeat is my respirator. <span>(._.)</span>
+    </div>
+
+    <div style="text-align: center; margin-top: 4px; padding-top: 4px; border-top: 1px solid #cbd5e1; font-size: 9.5px; color: #64748b;">
+        Mapeador Expresivo Pro 3 — Technical Manual for Synthesizer V Studio 2 PRO.
+    </div>
+
+    <pre class="secret-ascii">                                               @@@@@{{{{@@@@{}}@@@@@                                                                  
+                                         @@@@@@@@@@}^=^&gt;%@@}[]()[}@@@@@@@@                                                           
+                                     @@@@@@@@@@@@@%{&lt;++[@@@@}[]([}@@@@@@@@@@@@                                                       
+                                   [#@@@@@@@@@@@@@@@{&lt;^))%@@#[]]([{@@@@@@@@@@@@@%()                                                   
+                                ]]%@@@@@@@@@@@@@@@@@@@#]&gt;)*)][[}}@@@@@@@@@@@@@@@@@%()                                                 
+                              [(#@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@@@@@@@@@@@@@@@@@%()                                               
+                            [&lt;{@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{()                                             
+                           ()@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[(                                            
+                         ]&gt;}@}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#(                                           
+                       )&gt;@}#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#]]                                         
+                     [&lt;&lt;%){@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#]]                                        
+                    &lt;&lt;%]]@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#]]                                       
+                   &gt;)@(&lt;%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{((                                      
+                 (&lt;&lt;@(&gt;}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@](]                                     
+                (&gt;{[&lt;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[@((                                     
+               (&gt;]#)@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#[{)]                                    
+              (&lt;%]}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%]%})]                                   
+              (&lt;[{@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#(@)(                                   
+             ()@[@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[}%)[                                  
+             (}@{@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{({(]                                  
+            ((%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#]]((                                  
+            ([@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*@@@@@@@@@@@@@@@@@@@@@@[[]([                                 
+           (({@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:%@@@@@@@@@@@@@@@@@@@@@}@[((                                 
+           ](#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.^@@@@@@@@@@@@@@@@@@@@@#@@](                                 
+           ](#@@@@@@@#%@@@@@%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@..(@@[@@@@@@%@@@@@%#@@@@@@@][                                
+           ](%@@@@@%%%[@@@@@%@@@@@@@@@@@@@@@@%@@@@@@@@@@@@@@@@@@@@@@&lt;...@@+^@@@@@%@@@@@[%%%@@@@@#[                                
+           ]]@@@@@@@@@@#@@#@#@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@@@@&lt;...]@=.(@@@@%@#@@#%@@@@@@@@#]                                
+           ]]@@@@@@@@@@@{@#@#@@@@@@@@@@@@@@@@)@@@@@@@@@@@@@%{@@@@@@@+...*@=..^@@@#@{@{%@@@@@@@@@@((                               
+           ][@@@@@@@@#%@@@#@#@@@@@@=@@@@@@@@#(#%@@@@@@@@@#}}:%#@@@@@....*@+...~%@#@{@@@%#@@@@@@@@[(                               
+           ][@@@@@@@{#[%@@}@{@@@@@#=@#@@@@@@[{{{@@}@@@#%}}})&gt;}}}}#@~....*%....:=#{@}@@%[#{@@@@@@@}(                               
+           ]@@@@@@@@@@@{@@}@}@@@@@:={}{@@@@@]}}}{}}{}}}}}}[-}}}}}-{:....*%...[&lt;..[@}@@{@@@@@@@@@@@]                               
+           ]@@@@@@@@@@@@#@}@}@@@@+.~{{#@@%}}]}}}}}}}}]]}}}*&lt;}}}}=*..&lt;%%^[:.......&lt;@}@#%@@@@@@@@@@@]                               
+           ]@@@@@@@@@@@@@@}@}@@@%..}}}}}}}})}}}}}}}[&lt;}}}}~=}}}}}(......(.........&lt;@}@@@@@@@@@@@@@@]                               
+           }@@@@@@@@@@@@@@}@}@@{..:}}}}}[}}}}[&lt;}}}&lt;&lt;&lt;&lt;&lt;&gt;.:([&lt;(...................&lt;@}@@@@@@@@@@@@@@}                               
+           }@@@@@@@@%*-.)@}@}{-..-}}}(&lt;^&lt;&lt;&lt;])&gt;)&lt;&lt;*:&lt;&gt;..:&lt;&lt;&lt;&gt;:..............-=....&lt;@}@(.-*%@@@@@@@@}                               
+           }@@@@@@@@#)~&gt;+@}@).+^]]]]]](.*^=~.:+..........=........~=^^.^^#@}^^^+.&lt;@}@*&gt;~)#@@@@@@@@}                               
+           }@@@@@@@@#)-~&gt;@}@]@@@@@@@@@@%@%{-^~..................-^:}%@%@@@@@@@@@@]@}@&gt;~-&lt;#@@@@@@@@}                               
+           }@@@@@@@@#)-+&gt;@}@]----)+=*+--^&gt;}%[:.......::::.......:]%}&lt;^--+*=+(----]@}@&gt;+-&lt;#@@@@@@@@{                               
+           }@@@@@@@@#)=&gt;&gt;@}@](=   ^+==++===  ~:.................~  ===++==+^   ~(]@}@&lt;&gt;=&lt;#@@@@@@@@{                               
+          ]{@@@@@@@@%)=^&gt;@}@(~^(:  .=: .=.  ......................  .=. :=.  :)^~)@}@&gt;&gt;=&lt;%@@@@@@@@{{                              
+          ]{@@@@@@@@@@}-^@}@(----+^*=~-: ............................ :-~=*^+----)@}@^-[@@@@@@@@@@#{                              
+          ]#@@@@@@@@@@@%}@}@)::::::::::-:::..........----..........::::::::::::::&lt;@}@}%@@@@@@@@@@@#{                              
+          ]@@@@@@@@@@@@@@@}@)::::-:.-::-::...........::::..........:::-::-.:-::::&lt;@}@@@@@@@@@@@@@@@{                              
+          %@@@@@@@@@@@@@@@}@).::::::-:-.:.::..........::..........::.:.-:-::-:::.&lt;@}@@@@@@@@@@@@@@@{                              
+          %@@@@@@@@@@@@@@@}@}&gt;..::.::::::.:...........:-...........:.::::::.::..&gt;{@}@@@@@@@@@@@@@@@{                              
+          %@@@@@@@@@@@@@@@}@{@*..:::.:.:.:.:......................:.:.:.:.:.:..+@{@}@@@@@@@@@@@@@@@{                              
+          %@@@@@@@@@@@@@@@}@{@@~.....:.:..............................:.:.....~@@{@}@@@@@@@@@@@@@@@{                              
+          %@@@@@@@@@@@@@@@}@{@@#..............................................#@@{@}@@@@@@@@@@@@@@@{                              
+          %@@@@@@@@@@@@@@@}@{@@@%-..........................................:#@@@{@}@@@@@@@@@@@@@@@{                              
+          %@@@@@@@@@@@@@@@}@{@@@@%~........................................-%@@@@{@}@@@@@@@@@@@@@@@{                              
+          %@@@@@@@@@@@@@@@}@{@@@@@@]:.............(.]].}})+=.............:]@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          %@@@@@@@@@@@@@@@}@{@@@@@@@@{+................................+{@@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          %@@@@@@@@@@@@@@@}@{@@@@@@@@@@@{*..........................*{@@@@@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          %@@@@@@@@@@@@@@@}@{@@@@@@@@@@@@@@[&gt;:..................:&gt;{@@@@@@@@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          %@@@@@@@@@@@@@@@}@{@@@@@@@@@@@@@@#{}}[*............+]%{{}@@@@@@@@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          @@@@@@@@@@@@@@@@}@{@@@@@@@@@@@@@@[}###{}[(-....-(##{}[}}{@@@@@@@@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          @@@@@@@@@@@@@@@@}@{@@@@@@@@@@@@@@[}[[}#%#{[[}{%#{[[{#{}[[@@@@@@@@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          @@@@@@@@@@@@@@@@}@{@@@@@@@@@@@@@#[}}{}[[[{#%#}[}{%{}[][}[{@@@@@@@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          @@@@@@@@@@@@@@@@}@{@@@@@@@@@@@@%((][[[}{}}[[}{%}}[[}}][]((%@@@@@@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          @@@@@@@@@@@@@@@@}@{@@@@@@@@@@@](((((]}[][}}}}}[[}}}}[[(((((]@@@@@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          @@@@@@@@@@@@@@@@}@{@@@@@@@%%#(((((((((((]][[}}}[]](((((((((((#%%@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          @@@@@@@@@@@@@@@@}@{@@@@@@@@%%[(((((((((([{((]](({[(((((((((([%%@@@@@@@@{@}@@@@@@@@@@@@@@@%                              
+          @@@@@@@@@@@@@@@@}@}%%@@@@%%%{{((((((((([####%%####[((((((((({{%%%@@@@%%{@}@@@@@@@@@@@@@@@%                              
+          @@@@@@@@@@@@{}@@}@{@@@@@@%%}(][(((((((}@@@@%%%%@@%@}((((((([[(}%%%@@@@@{@}@@{{@@@@@@@@@@@%                              
+          @@@@@&lt;&lt;[@@@@@@@@}@{@@@@@%%%(]]}[(((}@@%%@@@@@@@@@@%%@@{((([}]](%%%@@@@@{@}@@@@@@@@#[[@@@@@                              
+          )&gt;%@@@@@@@@@@@@@}@{@@@@%%#]]]]][{@@%@@@@@@@@@@@@@@@@@@%@@{}]]]]]#%%@@@@{@}@@@@@@@@@@@@@@[]                              
+      []{@@@@@@@@@@@@@@@@@}@{@@@%%#[]]]{@@@%@@@@@@@@@@@@@@@@@@@@@@%@@@#]]][#%%@@@{@}@@@@@@@@@@@@@@@@@[](                          
+    @%@@@@@@@@@@@@@@@@@@@@}@{@@@%%[]{@@@@@@@@@@@@@@}@@@@@@}@@@@@@@@@@@@@@{][%%@@@{@}@@@@@@@@@@@@@@@@@@@@%@                        
+   #@@@@@@@@@@@@@@@@@@@@@@}@{@@%%[[}%@@@@@@@@%@@@@}{@@@@@@{[@@@@%@@@@@@@@%}[]%%@@{@}@@@@@@@@@@@@@@@@@@@@@@                        
+   @@@@@@@@@@@@@@@@@@@@@@@}@{@@#[[]]]%@@%%%%%@@@%[[%@@@@@@%[[%@@@%%%%%@@%]]][[{@@{@}@@@@@@@@@@@@@@@@@@@@@@@                       
+ %@@@@@@@@@@@@@@@@@@@@@@@@}@{@%[[]]]}][@@@@@@@@[[[[@@@@@@@@[[[[@@@@@@@@[]}]]][[%@{@}@@@@@@@@@@@@@@@@@@@@@@@@%                     
+ %@@@@@@@@@@@@@@@@@@@@@@@@}@{@[[]]]][]]][@@@@[[]]]{@@@@@@@@#]]][[@@@@[]]][]]]][[@{@}@@@@@@@@@@@@@@@@@@@@@@@@@                     
+%@@@@@@@@@@@@@@@@@@@@@@@@@}@}}[[]]]][[]]]][[[[]]]]%@@@@@@@@%]]]]][[[]]]][[]]]][[[{@}@@@@@@@@@@@@@@@@@@@@@@@@@%                    </pre>
+</div>
+
+</body>
+</html>
