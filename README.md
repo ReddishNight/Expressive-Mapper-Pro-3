@@ -3,51 +3,47 @@
 ![Synthesizer V Script](https://img.shields.io/badge/Synthesizer%20V-Lua%20Script-blue)
 ![Version](https://img.shields.io/badge/version-3.0-brightgreen)
 
-Mapeador Expresivo Pro 3 es un script avanzado para **Synthesizer V Studio** diseñado para automatizar dinámicas, curvas de expresión (pitch, tensión, volumen, aliento, etc.), síntesis melódica, contrapunto y progresiones armónicas de nivel profesional.
+Mapeador Expresivo Pro 3 es un script avanzado para **Synthesizer V Studio** diseñado para automatizar dinámicas vocales, curvas de expresión (pitch, tensión, volumen, aliento), síntesis melódica, contrapunto y progresiones armónicas de nivel profesional.
 
 ---
 
 ## ⚡ Instalación Rápida (Para Usuarios Finales)
 
-Si solo deseas instalar y usar el script en **Synthesizer V Studio**:
+Para instalar y usar el script en **Synthesizer V Studio**:
 
-1. Descarga el archivo ejecutable compilado: **[`MapeadorExpresivo.lua`](https://github.com/ReddishNight/Expressive-Mapper-Pro-3/raw/main/MapeadorExpresivo.lua)** (o accede a la sección de [Releases](../../releases)).
-2. Copia el archivo `MapeadorExpresivo.lua` en la carpeta de scripts de tu Synthesizer V Studio:
+1. Descarga el archivo compilado: **[`MapeadorExpresivo.lua`](MapeadorExpresivo.lua)** (o accede a la sección de [Releases](../../releases)).
+2. Copia `MapeadorExpresivo.lua` en la carpeta de scripts de tu Synthesizer V Studio:
    - **Windows:** `C:\Users\<TuUsuario>\Documents\Dreamtonics\Synthesizer V Studio\scripts\`
    - **macOS:** `~/Library/Application Support/Dreamtonics/Synthesizer V Studio/scripts/`
-3. En Synthesizer V Studio, abre el menú **Scripts** y selecciona **Rescan Scripts** (o reinicia la aplicación).
+3. En Synthesizer V Studio, ve al menú **Scripts** y selecciona **Rescan Scripts** (o reinicia la aplicación).
 
 ---
 
 ## 📘 Manuales Oficiales (PDF)
 
-Disponibles en el repositorio en múltiples idiomas:
-- 🇲🇽 [Manual Oficial en Español](Mapeador_Expresivo_Pro_3_Manual_Oficial.pdf)
-- 🇺🇸 [Official Manual in English](Mapeador_Expresivo_Pro_3_Manual_Official_EN.pdf)
-- 🇯🇵 [公式マニュアル (日本語)](Mapeador_Expresivo_Pro_3_Manual_Official_JA.pdf)
+Disponibles en el repositorio en tres idiomas:
+- 🇲🇽 **[Manual Oficial en Español (PDF)](Mapeador_Expresivo_Pro_3_Manual_ES.pdf)**
+- 🇺🇸 **[Official Manual in English (PDF)](Mapeador_Expresivo_Pro_3_Manual_EN.pdf)**
+- 🇯🇵 **[公式マニュアル (日本語 PDF)](Mapeador_Expresivo_Pro_3_Manual_JA.pdf)**
 
 ---
 
-## 🛠️ Estructura del Código Fuente (Para Desarrolladores)
+## 🛠️ Estructura del Proyecto
 
-El código fuente del proyecto está modularizado dentro de la carpeta `src/`:
+```text
+Expressive-Mapper-Pro-3/
+├── src/                               # Código fuente modular (00_Header a 08_ChordProgression)
+├── docs/                              # Herramientas de generación de documentación y plantillas
+├── Mapeador_Expresivo_Pro_3_Manual_ES.pdf # Manual oficial (Español)
+├── Mapeador_Expresivo_Pro_3_Manual_EN.pdf # Manual oficial (Inglés)
+├── Mapeador_Expresivo_Pro_3_Manual_JA.pdf # Manual oficial (Japonés)
+├── MapeadorExpresivo.lua              # 🚀 Script ejecutable compilado final
+├── build.bat                          # Script de compilación rápida (.bat)
+└── README.md                          # Documentación del repositorio
+```
 
-- `src/00_Header_Metadata.lua`: Metadatos y firma del script para Synthesizer V.
-- `src/01_I18n_Localization.lua`: Sistema de internacionalización (ES, EN, JA, ZH).
-- `src/02_Presets_ExpressionData.lua`: Datos de expresión y presets musicales.
-- `src/03_Tokenizer_MelodyGen.lua`: Tokenizador y generador de melodías.
-- `src/04_Hermite_AutomationEngine.lua`: Motor de automatización e interpolación Hermite.
-- `src/05_UI_MainController.lua`: Controlador de interfaz de usuario y diálogos.
-- `src/06_HarmonyEngine.lua`: Motor de armonía.
-- `src/07_CounterpointGen.lua`: Generador de contrapunto.
-- `src/08_ChordProgressionEngine.lua`: Motor de progresiones armónicas.
-
-### Compilador del Proyecto
-Para compilar los módulos de `src/` en el archivo final `MapeadorExpresivo.lua`, ejecuta en la consola:
+### Compilar desde el código fuente
+Para compilar los módulos de `src/` en el archivo final `MapeadorExpresivo.lua`:
 ```powershell
 build.bat
-```
-O mediante el script de Python:
-```powershell
-python build_html.py
 ```

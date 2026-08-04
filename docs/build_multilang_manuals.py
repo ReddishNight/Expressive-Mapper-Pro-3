@@ -2707,7 +2707,10 @@ end
 # -----------------------------------------------------------------------------
 # 3. LEER EL ASCII ART Y RE-REEMPLAZAR EN AMBOS ARCHIVOS
 # -----------------------------------------------------------------------------
-ascii_path = r'c:\Users\danny\Documents\Synthesizer V Scripts\ascii-art.txt'
+script_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(script_dir)
+
+ascii_path = os.path.join(script_dir, 'ascii-art.txt')
 with open(ascii_path, 'r', encoding='utf-8') as f:
     ascii_content = f.read()
 
@@ -2718,8 +2721,8 @@ html_en_content = html_en_template.replace('{escaped_ascii}', escaped_ascii)
 html_ja_content = html_ja_template.replace('{escaped_ascii}', escaped_ascii)
 
 # Escribir archivos HTML temporales
-html_en_out_path = r'c:\Users\danny\Documents\Synthesizer V Scripts\manual_template_en.html'
-html_ja_out_path = r'c:\Users\danny\Documents\Synthesizer V Scripts\manual_template_ja.html'
+html_en_out_path = os.path.join(script_dir, 'manual_template_en.html')
+html_ja_out_path = os.path.join(script_dir, 'manual_template_ja.html')
 
 with open(html_en_out_path, 'w', encoding='utf-8') as f:
     f.write(html_en_content)
@@ -2739,8 +2742,8 @@ def convert_to_pdf(html_in, pdf_out):
         html_in
     ], check=True)
 
-pdf_en_out = r'c:\Users\danny\Documents\Synthesizer V Scripts\Mapeador_Expresivo_Pro_3_Manual_Official_EN.pdf'
-pdf_ja_out = r'c:\Users\danny\Documents\Synthesizer V Scripts\Mapeador_Expresivo_Pro_3_Manual_Official_JA.pdf'
+pdf_en_out = os.path.join(root_dir, 'Mapeador_Expresivo_Pro_3_Manual_EN.pdf')
+pdf_ja_out = os.path.join(root_dir, 'Mapeador_Expresivo_Pro_3_Manual_JA.pdf')
 
 convert_to_pdf(html_en_out_path, pdf_en_out)
 convert_to_pdf(html_ja_out_path, pdf_ja_out)
