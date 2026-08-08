@@ -335,7 +335,12 @@ local PROGRESIONES_ACORDES = {
     [12] = { nombre = "Gospel / Soul Elevación", grados = { 1, 1, 4, 4 }, tipos = { "triada_mayor", "dom7", "triada_mayor", "triada_menor" } },
     [13] = { nombre = "Gabber / Hardstyle Stabs", grados = { 1, 6, 7, 1 }, tipos = { "triada_menor", "triada_mayor", "triada_mayor", "triada_menor" } },
     [14] = { nombre = "Chiptune / 8-Bit Heroico", grados = { 1, 7, 6, 5 }, tipos = { "triada_mayor", "triada_mayor", "triada_mayor", "dom7" } },
-    [15] = { nombre = "Uplifting Trance Pad", grados = { 6, 4, 1, 5 }, tipos = { "min7", "maj7", "triada_mayor", "dom7" } }
+    [15] = { nombre = "Uplifting Trance Pad", grados = { 6, 4, 1, 5 }, tipos = { "min7", "maj7", "triada_mayor", "dom7" } },
+    [16] = { nombre = "Canon de Pachelbel (8 Acordes)", grados = { 1, 5, 6, 3, 4, 1, 4, 5 }, tipos = { "triada_mayor", "triada_mayor", "triada_menor", "triada_menor", "triada_mayor", "triada_mayor", "triada_mayor", "triada_mayor" } },
+    [17] = { nombre = "Pop Rock Clásico (8 Acordes)", grados = { 1, 5, 6, 4, 1, 5, 6, 4 }, tipos = { "triada_mayor", "triada_mayor", "triada_menor", "triada_mayor", "triada_mayor", "triada_mayor", "triada_menor", "triada_mayor" } },
+    [18] = { nombre = "Jazz Cadencia Standard (3 Acordes)", grados = { 2, 5, 1 }, tipos = { "min7", "dom7", "maj7" } },
+    [19] = { nombre = "Épico Tráiler Oscuro (2 Acordes)", grados = { 1, 6 }, tipos = { "triada_menor", "maj7" } },
+    [20] = { nombre = "Melancolía Neoclásica (6 Acordes)", grados = { 6, 4, 1, 5, 6, 3 }, tipos = { "triada_menor", "triada_mayor", "triada_mayor", "triada_mayor", "triada_menor", "triada_menor" } }
 }
 
 -- ============================================================================

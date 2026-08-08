@@ -82,6 +82,18 @@ To install and run the tool suite in **Synthesizer V Studio**:
 
 ---
 
+## 3.6.2 Patch Notes
+
+- Improved `Vocal Harmonies` voice leading, register handling, and voice spacing without adding new presets.
+- Simplified status output to universal kaomojis for success/failure signaling.
+- Removed `idiomaUI` persistence from the user JSON so the SynthV host language is no longer overridden by old saved settings.
+- Fixed missing `Apply` label translations and reduced the amount of post-apply message spam in the panels.
+- Improved `Chords` variation so different options/sub-options no longer collapse into the same result.
+- Improved `Vocal Harmonies` option handling so combo-box selections are respected instead of being ignored.
+- Updated documentation notes to match the current modular 3.6.2 build and the applied engine patches.
+
+---
+
 ## 📘 Official PDF Manuals
 
 Comprehensive multi-page PDF documentation is available in three languages:

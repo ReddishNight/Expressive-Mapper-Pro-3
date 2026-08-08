@@ -81,7 +81,10 @@ local I18N_DATA = {
         confirmTitle = "Confirmar Operación",
         confirmMsgGenerar = "¿Deseas generar notas a partir de %d sílabas en %s%d usando el preset '%s' al %d%%?",
         completedTitle = "Mapeador Expresivo Pro 3",
-        completedMsg = "¡Operación completada exitosamente!\nÍtems procesados/creados: %d\nPreset/Config: %s\nIntensidad: %d%%\nGrupos/Pistas procesados: %d\nDeshacer Atómico registrado (Ctrl+Z para revertir).",
+        completedMsg = "(≧◡≦)",
+        syncCompletedMsg = "(≧◡≦)",
+        snapCompletedMsg = "(≧◡≦)",
+        errNoteRangeMsg = "[Error] El rango de nota mínimo debe ser menor que el máximo.",
         vistaSeccionChoices = {
             "Modo Rápido (EasyLyric & Melodía)",
             "Expresión Vocal (Curvas Hermite)",
@@ -92,7 +95,8 @@ local I18N_DATA = {
         ayudaGuiaPhoneme = "  (/) Fonemas directos",
         ayudaGuiaSlur = "  (_) Nota ligada",
         ayudaGuiaInflection = "  (\\) Inflexión de tono",
-        ayudaGuiaTimeMark = "  (%) Marcas de tiempo (%10.5s)"
+        ayudaGuiaTimeMark = "  (%) Marcas de tiempo (%10.5s)",
+        applyButtonLabel = "Aplicar"
     },
     [1] = { -- English
         title = "Expressive Mapper Pro 3",
@@ -172,7 +176,10 @@ local I18N_DATA = {
         confirmTitle = "Confirm Operation",
         confirmMsgGenerar = "Will generate notes from %d syllables starting at %s%d with preset '%s' at %d%%.\nContinue?",
         completedTitle = "Expressive Mapper Pro 3",
-        completedMsg = "Operation completed successfully.\nItems processed/created: %d\nPreset/Config: %s\nIntensity: %d%%\nGroups/Tracks processed: %d\nAtomic undo registered (Ctrl+Z to revert).",
+        completedMsg = "(≧◡≦)",
+        syncCompletedMsg = "(≧◡≦)",
+        snapCompletedMsg = "(≧◡≦)",
+        errNoteRangeMsg = "[Error] Minimum note range must be lower than maximum.",
         vistaSeccionChoices = {
             "Quick Mode (EasyLyric & Melody)",
             "Vocal Expression (Hermite Curves)",
@@ -183,7 +190,8 @@ local I18N_DATA = {
         ayudaGuiaPhoneme = "  - (/) Raw phonemes",
         ayudaGuiaSlur = "  - (_) Note slur",
         ayudaGuiaInflection = "  - (\\) Pitch inflection",
-        ayudaGuiaTimeMark = "  - (%) Time markers (%10.5s)"
+        ayudaGuiaTimeMark = "  - (%) Time markers (%10.5s)",
+        applyButtonLabel = "Apply"
     },
     [2] = { -- Japanese
         title = "表現力マッパー Pro 3",
@@ -263,7 +271,10 @@ local I18N_DATA = {
         confirmTitle = "操作の確認",
         confirmMsgGenerar = "%d音節から%s%dを基準にプリセット'%s'（%d%%）でノートを生成します。\n続行しますか？",
         completedTitle = "表現力マッパー Pro 3",
-        completedMsg = "処理が正常に完了しました！\n処理/生成アイテム数: %d\nプリセット/設定: %s\n強度: %d%%\n処理グループ/トラック数: %d\nAtomic Undo 登録完了（Ctrl+Z で元に戻せます）。",
+        completedMsg = "(≧◡≦)",
+        syncCompletedMsg = "(≧◡≦)",
+        snapCompletedMsg = "(≧◡≦)",
+        errNoteRangeMsg = "[エラー] 最小ノート範囲は最大ノート範囲より低く設定してください。",
         vistaSeccionChoices = {
             "クイックモード (EasyLyric & メロディ)",
             "ボーカル表現 (エルミート曲線)",
@@ -273,7 +284,8 @@ local I18N_DATA = {
         ayudaGuiaSyllable = "  - (-) 音節分割",
         ayudaGuiaPhoneme = "  - (/) 直接音素",
         ayudaGuiaSlur = "  - (_) スラー",
-        ayudaGuiaInflection = "  - (v) 音程変化"
+        ayudaGuiaInflection = "  - (v) 音程変化",
+        applyButtonLabel = "適用"
     }
 }
 

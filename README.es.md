@@ -82,6 +82,18 @@ Para instalar y ejecutar la Suite en **Synthesizer V Studio**:
 
 ---
 
+## Notas 3.6.2
+
+- Se mejoró `Vocal Harmonies` con mejor conducción de voces, rangos más naturales y separación más limpia entre voces.
+- Se simplificaron los estados a kaomojis universales para éxito y fallo.
+- Se eliminó la persistencia de `idiomaUI` en el JSON de usuario para que el idioma del host de SynthV no quede bloqueado por ajustes anteriores.
+- Se corrigieron las traducciones faltantes de `Aplicar` y se redujo el spam de mensajes posteriores a aplicar.
+- Se mejoró la variación de `Chords` para que las distintas opciones/subopciones ya no produzcan siempre el mismo resultado.
+- Se mejoró `Vocal Harmonies` para que respete correctamente las opciones de los ComboBox.
+- La documentación se actualizó para reflejar la versión modular 3.6.2 y los parches del motor.
+
+---
+
 ## 📘 Manuales Oficiales en PDF
 
 El proyecto cuenta con manuales detallados en formato PDF multilenguaje:

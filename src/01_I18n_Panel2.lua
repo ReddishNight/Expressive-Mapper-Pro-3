@@ -59,13 +59,16 @@ local I18N_DATA = {
         confirmTitle = "Confirmar Operación",
         confirmMsgExpresar = "¿Deseas aplicar la expresividad del preset '%s' al %d%% sobre las notas seleccionadas?",
         completedTitle = "Mapeador Expresivo Pro 3",
-        completedMsg = "¡Operación completada exitosamente!\nÍtems procesados/creados: %d\nPreset/Config: %s\nIntensidad: %d%%\nGrupos/Pistas procesados: %d\nDeshacer Atómico registrado (Ctrl+Z para revertir).",
+        completedMsg = "(≧◡≦)",
+        syncCompletedMsg = "(≧◡≦)",
+        snapCompletedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "Modo Rápido (EasyLyric & Melodía)",
             "Expresión Vocal (Curvas Hermite)",
             "Armonías Vocales (Coros SATB)",
             "Acordes & Contrapunto Algorítmico"
-        }
+        },
+        applyButtonLabel = "Aplicar"
     },
     [1] = { -- English
         title = "Expressive Mapper Pro 3",
@@ -125,13 +128,16 @@ local I18N_DATA = {
         confirmTitle = "Confirm Operation",
         confirmMsgExpresar = "Do you want to apply the expression preset '%s' at %d%% to the selected notes?",
         completedTitle = "Expressive Mapper Pro 3",
-        completedMsg = "Operation completed successfully.\nItems processed/created: %d\nPreset/Config: %s\nIntensity: %d%%\nGroups/Tracks processed: %d\nAtomic undo registered (Ctrl+Z to revert).",
+        completedMsg = "(≧◡≦)",
+        syncCompletedMsg = "(≧◡≦)",
+        snapCompletedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "Quick Mode (EasyLyric & Melody)",
             "Vocal Expression (Hermite Curves)",
             "Vocal Harmonies (SATB Choir)",
             "Chords & Algorithmic Counterpoint"
-        }
+        },
+        applyButtonLabel = "Apply"
     },
     [2] = { -- Japanese
         title = "表現力マッパー Pro 3",
@@ -189,13 +195,16 @@ local I18N_DATA = {
         confirmTitle = "操作の確認",
         confirmMsgExpresar = "選択したノートに対してプリセット'%s'（%d%%）で表現力オートメーションを適用しますか？",
         completedTitle = "表現力マッパー Pro 3",
-        completedMsg = "処理が正常に完了しました！\n処理/生成アイテム数: %d\nプリセット/設定: %s\n強度: %d%%\n処理グループ/トラック数: %d\nAtomic Undo 登録完了（Ctrl+Z で元に戻せます）。",
+        completedMsg = "(≧◡≦)",
+        syncCompletedMsg = "(≧◡≦)",
+        snapCompletedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "クイックモード (EasyLyric & メロディ)",
             "ボーカル表現 (エルミート曲線)",
             "ボーカルハーモニー (SATBコーラス)",
             "コード & アルゴリズム対位法"
-        }
+        },
+        applyButtonLabel = "適用"
     }
 }
 

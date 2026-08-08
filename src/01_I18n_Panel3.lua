@@ -38,7 +38,7 @@ local I18N_DATA = {
         confirmTitle = "Confirmar Operación",
         confirmMsgArmonia = "¿Deseas generar armonía vocal (%s) sobre las notas existentes?",
         completedTitle = "Mapeador Expresivo Pro 3",
-        completedMsg = "¡Operación completada exitosamente!\nÍtems procesados/creados: %d\nPreset/Config: %s\nIntensidad: %d%%\nGrupos/Pistas procesados: %d\nDeshacer Atómico registrado (Ctrl+Z para revertir).",
+        completedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "Modo Rápido (EasyLyric & Melodía)",
             "Expresión Vocal (Curvas Hermite)",
@@ -62,7 +62,9 @@ local I18N_DATA = {
             "Menor Húngara",
             "Doble Armónica (Bizantina)"
         },
-        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }
+        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
+        applyButtonLabel = "Aplicar",
+        trackHarmName = "Armonía %s"
     },
     [1] = { -- English
         title = "Expressive Mapper Pro 3",
@@ -99,7 +101,7 @@ local I18N_DATA = {
         confirmTitle = "Confirm Operation",
         confirmMsgArmonia = "Do you want to generate vocal harmony (%s) over the existing notes?",
         completedTitle = "Expressive Mapper Pro 3",
-        completedMsg = "Operation completed successfully.\nItems processed/created: %d\nPreset/Config: %s\nIntensity: %d%%\nGroups/Tracks processed: %d\nAtomic undo registered (Ctrl+Z to revert).",
+        completedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "Quick Mode (EasyLyric & Melody)",
             "Vocal Expression (Hermite Curves)",
@@ -123,7 +125,9 @@ local I18N_DATA = {
             "Hungarian Minor",
             "Double Harmonic (Byzantine)"
         },
-        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }
+        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
+        applyButtonLabel = "Apply",
+        trackHarmName = "Harmony %s"
     },
     [2] = { -- Japanese
         title = "表現力マッパー Pro 3",
@@ -160,7 +164,7 @@ local I18N_DATA = {
         confirmTitle = "操作の確認",
         confirmMsgArmonia = "既存のノートに対してハーモニー（%s）を生成しますか？",
         completedTitle = "表現力マッパー Pro 3",
-        completedMsg = "処理が正常に完了しました！\n処理/生成アイテム数: %d\nプリセット/設定: %s\n強度: %d%%\n処理グループ/トラック数: %d\nAtomic Undo 登録完了（Ctrl+Z で元に戻せます）。",
+        completedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "クイックモード (EasyLyric & メロディ)",
             "ボーカル表現 (エルミート曲線)",
@@ -184,7 +188,9 @@ local I18N_DATA = {
             "ハンガリー短音階",
             "ダブルハーモニック (ビザンチン)"
         },
-        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }
+        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
+        applyButtonLabel = "適用",
+        trackHarmName = "ハーモニー %s"
     }
 }
 

@@ -36,13 +36,24 @@ local function deserializarJSONSimple(jsonStr)
         elseif v == "false" then
             t[k] = false
         elseif string.sub(v, 1, 1) == '"' and string.sub(v, -1) == '"' then
-            t[k] = string.sub(v, 2, -2)
+            local s = string.sub(v, 2, -2)
+            s = string.gsub(s, '\\"', '"')
+            s = string.gsub(s, '\\\\', '\\')
+            s = string.gsub(s, '\\n', '\n')
+            t[k] = s
         else
             local num = tonumber(v)
             if num ~= nil then t[k] = num else t[k] = v end
         end
     end
     return t
+end
+
+local function normalizarConfiguracionIdioma(config)
+    if config then
+        config.idiomaUI = nil
+    end
+    return config
 end
 
 local function serializarJSONSimple(t)
@@ -69,6 +80,7 @@ end
 local function guardarConfiguracionUsuario(answers)
     if not answers then return end
     pcall(function()
+        answers = normalizarConfiguracionIdioma(answers)
         local ruta = obtenerRutaConfigUsuario()
         local f = io.open(ruta, "w")
         if f then
@@ -92,7 +104,7 @@ local function cargarConfiguracionUsuario()
             end
         end
     end)
-    return config
+    return normalizarConfiguracionIdioma(config)
 end
 
 --- Mostrar diálogo de preset personalizado y retornar tabla de configuración
@@ -220,11 +232,10 @@ local valEnableJustIntonation, valEnableVocalModes, valEnableDetune, valEnableEx
 local valEnableSmartVibrato, valMergeMode, valLimpiarPrevios, valAdaptarTempo
 local valCompensarGanancia, valProcesarTodosGrupos, valHumanizacion, valRegistro, valFonema
 local valCustomTension, valCustomBreath, valCustomVolume, valCustomGender, valCustomVoicing, valCustomTimbre
-
-
 local valIdiomaUI, valPreset, valIntensidad, valDensityStep, valCustomTension
 local valCustomBreath, valCustomVolume, valCustomGender, valCustomVoicing, valCustomTimbre
 local valMergeMode, valLimpiarPrevios
+local statusText = ""
 local panelWidgets = nil
 
 local function leerValorWidget(widget, fallback)
@@ -237,11 +248,28 @@ local function leerValorWidget(widget, fallback)
     return fallback
 end
 
+local function refrescarEstadoPanel2()
+    statusText = ""
+    local currentCfg = cargarConfiguracionUsuario()
+    if panelWidgets then
+        currentCfg.preset = tonumber(panelWidgets.preset:getValue() or currentCfg.preset) or currentCfg.preset or 0
+        currentCfg.intensidad = tonumber(panelWidgets.intensidad:getValue() or currentCfg.intensidad) or currentCfg.intensidad or 100
+        currentCfg.densityStep = tonumber(panelWidgets.densityStep:getValue() or currentCfg.densityStep) or currentCfg.densityStep or 0
+        currentCfg.customTension = tonumber(panelWidgets.customTension:getValue() or currentCfg.customTension) or currentCfg.customTension or 0
+        currentCfg.customBreath = tonumber(panelWidgets.customBreath:getValue() or currentCfg.customBreath) or currentCfg.customBreath or 0
+        currentCfg.customVolume = tonumber(panelWidgets.customVolume:getValue() or currentCfg.customVolume) or currentCfg.customVolume or 0
+        currentCfg.customGender = tonumber(panelWidgets.customGender:getValue() or currentCfg.customGender) or currentCfg.customGender or 0
+        currentCfg.customVoicing = tonumber(panelWidgets.customVoicing:getValue() or currentCfg.customVoicing) or currentCfg.customVoicing or 70
+        currentCfg.customTimbre = tonumber(panelWidgets.customTimbre:getValue() or currentCfg.customTimbre) or currentCfg.customTimbre or 0
+        currentCfg.mergeMode = panelWidgets.mergeMode:getValue() == true
+        currentCfg.limpiarPrevios = panelWidgets.limpiarPrevios:getValue() == true
+        guardarConfiguracionUsuario(currentCfg)
+    end
+    SV:refreshSidePanel()
+end
+
 local function asegurarWidgetsPanel2(cfg)
     local idiomaInicial = _G.idiomaDetectado or 0
-    if cfg.idiomaUI ~= nil then
-        idiomaInicial = tonumber(cfg.idiomaUI) or 0
-    end
 
     if not panelWidgets then
         panelWidgets = {
@@ -259,23 +287,36 @@ local function asegurarWidgetsPanel2(cfg)
             limpiarPrevios = SV:create("WidgetValue"),
             runButton = SV:create("WidgetValue")
         }
+        panelWidgets.idiomaUI:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.preset:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.intensidad:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.densityStep:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.customTension:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.customBreath:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.customVolume:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.customGender:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.customVoicing:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.customTimbre:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.mergeMode:setValueChangeCallback(refrescarEstadoPanel2)
+        panelWidgets.limpiarPrevios:setValueChangeCallback(refrescarEstadoPanel2)
+
         panelWidgets.runButton:setValueChangeCallback(function()
             ejecutarOperacionPrincipal()
         end)
-    end
 
-    panelWidgets.idiomaUI:setValue(tonumber(cfg.idiomaUI) or idiomaInicial)
-    panelWidgets.preset:setValue(cfg.preset ~= nil and tonumber(cfg.preset) or 0)
-    panelWidgets.intensidad:setValue(cfg.intensidad ~= nil and tonumber(cfg.intensidad) or 100)
-    panelWidgets.densityStep:setValue(cfg.densityStep ~= nil and tonumber(cfg.densityStep) or 0)
-    panelWidgets.customTension:setValue(cfg.customTension ~= nil and tonumber(cfg.customTension) or 0)
-    panelWidgets.customBreath:setValue(cfg.customBreath ~= nil and tonumber(cfg.customBreath) or 0)
-    panelWidgets.customVolume:setValue(cfg.customVolume ~= nil and tonumber(cfg.customVolume) or 0)
-    panelWidgets.customGender:setValue(cfg.customGender ~= nil and tonumber(cfg.customGender) or 0)
-    panelWidgets.customVoicing:setValue(cfg.customVoicing ~= nil and tonumber(cfg.customVoicing) or 70)
-    panelWidgets.customTimbre:setValue(cfg.customTimbre ~= nil and tonumber(cfg.customTimbre) or 0)
-    panelWidgets.mergeMode:setValue(cfg.mergeMode == true)
-    panelWidgets.limpiarPrevios:setValue(cfg.limpiarPrevios == nil and true or (cfg.limpiarPrevios == true))
+        panelWidgets.idiomaUI:setValue(idiomaInicial)
+        panelWidgets.preset:setValue(cfg.preset ~= nil and tonumber(cfg.preset) or 0)
+        panelWidgets.intensidad:setValue(cfg.intensidad ~= nil and tonumber(cfg.intensidad) or 100)
+        panelWidgets.densityStep:setValue(cfg.densityStep ~= nil and tonumber(cfg.densityStep) or 0)
+        panelWidgets.customTension:setValue(cfg.customTension ~= nil and tonumber(cfg.customTension) or 0)
+        panelWidgets.customBreath:setValue(cfg.customBreath ~= nil and tonumber(cfg.customBreath) or 0)
+        panelWidgets.customVolume:setValue(cfg.customVolume ~= nil and tonumber(cfg.customVolume) or 0)
+        panelWidgets.customGender:setValue(cfg.customGender ~= nil and tonumber(cfg.customGender) or 0)
+        panelWidgets.customVoicing:setValue(cfg.customVoicing ~= nil and tonumber(cfg.customVoicing) or 70)
+        panelWidgets.customTimbre:setValue(cfg.customTimbre ~= nil and tonumber(cfg.customTimbre) or 0)
+        panelWidgets.mergeMode:setValue(cfg.mergeMode == true)
+        panelWidgets.limpiarPrevios:setValue(cfg.limpiarPrevios == nil and true or (cfg.limpiarPrevios == true))
+    end
 
     return panelWidgets
 end
@@ -299,7 +340,8 @@ function getSidePanelSectionState()
     valMergeMode = leerValorWidget(widgets.mergeMode, cfg.mergeMode == true)
     valLimpiarPrevios = leerValorWidget(widgets.limpiarPrevios, cfg.limpiarPrevios == nil and true or (cfg.limpiarPrevios == true))
 
-    local tr = I18N_DATA[valIdiomaUI] or I18N_DATA[0]
+    local hostLangIdx = _G.idiomaDetectado or 0
+    local tr = I18N_DATA[hostLangIdx] or I18N_DATA[0]
     local rows = {
         { type = "Label", text = tr.vistaSeccionChoices[2] or "Vocal Expression & Hermite Curves" },
         {
@@ -393,6 +435,13 @@ function getSidePanelSectionState()
         }
     }
 
+    if statusText and statusText ~= "" then
+        table.insert(rows, {
+            type = "Label",
+            text = statusText
+        })
+    end
+
     return {
         title = "Vocal Expression",
         rows = rows
@@ -400,33 +449,33 @@ function getSidePanelSectionState()
 end
 
 function ejecutarOperacionPrincipal()
-    local cfg = {
-        modo = 1, -- MODO 1: Splines de Hermite
-        idiomaUI = valIdiomaUI or 0,
-        preset = valPreset or 0,
-        intensidad = valIntensidad or 100,
-        densityStep = valDensityStep or 0,
-        customTension = valCustomTension or 0,
-        customBreath = valCustomBreath or 0,
-        customVolume = valCustomVolume or 0,
-        customGender = valCustomGender or 0,
-        customVoicing = valCustomVoicing or 70,
-        customTimbre = valCustomTimbre or 0,
-        mergeMode = valMergeMode or false,
-        limpiarPrevios = valLimpiarPrevios or true,
-        enableVocalModes = true,
-        enableDetune = true,
-        enableExpPad = true,
-        enableSmartVibrato = true,
-        adaptarTempo = true,
-        valHumanizacion = 100,
-        valRegistro = 100,
-        valFonema = 100
-    }
+    local cfg = cargarConfiguracionUsuario()
+    cfg.modo = 1 -- MODO 1: Splines de Hermite
+    if panelWidgets then
+        cfg.preset = tonumber(panelWidgets.preset:getValue() or cfg.preset) or cfg.preset or 0
+        cfg.intensidad = tonumber(panelWidgets.intensidad:getValue() or cfg.intensidad) or cfg.intensidad or 100
+        cfg.densityStep = tonumber(panelWidgets.densityStep:getValue() or cfg.densityStep) or cfg.densityStep or 0
+        cfg.customTension = tonumber(panelWidgets.customTension:getValue() or cfg.customTension) or cfg.customTension or 0
+        cfg.customBreath = tonumber(panelWidgets.customBreath:getValue() or cfg.customBreath) or cfg.customBreath or 0
+        cfg.customVolume = tonumber(panelWidgets.customVolume:getValue() or cfg.customVolume) or cfg.customVolume or 0
+        cfg.customGender = tonumber(panelWidgets.customGender:getValue() or cfg.customGender) or cfg.customGender or 0
+        cfg.customVoicing = tonumber(panelWidgets.customVoicing:getValue() or cfg.customVoicing) or cfg.customVoicing or 70
+        cfg.customTimbre = tonumber(panelWidgets.customTimbre:getValue() or cfg.customTimbre) or cfg.customTimbre or 0
+        cfg.mergeMode = panelWidgets.mergeMode:getValue() == true
+        cfg.limpiarPrevios = panelWidgets.limpiarPrevios:getValue() == true
+    end
+    cfg.enableVocalModes = true
+    cfg.enableDetune = true
+    cfg.enableExpPad = true
+    cfg.enableSmartVibrato = true
+    cfg.adaptarTempo = true
+    cfg.valHumanizacion = 100
+    cfg.valRegistro = 100
+    cfg.valFonema = 100
     guardarConfiguracionUsuario(cfg)
 
     -- Mapear variables para compatibilidad con el backend
-    local langIdx = cfg.idiomaUI or 0
+    local langIdx = _G.idiomaDetectado or 0
     local tr = I18N_DATA[langIdx] or I18N_DATA[0]
 
     local modoOperacion       = cfg.modo
@@ -481,7 +530,8 @@ function ejecutarOperacionPrincipal()
     local pistaActual = editorPrincipal:getCurrentTrack()
 
     if not pistaActual then
-        SV:showMessageBox(tr.errContextTitle, tr.errContextMsg)
+        statusText = "[Error] " .. (tr.errContextMsg or "No active track")
+        SV:refreshSidePanel()
         return
     end
 
@@ -556,7 +606,13 @@ function ejecutarOperacionPrincipal()
         end
         confirmMsg = string.format(tr.confirmMsgGenerar, numSilabasPreview, nomNota, octNota, nomPreset, valIntensidad)
     elseif modoOperacion == 1 then
-        confirmMsg = string.format(tr.confirmMsgExpresar, nomPreset, valIntensidad)
+        if langIdx == 1 then
+            confirmMsg = string.format("Do you want to apply the expression preset '%s' at %d%% to the selected notes?", nomPreset, valIntensidad)
+        elseif langIdx == 2 then
+            confirmMsg = string.format("選択したノートに対してプリセット'%s'（%d%%）で表現力オートメーションを適用しますか？", nomPreset, valIntensidad)
+        else
+            confirmMsg = string.format("¿Deseas aplicar la expresividad del preset '%s' al %d%% sobre las notas seleccionadas?", nomPreset, valIntensidad)
+        end
     elseif modoOperacion == 2 then
         local nomArm = tr.modoArmoniaChoices[modoArmoniaIdx + 1] or "3ra"
         confirmMsg = string.format(tr.confirmMsgArmonia, nomArm)
@@ -575,12 +631,8 @@ function ejecutarOperacionPrincipal()
     end
 
     if rangoNotaMin >= rangoNotaMax then
-        SV:showMessageBox(tr.errContextTitle, tr.idiomaUI == 0 and "Rango de nota minimo debe ser menor que el maximo." or "Minimum note range must be lower than maximum.")
-        return
-    end
-
-    local confirmResult = SV:showOkCancelBox(tr.confirmTitle, confirmMsg)
-    if not confirmResult then
+        statusText = (langIdx == 0) and "[Error] Rango de nota mínimo debe ser menor que el máximo." or "[Error] Minimum note range must be lower than maximum."
+        SV:refreshSidePanel()
         return
     end
 
@@ -607,46 +659,46 @@ function ejecutarOperacionPrincipal()
     end
     if modoOperacion == 2 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local totalArmonias = generarPistasArmonia(proyecto, pistaActual, groupRefActivo, tonicaIdx, escalaIdx, modoArmoniaIdx, presetCoralIdx, antiFaseMs, antiFaseCents, factorIntensidad, configPreset, timeAxis, armoniaIntervalosCustom, enableJustIntonation)
-        local resumenArm = string.format(tr.completedMsg, (totalArmonias or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenArm)
+        statusText = string.format(tr.completedMsg, (totalArmonias or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 3 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local totalContra = generarPistaContrapunto(proyecto, pistaActual, groupRefActivo, especieContrapuntoIdx, tonicaIdx, escalaIdx, factorIntensidad, configPreset, timeAxis)
-        local resumenContra = string.format(tr.completedMsg, (totalContra or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenContra)
+        statusText = string.format(tr.completedMsg, (totalContra or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 4 then
-        local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis)
-        local resumenProg = string.format(tr.completedMsg, (totalAcordes or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenProg)
+        local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis, groupRefActivo)
+        statusText = string.format(tr.completedMsg, (totalAcordes or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 5 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local grupoGuiaTarget = groupRefActivo:getTarget()
         local numNotasGuia = grupoGuiaTarget:getNumNotes()
         if numNotasGuia == 0 then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
@@ -689,22 +741,22 @@ function ejecutarOperacionPrincipal()
             end
         end
 
-        local resumenSinc = string.format("Operación de sincronización completada.\nGrupos sincronizados con éxito: %d", totalGruposSincronizados)
-        SV:showMessageBox(tr.completedTitle, resumenSinc)
+        statusText = tr.syncCompletedMsg or string.format("Synchronization completed. Groups: %d", totalGruposSincronizados)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 6 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local targetGroup = groupRefActivo:getTarget()
         local numNotas = targetGroup:getNumNotes()
         if numNotas == 0 then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
@@ -743,8 +795,8 @@ function ejecutarOperacionPrincipal()
             end
         end
 
-        local resumenForzar = string.format("Operación de forzado de afinación completada.\nNotas corregidas a la escala diatónica: %d", totalNotasCorregidas)
-        SV:showMessageBox(tr.completedTitle, resumenForzar)
+        statusText = tr.snapCompletedMsg or string.format("Scale correction completed. Notes fixed: %d", totalNotasCorregidas)
+        SV:refreshSidePanel()
         return
     end
 
@@ -1077,5 +1129,6 @@ function ejecutarOperacionPrincipal()
     end
 
     local resumen = string.format(tr.completedMsg, (totalNotasProcesadas or 0), (nomPreset or ""), (valIntensidad or 0), (numGruposAProcesar or 0))
-    SV:showMessageBox(tr.completedTitle, resumen)
-    end
+    statusText = resumen
+    SV:refreshSidePanel()
+end

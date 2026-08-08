@@ -342,6 +342,23 @@
         Este manual presenta la documentación integral del sistema <strong>Mapeador Expresivo Pro 3</strong>. Cada módulo se organiza tanto en secciones dedicadas para cada script <code>.lua</code> independiente como en dos niveles de profundidad: un <strong>Resumen Sencillo</strong> orientado a la comprensión rápida del flujo de trabajo para todo nivel de usuario, seguido de una <strong>Especificación Técnica Extendida</strong> dirigida a productores avanzados e ingenieros de audio.
     </p>
 
+    <div class="section-block" style="margin-top:12px;">
+        <div class="section-title">Notas de la 3.6.2</div>
+        <div class="card card-simple">
+            <div class="card-body">
+                Esta versión se centra en pulir el motor y la documentación:
+                <ul>
+                    <li><strong>Vocal Harmonies:</strong> mejor conducción de voces, separación, manejo de registros y respeto de opciones de ComboBox para coros más musicales.</li>
+                    <li><strong>Chords:</strong> mejor variación para que distintas opciones y subopciones no produzcan siempre el mismo resultado.</li>
+                    <li><strong>Estados de UI:</strong> se simplificaron los mensajes de éxito y fallo a kaomojis universales.</li>
+                    <li><strong>Persistencia de idioma:</strong> se eliminó <code>idiomaUI</code> del JSON de usuario para que el idioma del host de SynthV no quede fijado por ajustes antiguos.</li>
+                    <li><strong>Flujo de Apply:</strong> se corrigieron las traducciones faltantes de <code>Aplicar</code> y se redujo el spam de mensajes posteriores.</li>
+                    <li><strong>Documentación:</strong> manuales alineados con la versión modular 3.6.2 y los parches aplicados.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <!-- ÍNDICE DE CONTENIDOS -->
     <div class="toc-container">
         <div class="toc-title">Índice del Manual</div>
@@ -476,9 +493,9 @@
             <tbody>
                 <tr>
                     <td><code>"idiomaUI"</code></td>
-                    <td>Numérico (Int)</td>
-                    <td><code>0</code> (Español)</td>
-                    <td>Determina la traducción seleccionada para etiquetas y mensajes (0: ES, 1: EN, 2: JA).</td>
+                    <td>Obsoleto</td>
+                    <td>Idioma del host</td>
+                    <td>Ya no se guarda. Se usa directamente el idioma del host de SynthV para las traducciones.</td>
                 </tr>
                 <tr>
                     <td><code>"modo"</code></td>

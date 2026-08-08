@@ -81,6 +81,76 @@ local function optimizarVoiceLeading(pitchPrevio, pitchCandidatoDirecto, deltaGr
     return pitchCandidatoDirecto
 end
 
+local function ajustarPitchPorRango(pitch, vozIdx, numVoces)
+    local minPitch = 36
+    local maxPitch = 84
+    local targetCenter = 60
+
+    if numVoces >= 4 then
+        if vozIdx == 1 then
+            minPitch, maxPitch, targetCenter = 60, 84, 72
+        elseif vozIdx == 2 then
+            minPitch, maxPitch, targetCenter = 52, 76, 64
+        elseif vozIdx == 3 then
+            minPitch, maxPitch, targetCenter = 45, 69, 57
+        else
+            minPitch, maxPitch, targetCenter = 36, 60, 48
+        end
+    elseif numVoces == 3 then
+        if vozIdx == 1 then
+            minPitch, maxPitch, targetCenter = 56, 84, 69
+        elseif vozIdx == 2 then
+            minPitch, maxPitch, targetCenter = 48, 72, 60
+        else
+            minPitch, maxPitch, targetCenter = 36, 60, 48
+        end
+    elseif numVoces == 2 then
+        if vozIdx == 1 then
+            minPitch, maxPitch, targetCenter = 52, 84, 68
+        else
+            minPitch, maxPitch, targetCenter = 40, 68, 52
+        end
+    end
+
+    while pitch < minPitch do pitch = pitch + 12 end
+    while pitch > maxPitch do pitch = pitch - 12 end
+
+    if math.abs(pitch - targetCenter) > 12 then
+        if pitch < targetCenter then
+            pitch = pitch + 12
+        elseif pitch > targetCenter then
+            pitch = pitch - 12
+        end
+    end
+
+    return math.max(minPitch, math.min(maxPitch, pitch))
+end
+
+local function asegurarSeparacionVoces(pitchActual, pitchAnterior, vozIdx, numVoces)
+    if not pitchAnterior then
+        return pitchActual
+    end
+
+    local separacionMinima = 0
+    if numVoces >= 4 then
+        separacionMinima = (vozIdx == 4) and 5 or 3
+    elseif numVoces == 3 then
+        separacionMinima = (vozIdx == 3) and 5 or 3
+    else
+        separacionMinima = 3
+    end
+
+    while pitchActual >= pitchAnterior - separacionMinima do
+        pitchActual = pitchActual - 12
+    end
+
+    while pitchActual < 24 do
+        pitchActual = pitchActual + 12
+    end
+
+    return pitchActual
+end
+
 --- Generar conjunto de voces armónicas para una nota base
 --- Soporta presets corales (SATB, Dúo, Trío) y transposición interválica
 local function generarVocesArmonicasNota(pitchBase, deltaGrados, tonica, escalaIndices, presetCoralConfig)
@@ -161,15 +231,29 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
     local numVoces = #listaIntervalos
     local pistasCreadas = 0
     local notasTotalCreadas = 0
+    local pitchFinalPorVoz = {}
 
     for vIdx = 1, numVoces do
         local intInfo = listaIntervalos[vIdx]
-        local nombreVoz = "Armonía " .. (intInfo.val >= 0 and "+" or "") .. intInfo.val .. (intInfo.tipo == "c" and " (Cromático)" or " (Diatónico)")
+        local langIdx = _G.idiomaDetectado or 0
+        local tr = I18N_DATA[langIdx] or I18N_DATA[0]
+        local descVoz = (intInfo.val >= 0 and "+" or "") .. intInfo.val .. (intInfo.tipo == "c" and " (Cromático)" or " (Diatónico)")
+        local nombrePistaHarm = string.format(tr.trackHarmName or "Armonía %s", descVoz)
 
-        local nuevaPista = SV:create("Track")
-        nuevaPista:setName(pistaBase:getName() .. " - " .. nombreVoz)
-
-        proyecto:addTrack(nuevaPista)
+        local nuevaPista = nil
+        local totalP = proyecto:getNumTracks()
+        for i = 1, totalP do
+            local t = proyecto:getTrack(i)
+            if t:getName() == nombrePistaHarm then
+                nuevaPista = t
+                break
+            end
+        end
+        if not nuevaPista then
+            nuevaPista = SV:create("Track")
+            nuevaPista:setName(nombrePistaHarm)
+            proyecto:addTrack(nuevaPista)
+        end
         pistasCreadas = pistasCreadas + 1
 
         -- Replicar la base de voz (cantante y vocalModeParams) del grupo guía original
@@ -241,8 +325,11 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
                 pitchHarmTarget = transponerPorGradosEscala(pitchOrg, intInfo.val, tonica, escalaIndices)
             end
             local pitchHarm = optimizarVoiceLeading(pitchPrevioVoz, pitchHarmTarget, intInfo.val, tonica, escalaIndices)
+            pitchHarm = ajustarPitchPorRango(pitchHarm, vIdx, numVoces)
+            pitchHarm = asegurarSeparacionVoces(pitchHarm, pitchFinalPorVoz[vIdx - 1], vIdx, numVoces)
             pitchHarm = math.max(24, math.min(96, pitchHarm)) -- C1 a C7 rango seguro vocal
             pitchPrevioVoz = pitchHarm
+            pitchFinalPorVoz[vIdx] = pitchHarm
 
             -- Entonación Justa (Just Intonation) vs Temperamento Igual Pop
             local detuneJustIntonation = 0

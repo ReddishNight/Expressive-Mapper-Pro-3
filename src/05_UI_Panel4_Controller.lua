@@ -36,13 +36,24 @@ local function deserializarJSONSimple(jsonStr)
         elseif v == "false" then
             t[k] = false
         elseif string.sub(v, 1, 1) == '"' and string.sub(v, -1) == '"' then
-            t[k] = string.sub(v, 2, -2)
+            local s = string.sub(v, 2, -2)
+            s = string.gsub(s, '\\"', '"')
+            s = string.gsub(s, '\\\\', '\\')
+            s = string.gsub(s, '\\n', '\n')
+            t[k] = s
         else
             local num = tonumber(v)
             if num ~= nil then t[k] = num else t[k] = v end
         end
     end
     return t
+end
+
+local function normalizarConfiguracionIdioma(config)
+    if config then
+        config.idiomaUI = nil
+    end
+    return config
 end
 
 local function serializarJSONSimple(t)
@@ -69,6 +80,7 @@ end
 local function guardarConfiguracionUsuario(answers)
     if not answers then return end
     pcall(function()
+        answers = normalizarConfiguracionIdioma(answers)
         local ruta = obtenerRutaConfigUsuario()
         local f = io.open(ruta, "w")
         if f then
@@ -92,7 +104,7 @@ local function cargarConfiguracionUsuario()
             end
         end
     end)
-    return config
+    return normalizarConfiguracionIdioma(config)
 end
 
 --- Mostrar diálogo de preset personalizado y retornar tabla de configuración
@@ -222,7 +234,8 @@ local valCompensarGanancia, valProcesarTodosGrupos, valHumanizacion, valRegistro
 local valCustomTension, valCustomBreath, valCustomVolume, valCustomGender, valCustomVoicing, valCustomTimbre
 
 
-local valIdiomaUI, valPanel4Modo, valEspecieContrapunto, valProgresionAcordes, valRitmoAcordes
+local valIdiomaUI, valPanel4Modo, valEspecieContrapunto, valProgresionAcordes, valRitmoAcordes, valEscalaMelodica, valTonica, valAutoDetectKey
+local statusText = ""
 local panelWidgets = nil
 
 local function leerValorWidget(widget, fallback)
@@ -235,11 +248,24 @@ local function leerValorWidget(widget, fallback)
     return fallback
 end
 
+local function refrescarEstadoPanel4()
+    statusText = ""
+    local currentCfg = cargarConfiguracionUsuario()
+    if panelWidgets then
+        currentCfg.panel4Modo = tonumber(panelWidgets.panel4Modo:getValue() or currentCfg.panel4Modo) or currentCfg.panel4Modo or 1
+        currentCfg.especieContrapunto = tonumber(panelWidgets.especieContrapunto:getValue() or currentCfg.especieContrapunto) or currentCfg.especieContrapunto or 0
+        currentCfg.progresionAcordes = tonumber(panelWidgets.progresionAcordes:getValue() or currentCfg.progresionAcordes) or currentCfg.progresionAcordes or 0
+        currentCfg.ritmoAcordes = tonumber(panelWidgets.ritmoAcordes:getValue() or currentCfg.ritmoAcordes) or currentCfg.ritmoAcordes or 0
+        currentCfg.escalaMelodica = tonumber(panelWidgets.escalaMelodica:getValue() or currentCfg.escalaMelodica) or currentCfg.escalaMelodica or 2
+        currentCfg.tonica = tonumber(panelWidgets.tonica:getValue() or currentCfg.tonica) or currentCfg.tonica or 0
+        currentCfg.autoDetectKey = panelWidgets.autoDetectKey:getValue() == true
+        guardarConfiguracionUsuario(currentCfg)
+    end
+    SV:refreshSidePanel()
+end
+
 local function asegurarWidgetsPanel4(cfg)
     local idiomaInicial = _G.idiomaDetectado or 0
-    if cfg.idiomaUI ~= nil then
-        idiomaInicial = tonumber(cfg.idiomaUI) or 0
-    end
 
     if not panelWidgets then
         panelWidgets = {
@@ -248,18 +274,33 @@ local function asegurarWidgetsPanel4(cfg)
             especieContrapunto = SV:create("WidgetValue"),
             progresionAcordes = SV:create("WidgetValue"),
             ritmoAcordes = SV:create("WidgetValue"),
+            escalaMelodica = SV:create("WidgetValue"),
+            tonica = SV:create("WidgetValue"),
+            autoDetectKey = SV:create("WidgetValue"),
             runButton = SV:create("WidgetValue")
         }
+        panelWidgets.idiomaUI:setValueChangeCallback(refrescarEstadoPanel4)
+        panelWidgets.panel4Modo:setValueChangeCallback(refrescarEstadoPanel4)
+        panelWidgets.especieContrapunto:setValueChangeCallback(refrescarEstadoPanel4)
+        panelWidgets.progresionAcordes:setValueChangeCallback(refrescarEstadoPanel4)
+        panelWidgets.ritmoAcordes:setValueChangeCallback(refrescarEstadoPanel4)
+        panelWidgets.escalaMelodica:setValueChangeCallback(refrescarEstadoPanel4)
+        panelWidgets.tonica:setValueChangeCallback(refrescarEstadoPanel4)
+        panelWidgets.autoDetectKey:setValueChangeCallback(refrescarEstadoPanel4)
+
         panelWidgets.runButton:setValueChangeCallback(function()
             ejecutarOperacionPrincipal()
         end)
-    end
 
-    panelWidgets.idiomaUI:setValue(tonumber(cfg.idiomaUI) or idiomaInicial)
-    panelWidgets.panel4Modo:setValue(cfg.panel4Modo ~= nil and tonumber(cfg.panel4Modo) or 1)
-    panelWidgets.especieContrapunto:setValue(cfg.especieContrapunto ~= nil and tonumber(cfg.especieContrapunto) or 0)
-    panelWidgets.progresionAcordes:setValue(cfg.progresionAcordes ~= nil and tonumber(cfg.progresionAcordes) or 0)
-    panelWidgets.ritmoAcordes:setValue(cfg.ritmoAcordes ~= nil and tonumber(cfg.ritmoAcordes) or 0)
+        panelWidgets.idiomaUI:setValue(idiomaInicial)
+        panelWidgets.panel4Modo:setValue(cfg.panel4Modo ~= nil and tonumber(cfg.panel4Modo) or 1)
+        panelWidgets.especieContrapunto:setValue(cfg.especieContrapunto ~= nil and tonumber(cfg.especieContrapunto) or 0)
+        panelWidgets.progresionAcordes:setValue(cfg.progresionAcordes ~= nil and tonumber(cfg.progresionAcordes) or 0)
+        panelWidgets.ritmoAcordes:setValue(cfg.ritmoAcordes ~= nil and tonumber(cfg.ritmoAcordes) or 0)
+        panelWidgets.escalaMelodica:setValue(cfg.escalaMelodica ~= nil and tonumber(cfg.escalaMelodica) or 2)
+        panelWidgets.tonica:setValue(cfg.tonica ~= nil and tonumber(cfg.tonica) or 0)
+        panelWidgets.autoDetectKey:setValue(cfg.autoDetectKey == nil and true or (cfg.autoDetectKey == true))
+    end
 
     return panelWidgets
 end
@@ -275,8 +316,23 @@ function getSidePanelSectionState()
     valEspecieContrapunto = tonumber(leerValorWidget(widgets.especieContrapunto, cfg.especieContrapunto ~= nil and tonumber(cfg.especieContrapunto) or 0)) or 0
     valProgresionAcordes = tonumber(leerValorWidget(widgets.progresionAcordes, cfg.progresionAcordes ~= nil and tonumber(cfg.progresionAcordes) or 0)) or 0
     valRitmoAcordes = tonumber(leerValorWidget(widgets.ritmoAcordes, cfg.ritmoAcordes ~= nil and tonumber(cfg.ritmoAcordes) or 0)) or 0
+    valEscalaMelodica = tonumber(leerValorWidget(widgets.escalaMelodica, cfg.escalaMelodica ~= nil and tonumber(cfg.escalaMelodica) or 2)) or 2
+    valTonica = tonumber(leerValorWidget(widgets.tonica, cfg.tonica ~= nil and tonumber(cfg.tonica) or 0)) or 0
+    valAutoDetectKey = leerValorWidget(widgets.autoDetectKey, cfg.autoDetectKey == nil and true or (cfg.autoDetectKey == true))
 
     local tr = I18N_DATA[valIdiomaUI] or I18N_DATA[0]
+    
+    local valEsc = widgets.escalaMelodica:getValue()
+    if not valEsc or valEsc < 0 or valEsc >= (tr.escalaChoices and #tr.escalaChoices or 15) then
+        widgets.escalaMelodica:setValue(2)
+        valEscalaMelodica = 2
+    end
+    local valTon = widgets.tonica:getValue()
+    if not valTon or valTon < 0 or valTon >= 12 then
+        widgets.tonica:setValue(0)
+        valTonica = 0
+    end
+
     local modoP4 = valPanel4Modo
     
     local choicesModoP4 = { "Contrapunto Fuxiano", "Progresión de Acordes", "Sincronizar Grupos de Coros", "Forzar Afinación Diatónica" }
@@ -296,6 +352,31 @@ function getSidePanelSectionState()
             }
         }
     }
+
+    if modoP4 == 0 or modoP4 == 1 or modoP4 == 3 then
+        local NOTAS_NOMBRES_ARRAY = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }
+        table.insert(rows, {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.autoDetectKeyLabel or "Auto-Detectar Tonalidad" },
+                { type = "CheckBox", text = tr.autoDetectKeyLabel or "Auto-Detectar Tonalidad", value = widgets.autoDetectKey }
+            }
+        })
+        table.insert(rows, {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.tonicaLabel or "Tónica" },
+                { type = "ComboBox", choices = NOTAS_NOMBRES_ARRAY, value = widgets.tonica }
+            }
+        })
+        table.insert(rows, {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.escalaLabel or "Escala Armónica" },
+                { type = "ComboBox", choices = tr.escalaChoices, value = widgets.escalaMelodica }
+            }
+        })
+    end
 
     if modoP4 == 0 then
         -- Contrapunto (Modo 3)
@@ -336,6 +417,13 @@ function getSidePanelSectionState()
         }
     })
 
+    if statusText and statusText ~= "" then
+        table.insert(rows, {
+            type = "Label",
+            text = statusText
+        })
+    end
+
     return {
         title = "Chords & Counterpoint",
         rows = rows
@@ -343,28 +431,44 @@ function getSidePanelSectionState()
 end
 
 function ejecutarOperacionPrincipal()
+    local cfg = cargarConfiguracionUsuario()
     local p4m = valPanel4Modo or (panelWidgets and panelWidgets.panel4Modo and panelWidgets.panel4Modo:getValue()) or 1
+    if panelWidgets then
+        p4m = tonumber(panelWidgets.panel4Modo:getValue() or p4m) or p4m
+        cfg.panel4Modo = p4m
+        cfg.especieContrapunto = tonumber(panelWidgets.especieContrapunto:getValue() or cfg.especieContrapunto) or cfg.especieContrapunto or 0
+        cfg.progresionAcordes = tonumber(panelWidgets.progresionAcordes:getValue() or cfg.progresionAcordes) or cfg.progresionAcordes or 0
+        cfg.ritmoAcordes = tonumber(panelWidgets.ritmoAcordes:getValue() or cfg.ritmoAcordes) or cfg.ritmoAcordes or 0
+        cfg.escalaMelodica = tonumber(panelWidgets.escalaMelodica:getValue() or cfg.escalaMelodica) or cfg.escalaMelodica or 2
+        cfg.tonica = tonumber(panelWidgets.tonica:getValue() or cfg.tonica) or cfg.tonica or 0
+        cfg.autoDetectKey = panelWidgets.autoDetectKey:getValue() == true
+    end
+    
     local modoReal = 4
     if p4m == 0 then modoReal = 3
     elseif p4m == 1 then modoReal = 4
     elseif p4m == 2 then modoReal = 5
     elseif p4m == 3 then modoReal = 6
     end
+    cfg.modo = modoReal
 
-    local cfg = {
+    local cfg_final = {
         modo = modoReal,
         panel4Modo = p4m,
-        idiomaUI = valIdiomaUI or 0,
-        especieContrapunto = valEspecieContrapunto or 0,
-        progresionAcordes = valProgresionAcordes or 0,
-        ritmoAcordes = valRitmoAcordes or 0,
+        especieContrapunto = cfg.especieContrapunto,
+        progresionAcordes = cfg.progresionAcordes,
+        ritmoAcordes = cfg.ritmoAcordes,
+        escalaMelodica = cfg.escalaMelodica,
+        tonica = cfg.tonica,
+        autoDetectKey = cfg.autoDetectKey,
         intensidad = 100,
         preset = 0,
         valHumanizacion = 100,
         valRegistro = 100,
         valFonema = 100
     }
-    guardarConfiguracionUsuario(cfg)
+    guardarConfiguracionUsuario(cfg_final)
+    local cfg = cfg_final
 
     -- Mapear variables para compatibilidad con el backend
     local modoOperacion       = cfg.modo
@@ -406,7 +510,7 @@ function ejecutarOperacionPrincipal()
     local rangoNotaMax        = 72
     local enableJustIntonation = true
     local vistaSeccion        = 3
-local langIdx                   = cfg.idiomaUI or 0
+    local langIdx                   = _G.idiomaDetectado or 0
     local tr                        = I18N_DATA[langIdx] or I18N_DATA[0]
 
     local modoOperacion       = cfg.modo
@@ -461,7 +565,8 @@ local langIdx                   = cfg.idiomaUI or 0
     local pistaActual = editorPrincipal:getCurrentTrack()
 
     if not pistaActual then
-        SV:showMessageBox(tr.errContextTitle, tr.errContextMsg)
+        statusText = "[Error] " .. (tr.errContextMsg or "No active track")
+        SV:refreshSidePanel()
         return
     end
 
@@ -555,12 +660,8 @@ local langIdx                   = cfg.idiomaUI or 0
     end
 
     if rangoNotaMin >= rangoNotaMax then
-        SV:showMessageBox(tr.errContextTitle, tr.idiomaUI == 0 and "Rango de nota minimo debe ser menor que el maximo." or "Minimum note range must be lower than maximum.")
-        return
-    end
-
-    local confirmResult = SV:showOkCancelBox(tr.confirmTitle, confirmMsg)
-    if not confirmResult then
+        statusText = tr.idiomaUI == 0 and "[Error] Rango de nota mínimo debe ser menor que el máximo." or "[Error] Minimum note range must be lower than maximum."
+        SV:refreshSidePanel()
         return
     end
 
@@ -587,46 +688,46 @@ local langIdx                   = cfg.idiomaUI or 0
     end
     if modoOperacion == 2 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local totalArmonias = generarPistasArmonia(proyecto, pistaActual, groupRefActivo, tonicaIdx, escalaIdx, modoArmoniaIdx, presetCoralIdx, antiFaseMs, antiFaseCents, factorIntensidad, configPreset, timeAxis, armoniaIntervalosCustom, enableJustIntonation)
-        local resumenArm = string.format(tr.completedMsg, (totalArmonias or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenArm)
+        statusText = string.format(tr.completedMsg, (totalArmonias or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 3 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local totalContra = generarPistaContrapunto(proyecto, pistaActual, groupRefActivo, especieContrapuntoIdx, tonicaIdx, escalaIdx, factorIntensidad, configPreset, timeAxis)
-        local resumenContra = string.format(tr.completedMsg, (totalContra or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenContra)
+        statusText = string.format(tr.completedMsg, (totalContra or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 4 then
-        local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis)
-        local resumenProg = string.format(tr.completedMsg, (totalAcordes or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenProg)
+        local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis, groupRefActivo)
+        statusText = string.format(tr.completedMsg, (totalAcordes or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 5 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local grupoGuiaTarget = groupRefActivo:getTarget()
         local numNotasGuia = grupoGuiaTarget:getNumNotes()
         if numNotasGuia == 0 then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
@@ -669,22 +770,22 @@ local langIdx                   = cfg.idiomaUI or 0
             end
         end
 
-        local resumenSinc = string.format("Operación de sincronización completada.\nGrupos sincronizados con éxito: %d", totalGruposSincronizados)
-        SV:showMessageBox(tr.completedTitle, resumenSinc)
+        statusText = string.format("Sincronización completada. Grupos: %d", totalGruposSincronizados)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 6 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local targetGroup = groupRefActivo:getTarget()
         local numNotas = targetGroup:getNumNotes()
         if numNotas == 0 then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
@@ -723,8 +824,8 @@ local langIdx                   = cfg.idiomaUI or 0
             end
         end
 
-        local resumenForzar = string.format("Operación de forzado de afinación completada.\nNotas corregidas a la escala diatónica: %d", totalNotasCorregidas)
-        SV:showMessageBox(tr.completedTitle, resumenForzar)
+        statusText = string.format("Forzado completado. Notas corregidas: %d", totalNotasCorregidas)
+        SV:refreshSidePanel()
         return
     end
 
@@ -1057,5 +1158,6 @@ local langIdx                   = cfg.idiomaUI or 0
     end
 
     local resumen = string.format(tr.completedMsg, (totalNotasProcesadas or 0), (nomPreset or ""), (valIntensidad or 0), (numGruposAProcesar or 0))
-    SV:showMessageBox(tr.completedTitle, resumen)
-    end
+    statusText = resumen
+    SV:refreshSidePanel()
+end

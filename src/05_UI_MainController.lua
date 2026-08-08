@@ -36,13 +36,24 @@ local function deserializarJSONSimple(jsonStr)
         elseif v == "false" then
             t[k] = false
         elseif string.sub(v, 1, 1) == '"' and string.sub(v, -1) == '"' then
-            t[k] = string.sub(v, 2, -2)
+            local s = string.sub(v, 2, -2)
+            s = string.gsub(s, '\\"', '"')
+            s = string.gsub(s, '\\\\', '\\')
+            s = string.gsub(s, '\\n', '\n')
+            t[k] = s
         else
             local num = tonumber(v)
             if num ~= nil then t[k] = num else t[k] = v end
         end
     end
     return t
+end
+
+local function normalizarConfiguracionIdioma(config)
+    if config then
+        config.idiomaUI = nil
+    end
+    return config
 end
 
 local function serializarJSONSimple(t)
@@ -69,6 +80,7 @@ end
 local function guardarConfiguracionUsuario(answers)
     if not answers then return end
     pcall(function()
+        answers = normalizarConfiguracionIdioma(answers)
         local ruta = obtenerRutaConfigUsuario()
         local f = io.open(ruta, "w")
         if f then
@@ -92,7 +104,7 @@ local function cargarConfiguracionUsuario()
             end
         end
     end)
-    return config
+    return normalizarConfiguracionIdioma(config)
 end
 
 --- Mostrar diálogo de preset personalizado y retornar tabla de configuración
@@ -274,9 +286,7 @@ function getSidePanelSectionState()
         -- Cargar valores almacenados en config
         local cfg = cargarConfiguracionUsuario()
         local idiomaInicial = _G.idiomaDetectado or 0
-        if cfg.idiomaUI ~= nil then
-            idiomaInicial = tonumber(cfg.idiomaUI) or 0
-        elseif SV and SV.getHostLanguage then
+        if SV and SV.getHostLanguage then
             pcall(function()
                 local hostLang = string.lower(SV:getHostLanguage() or "")
                 if string.find(hostLang, "en") then
@@ -290,7 +300,7 @@ function getSidePanelSectionState()
         end
 
         valVistaSeccion:setValue(cfg.vistaSeccion ~= nil and tonumber(cfg.vistaSeccion) or 0)
-        valIdiomaUI:setValue(cfg.idiomaUI ~= nil and tonumber(cfg.idiomaUI) or idiomaInicial)
+        valIdiomaUI:setValue(idiomaInicial)
         valModo:setValue(cfg.modo ~= nil and tonumber(cfg.modo) or 0)
         valPreset:setValue(cfg.preset ~= nil and tonumber(cfg.preset) or 0)
         valIntensidad:setValue(cfg.intensidad ~= nil and tonumber(cfg.intensidad) or 100)
@@ -673,7 +683,7 @@ function ejecutarOperacionPrincipal()
     }
     guardarConfiguracionUsuario(cfg)
 
-    local langIdx                   = cfg.idiomaUI
+    local langIdx                   = _G.idiomaDetectado or 0
     local tr                        = I18N_DATA[langIdx] or I18N_DATA[0]
 
     local modoOperacion       = cfg.modo
@@ -877,7 +887,7 @@ function ejecutarOperacionPrincipal()
         return
 
     elseif modoOperacion == 4 then
-        local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis)
+        local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis, groupRefActivo)
         local resumenProg = string.format(tr.completedMsg, (totalAcordes or 0), (nomPreset or ""), (valIntensidad or 0), 1)
         SV:showMessageBox(tr.completedTitle, resumenProg)
         return

@@ -134,7 +134,6 @@ local function generarPistaContrapunto(proyecto, pistaBase, groupRefBase, especi
 
     table.sort(notasBase, function(a, b) return a:getOnset() < b:getOnset() end)
 
-    local nuevaPista = SV:create("Track")
     local nombreEspecie = {
         [0] = "1ra Especie (1:1)",
         [1] = "2da Especie (2:1)",
@@ -143,9 +142,24 @@ local function generarPistaContrapunto(proyecto, pistaBase, groupRefBase, especi
         [4] = "5ta Especie (Florido)",
         [5] = "Libre (Rítmico)"
     }
-    nuevaPista:setName(pistaBase:getName() .. " - Contramelodía " .. (nombreEspecie[especieIdx] or ""))
-
-    proyecto:addTrack(nuevaPista)
+    local langIdx = _G.idiomaDetectado or 0
+    local tr = I18N_DATA[langIdx] or I18N_DATA[0]
+    local nombrePistaContra = string.format(tr.trackContraName or "Contramelodía %s", (nombreEspecie[especieIdx] or ""))
+    
+    local nuevaPista = nil
+    local totalP = proyecto:getNumTracks()
+    for i = 1, totalP do
+        local t = proyecto:getTrack(i)
+        if t:getName() == nombrePistaContra then
+            nuevaPista = t
+            break
+        end
+    end
+    if not nuevaPista then
+        nuevaPista = SV:create("Track")
+        nuevaPista:setName(nombrePistaContra)
+        proyecto:addTrack(nuevaPista)
+    end
 
     -- Obtener offset y rango visual del grupo guía original
     local sourceOffset = groupRefBase:getTimeOffset()

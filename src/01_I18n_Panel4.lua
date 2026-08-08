@@ -31,7 +31,12 @@ local I18N_DATA = {
             "13. Gospel / Soul Elevación (I - I7 - IV - iv6)",
             "14. Gabber / Hardstyle Stabs (i - bVI - bVII - i)",
             "15. Chiptune / 8-Bit Heroico (I - bVII - bVI - V7)",
-            "16. Uplifting Trance Pad (vi7 - IVmaj7 - I - V)"
+            "16. Uplifting Trance Pad (vi7 - IVmaj7 - I - V)",
+            "17. Canon de Pachelbel (8 Acordes)",
+            "18. Pop Rock Clásico (8 Acordes)",
+            "19. Jazz Cadencia Standard (3 Acordes)",
+            "20. Épico Tráiler Oscuro (2 Acordes)",
+            "21. Melancolía Neoclásica (6 Acordes)"
         },
         ritmoAcordesLabel = "15. Ritmo del Acompañamiento",
         ritmoAcordesChoices = {
@@ -49,12 +54,36 @@ local I18N_DATA = {
         confirmMsgContrapunto = "¿Deseas generar una contramelodía (%s) en una pista nueva?",
         confirmMsgProgresion = "¿Deseas generar una progresión de acordes (%s)?",
         completedTitle = "Mapeador Expresivo Pro 3",
-        completedMsg = "¡Operación completada exitosamente!\nÍtems procesados/creados: %d\nPreset/Config: %s\nIntensidad: %d%%\nGrupos/Pistas procesados: %d\nDeshacer Atómico registrado (Ctrl+Z para revertir).",
+        completedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "Modo Rápido (EasyLyric & Melodía)",
             "Expresión Vocal (Curvas Hermite)",
             "Armonías Vocales (Coros SATB)",
             "Acordes & Contrapunto Algorítmico"
+        },
+        applyButtonLabel = "Aplicar",
+        autoDetectKeyLabel = "Auto-detectar Tonalidad (Krumhansl)",
+        tonicaLabel = "Tónica de la Escala (Root)",
+        escalaLabel = "Escala Armónica",
+        trackBassName = "Acordes Bajo",
+        trackVoiceName = "Acordes Voz %d",
+        trackContraName = "Contramelodía %s",
+        escalaChoices = {
+            "Pentatónica Mayor",
+            "Pentatónica Menor",
+            "Mayor Natural (Jónica)",
+            "Menor Natural (Eólica)",
+            "Menor Armónica",
+            "Menor Melódica",
+            "Dórica",
+            "Frigia",
+            "Lidia",
+            "Mixolidia",
+            "Locria",
+            "Blues",
+            "Cromática",
+            "Menor Húngara",
+            "Doble Armónica (Bizantina)"
         }
     },
     [1] = { -- English
@@ -103,12 +132,36 @@ local I18N_DATA = {
         confirmMsgContrapunto = "Do you want to generate a countermelody (%s) in a new track?",
         confirmMsgProgresion = "Do you want to generate a chord progression (%s)?",
         completedTitle = "Expressive Mapper Pro 3",
-        completedMsg = "Operation completed successfully.\nItems processed/created: %d\nPreset/Config: %s\nIntensity: %d%%\nGroups/Tracks processed: %d\nAtomic undo registered (Ctrl+Z to revert).",
+        completedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "Quick Mode (EasyLyric & Melody)",
             "Vocal Expression (Hermite Curves)",
             "Vocal Harmonies (SATB Choir)",
             "Chords & Algorithmic Counterpoint"
+        },
+        applyButtonLabel = "Apply",
+        autoDetectKeyLabel = "Auto-Detect Key (Krumhansl)",
+        tonicaLabel = "Scale Tonic (Root Note)",
+        escalaLabel = "Harmonic Scale",
+        trackBassName = "Chord Bass",
+        trackVoiceName = "Chord Voice %d",
+        trackContraName = "Countermelody %s",
+        escalaChoices = {
+            "Major Pentatonic",
+            "Minor Pentatonic",
+            "Natural Major (Ionian)",
+            "Natural Minor (Aeolian)",
+            "Harmonic Minor",
+            "Melodic Minor",
+            "Dorian",
+            "Phrygian",
+            "Lydian",
+            "Mixolydian",
+            "Locrian",
+            "Blues",
+            "Chromatic",
+            "Hungarian Minor",
+            "Double Harmonic (Byzantine)"
         }
     },
     [2] = { -- Japanese
@@ -139,7 +192,12 @@ local I18N_DATA = {
             "13. ゴスペル / ソウルエレベーション (I - I7 - IV - iv6)",
             "14. ハードスタイル / ガバスタブ (i - bVI - bVII - i)",
             "15. 8ビットヒーローチップチューン (I - bVII - bVI - V7)",
-            "16. アップリフティングトランスパッド (vi7 - IVmaj7 - I - V)"
+            "16. アップリフティングトランスパッド (vi7 - IVmaj7 - I - V)",
+            "17. パッヘルベルのカノン (8コード)",
+            "18. クラシックポップロック (8コード)",
+            "19. 標準ジャズケーデンス (3コード)",
+            "20. ダークエピックトレーラー (2コード)",
+            "21. ネオクラシカルメランコリー (6コード)"
         },
         ritmoAcordesLabel = "15. 伴奏リズムパターン",
         ritmoAcordesChoices = {
@@ -157,12 +215,36 @@ local I18N_DATA = {
         confirmMsgContrapunto = "新しいトラックに対位法メロディ（%s）を生成しますか？",
         confirmMsgProgresion = "コード進行（%s）を生成しますか？",
         completedTitle = "表現力マッパー Pro 3",
-        completedMsg = "処理が正常に完了しました！\n処理/生成アイテム数: %d\nプリセット/設定: %s\n強度: %d%%\n処理グループ/トラック数: %d\nAtomic Undo 登録完了（Ctrl+Z で元に戻せます）。",
+        completedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "クイックモード (EasyLyric & メロディ)",
             "ボーカル表現 (エルミート曲線)",
             "ボーカルハーモニー (SATBコーラス)",
             "コード & アルゴリズム対位法"
+        },
+        applyButtonLabel = "適用",
+        autoDetectKeyLabel = "キー自動検出 (Krumhansl)",
+        tonicaLabel = "主音 (ルート音)",
+        escalaLabel = "調性スケール",
+        trackBassName = "コードベース",
+        trackVoiceName = "コードボイス %d",
+        trackContraName = "カウンターメロディ %s",
+        escalaChoices = {
+            "メジャーペンタトニック",
+            "マイナーペンタトニック",
+            "自然長音階 (アイオニアン)",
+            "自然短音階 (エオリアン)",
+            "和声的短音階",
+            "旋律的短音階",
+            "ドリアン",
+            "フリジアン",
+            "リディアン",
+            "ミクソリディアン",
+            "ロクリアン",
+            "ブルース",
+            "クロマチック",
+            "ハンガリー短音階",
+            "ダブルハーモニック (ビザンチン)"
         }
     }
 }

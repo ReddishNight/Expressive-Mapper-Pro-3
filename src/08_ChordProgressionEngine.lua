@@ -75,7 +75,7 @@ local function optimizarConduccionVoces(notasNuevas, notasPrevias)
 end
 
 --- Generar notas y pistas para una progresión de acordes profesional
-local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, tonica, escalaIdx, ritmoIdx, fIntensidad, configPreset, timeAxis, factorSwing)
+local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, tonica, escalaIdx, ritmoIdx, fIntensidad, configPreset, timeAxis, groupRefBase)
     local escalaIndices = ESCALAS_AVANZADAS[escalaIdx] or ESCALAS_AVANZADAS[2]
     local datosProgresion = PROGRESIONES_ACORDES[progresionIdx] or PROGRESIONES_ACORDES[0]
     local gradosAcordes = datosProgresion.grados or { 4, 5, 3, 6 }
@@ -83,14 +83,40 @@ local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, toni
 
     local numCompases = #gradosAcordes
     local durCompasBlicks = SV.QUARTER * 4
+
+    local startBlick = 0
+    if groupRefBase then
+        startBlick = groupRefBase:getOnset()
+        local groupDur = groupRefBase:getDuration()
+        if groupDur > 0 then
+            durCompasBlicks = math.max(SV.QUARTER / 2, math.floor(groupDur / numCompases))
+        end
+    else
+        local reproductor = SV:getPlayback()
+        startBlick = reproductor:getPlayhead()
+    end
     local totalChordBlicks = numCompases * durCompasBlicks
 
-    local reproductor = SV:getPlayback()
-    local startBlick = reproductor:getPlayhead()
-    -- Crear pista y note group para el Bajo
-    local pistaBajo = SV:create("Track")
-    pistaBajo:setName(pistaBase:getName() .. " - Acordes Bajo")
-    proyecto:addTrack(pistaBajo)
+    local function obtenerOCrearPista(nombrePista)
+        local totalP = proyecto:getNumTracks()
+        for i = 1, totalP do
+            local t = proyecto:getTrack(i)
+            if t:getName() == nombrePista then
+                return t
+            end
+        end
+        local tNueva = SV:create("Track")
+        tNueva:setName(nombrePista)
+        proyecto:addTrack(tNueva)
+        return tNueva
+    end
+
+    local langIdx = _G.idiomaDetectado or 0
+    local tr = I18N_DATA[langIdx] or I18N_DATA[0]
+
+    -- Obtener o crear pista para el Bajo
+    local nombreBajo = tr.trackBassName or "Acordes Bajo"
+    local pistaBajo = obtenerOCrearPista(nombreBajo)
     local groupBajo = SV:create("NoteGroup")
     proyecto:addNoteGroup(groupBajo)
     local refBajo = SV:create("NoteGroupReference")
@@ -109,13 +135,12 @@ local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, toni
         end
     end
 
-    -- Crear pistas y note groups para las voces superiores
+    -- Obtener o crear pistas para las voces superiores
     local pistasVoces = {}
     local groupsVoces = {}
     for v = 1, maxVocesSuperiores do
-        local pV = SV:create("Track")
-        pV:setName(pistaBase:getName() .. " - Acordes Voz " .. v)
-        proyecto:addTrack(pV)
+        local nombreVoz = string.format(tr.trackVoiceName or "Acordes Voz %d", v)
+        local pV = obtenerOCrearPista(nombreVoz)
         local gV = SV:create("NoteGroup")
         proyecto:addNoteGroup(gV)
         local rV = SV:create("NoteGroupReference")

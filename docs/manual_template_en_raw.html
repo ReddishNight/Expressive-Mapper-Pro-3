@@ -343,6 +343,23 @@
         This manual presents comprehensive technical documentation for <strong>Expressive Mapper Pro 3</strong>. Each module is organized into dedicated sections for each standalone <code>.lua</code> script, as well as two levels of depth: a <strong>Simple Summary</strong> for fast workflow understanding and an <strong>Extended Technical Specification</strong> for advanced producers and audio engineers.
     </p>
 
+    <div class="section-block" style="margin-top:12px;">
+        <div class="section-title">3.6.2 Patch Notes</div>
+        <div class="card card-simple">
+            <div class="card-body">
+                This release focuses on refinement rather than new presets:
+                <ul>
+                    <li><strong>Vocal Harmonies:</strong> improved voice leading, spacing, register handling, and combo-box option respect for more musical choir generation.</li>
+                    <li><strong>Chords:</strong> improved variation so different options and sub-options no longer collapse into the same result.</li>
+                    <li><strong>UI Status Output:</strong> simplified completion/status feedback to universal kaomojis for clearer visual signaling.</li>
+                    <li><strong>Language Persistence:</strong> removed <code>idiomaUI</code> persistence from the user JSON so the SynthV host language is no longer overridden by older saved settings.</li>
+                    <li><strong>Apply Workflow:</strong> fixed missing <code>Apply</code> label translations and reduced post-apply message spam in the panels.</li>
+                    <li><strong>Documentation:</strong> manuals updated to match the current modular 3.6.2 build and the applied engine patches.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <!-- TABLE OF CONTENTS -->
     <div class="toc-container">
         <div class="toc-title">Table of Contents</div>
@@ -477,9 +494,9 @@
             <tbody>
                 <tr>
                     <td><code>"idiomaUI"</code></td>
-                    <td>Numeric (Int)</td>
-                    <td><code>0</code> (Spanish)</td>
-                    <td>UI language translation (0: ES, 1: EN, 2: JA).</td>
+                    <td>Deprecated</td>
+                    <td>Host language</td>
+                    <td>No longer persisted. SynthV host language is used directly for translations.</td>
                 </tr>
                 <tr>
                     <td><code>"modo"</code></td>

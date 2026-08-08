@@ -114,7 +114,10 @@ local I18N_DATA = {
         confirmTitle = "Confirmar Operación",
         confirmMsgGenerar = "¿Deseas generar notas a partir de %d sílabas en %s%d usando el preset '%s' al %d%%?",
         completedTitle = "Mapeador Expresivo Pro 3",
-        completedMsg = "¡Operación completada exitosamente!\nÍtems procesados/creados: %d\nPreset/Config: %s\nIntensidad: %d%%\nGrupos/Pistas procesados: %d\nDeshacer Atómico registrado (Ctrl+Z para revertir).",
+        completedMsg = "(≧◡≦)",
+        syncCompletedMsg = "(≧◡≦)",
+        snapCompletedMsg = "(≧◡≦)",
+        errNoteRangeMsg = "[Error] El rango de nota mínimo debe ser menor que el máximo.",
         vistaSeccionChoices = {
             "Modo Rápido (EasyLyric & Melodía)",
             "Expresión Vocal (Curvas Hermite)",
@@ -125,7 +128,8 @@ local I18N_DATA = {
         ayudaGuiaPhoneme = "  (/) Fonemas directos",
         ayudaGuiaSlur = "  (_) Nota ligada",
         ayudaGuiaInflection = "  (\\) Inflexión de tono",
-        ayudaGuiaTimeMark = "  (%) Marcas de tiempo (%10.5s)"
+        ayudaGuiaTimeMark = "  (%) Marcas de tiempo (%10.5s)",
+        applyButtonLabel = "Aplicar"
     },
     [1] = { -- English
         title = "Expressive Mapper Pro 3",
@@ -205,7 +209,10 @@ local I18N_DATA = {
         confirmTitle = "Confirm Operation",
         confirmMsgGenerar = "Will generate notes from %d syllables starting at %s%d with preset '%s' at %d%%.\nContinue?",
         completedTitle = "Expressive Mapper Pro 3",
-        completedMsg = "Operation completed successfully.\nItems processed/created: %d\nPreset/Config: %s\nIntensity: %d%%\nGroups/Tracks processed: %d\nAtomic undo registered (Ctrl+Z to revert).",
+        completedMsg = "(≧◡≦)",
+        syncCompletedMsg = "(≧◡≦)",
+        snapCompletedMsg = "(≧◡≦)",
+        errNoteRangeMsg = "[Error] Minimum note range must be lower than maximum.",
         vistaSeccionChoices = {
             "Quick Mode (EasyLyric & Melody)",
             "Vocal Expression (Hermite Curves)",
@@ -216,7 +223,8 @@ local I18N_DATA = {
         ayudaGuiaPhoneme = "  - (/) Raw phonemes",
         ayudaGuiaSlur = "  - (_) Note slur",
         ayudaGuiaInflection = "  - (\\) Pitch inflection",
-        ayudaGuiaTimeMark = "  - (%) Time markers (%10.5s)"
+        ayudaGuiaTimeMark = "  - (%) Time markers (%10.5s)",
+        applyButtonLabel = "Apply"
     },
     [2] = { -- Japanese
         title = "表現力マッパー Pro 3",
@@ -296,7 +304,10 @@ local I18N_DATA = {
         confirmTitle = "操作の確認",
         confirmMsgGenerar = "%d音節から%s%dを基準にプリセット'%s'（%d%%）でノートを生成します。\n続行しますか？",
         completedTitle = "表現力マッパー Pro 3",
-        completedMsg = "処理が正常に完了しました！\n処理/生成アイテム数: %d\nプリセット/設定: %s\n強度: %d%%\n処理グループ/トラック数: %d\nAtomic Undo 登録完了（Ctrl+Z で元に戻せます）。",
+        completedMsg = "(≧◡≦)",
+        syncCompletedMsg = "(≧◡≦)",
+        snapCompletedMsg = "(≧◡≦)",
+        errNoteRangeMsg = "[エラー] 最小ノート範囲は最大ノート範囲より低く設定してください。",
         vistaSeccionChoices = {
             "クイックモード (EasyLyric & メロディ)",
             "ボーカル表現 (エルミート曲線)",
@@ -306,7 +317,8 @@ local I18N_DATA = {
         ayudaGuiaSyllable = "  - (-) 音節分割",
         ayudaGuiaPhoneme = "  - (/) 直接音素",
         ayudaGuiaSlur = "  - (_) スラー",
-        ayudaGuiaInflection = "  - (v) 音程変化"
+        ayudaGuiaInflection = "  - (v) 音程変化",
+        applyButtonLabel = "適用"
     }
 }
 
@@ -660,7 +672,12 @@ local PROGRESIONES_ACORDES = {
     [12] = { nombre = "Gospel / Soul Elevación", grados = { 1, 1, 4, 4 }, tipos = { "triada_mayor", "dom7", "triada_mayor", "triada_menor" } },
     [13] = { nombre = "Gabber / Hardstyle Stabs", grados = { 1, 6, 7, 1 }, tipos = { "triada_menor", "triada_mayor", "triada_mayor", "triada_menor" } },
     [14] = { nombre = "Chiptune / 8-Bit Heroico", grados = { 1, 7, 6, 5 }, tipos = { "triada_mayor", "triada_mayor", "triada_mayor", "dom7" } },
-    [15] = { nombre = "Uplifting Trance Pad", grados = { 6, 4, 1, 5 }, tipos = { "min7", "maj7", "triada_mayor", "dom7" } }
+    [15] = { nombre = "Uplifting Trance Pad", grados = { 6, 4, 1, 5 }, tipos = { "min7", "maj7", "triada_mayor", "dom7" } },
+    [16] = { nombre = "Canon de Pachelbel (8 Acordes)", grados = { 1, 5, 6, 3, 4, 1, 4, 5 }, tipos = { "triada_mayor", "triada_mayor", "triada_menor", "triada_menor", "triada_mayor", "triada_mayor", "triada_mayor", "triada_mayor" } },
+    [17] = { nombre = "Pop Rock Clásico (8 Acordes)", grados = { 1, 5, 6, 4, 1, 5, 6, 4 }, tipos = { "triada_mayor", "triada_mayor", "triada_menor", "triada_mayor", "triada_mayor", "triada_mayor", "triada_menor", "triada_mayor" } },
+    [18] = { nombre = "Jazz Cadencia Standard (3 Acordes)", grados = { 2, 5, 1 }, tipos = { "min7", "dom7", "maj7" } },
+    [19] = { nombre = "Épico Tráiler Oscuro (2 Acordes)", grados = { 1, 6 }, tipos = { "triada_menor", "maj7" } },
+    [20] = { nombre = "Melancolía Neoclásica (6 Acordes)", grados = { 6, 4, 1, 5, 6, 3 }, tipos = { "triada_menor", "triada_mayor", "triada_mayor", "triada_mayor", "triada_menor", "triada_menor" } }
 }
 
 -- ============================================================================
@@ -2318,13 +2335,24 @@ local function deserializarJSONSimple(jsonStr)
         elseif v == "false" then
             t[k] = false
         elseif string.sub(v, 1, 1) == '"' and string.sub(v, -1) == '"' then
-            t[k] = string.sub(v, 2, -2)
+            local s = string.sub(v, 2, -2)
+            s = string.gsub(s, '\\"', '"')
+            s = string.gsub(s, '\\\\', '\\')
+            s = string.gsub(s, '\\n', '\n')
+            t[k] = s
         else
             local num = tonumber(v)
             if num ~= nil then t[k] = num else t[k] = v end
         end
     end
     return t
+end
+
+local function normalizarConfiguracionIdioma(config)
+    if config then
+        config.idiomaUI = nil
+    end
+    return config
 end
 
 local function serializarJSONSimple(t)
@@ -2351,6 +2379,7 @@ end
 local function guardarConfiguracionUsuario(answers)
     if not answers then return end
     pcall(function()
+        answers = normalizarConfiguracionIdioma(answers)
         local ruta = obtenerRutaConfigUsuario()
         local f = io.open(ruta, "w")
         if f then
@@ -2374,7 +2403,7 @@ local function cargarConfiguracionUsuario()
             end
         end
     end)
-    return config
+    return normalizarConfiguracionIdioma(config)
 end
 
 --- Mostrar diálogo de preset personalizado y retornar tabla de configuración
@@ -2505,6 +2534,7 @@ local valCustomTension, valCustomBreath, valCustomVolume, valCustomGender, valCu
 
 
 local valIdiomaUI, valPreset, valIntensidad, valLetra, valBasePitch, valSoloFonemas
+local statusText = ""
 local panelWidgets = nil
 
 local function leerValorWidget(widget, fallback)
@@ -2517,11 +2547,28 @@ local function leerValorWidget(widget, fallback)
     return fallback
 end
 
+local function refrescarEstadoPanel1()
+    statusText = ""
+    local currentCfg = cargarConfiguracionUsuario()
+    if panelWidgets then
+        currentCfg.preset = tonumber(panelWidgets.preset:getValue() or currentCfg.preset) or currentCfg.preset or 0
+        currentCfg.intensidad = tonumber(panelWidgets.intensidad:getValue() or currentCfg.intensidad) or currentCfg.intensidad or 100
+        currentCfg.letra = tostring(panelWidgets.letra:getValue() or currentCfg.letra)
+        currentCfg.separatorMode = tostring(panelWidgets.separatorMode:getValue() or currentCfg.separatorMode)
+        currentCfg.separatorCustom = tostring(panelWidgets.separatorCustom:getValue() or currentCfg.separatorCustom)
+        currentCfg.basePitch = tonumber(panelWidgets.basePitch:getValue() or currentCfg.basePitch) or currentCfg.basePitch or 60
+        currentCfg.soloFonemas = panelWidgets.soloFonemas:getValue() == true
+        currentCfg.modoMelodia = tonumber(panelWidgets.modoMelodia:getValue() or currentCfg.modoMelodia) or currentCfg.modoMelodia or 0
+        currentCfg.modoRitmo = tonumber(panelWidgets.modoRitmo:getValue() or currentCfg.modoRitmo) or currentCfg.modoRitmo or 0
+        currentCfg.escalaMelodica = tonumber(panelWidgets.escalaMelodica:getValue() or currentCfg.escalaMelodica) or currentCfg.escalaMelodica or 2
+        currentCfg.targetNotesMode = tonumber(panelWidgets.targetNotesMode:getValue() or currentCfg.targetNotesMode) or currentCfg.targetNotesMode or 0
+        guardarConfiguracionUsuario(currentCfg)
+    end
+    SV:refreshSidePanel()
+end
+
 local function asegurarWidgetsPanel1(cfg)
     local idiomaInicial = _G.idiomaDetectado or 0
-    if cfg.idiomaUI ~= nil then
-        idiomaInicial = tonumber(cfg.idiomaUI) or 0
-    end
 
     if not panelWidgets then
         panelWidgets = {
@@ -2539,23 +2586,36 @@ local function asegurarWidgetsPanel1(cfg)
             targetNotesMode = SV:create("WidgetValue"),
             runButton = SV:create("WidgetValue")
         }
+        panelWidgets.idiomaUI:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.preset:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.intensidad:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.letra:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.separatorMode:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.separatorCustom:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.basePitch:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.soloFonemas:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.modoMelodia:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.modoRitmo:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.escalaMelodica:setValueChangeCallback(refrescarEstadoPanel1)
+        panelWidgets.targetNotesMode:setValueChangeCallback(refrescarEstadoPanel1)
+
         panelWidgets.runButton:setValueChangeCallback(function()
             ejecutarOperacionPrincipal()
         end)
-    end
 
-    panelWidgets.idiomaUI:setValue(tonumber(cfg.idiomaUI) or idiomaInicial)
-    panelWidgets.preset:setValue(cfg.preset ~= nil and tonumber(cfg.preset) or 0)
-    panelWidgets.intensidad:setValue(cfg.intensidad ~= nil and tonumber(cfg.intensidad) or 100)
-    panelWidgets.letra:setValue(cfg.letra ~= nil and tostring(cfg.letra) or "")
-    panelWidgets.separatorMode:setValue(cfg.separatorMode ~= nil and tostring(cfg.separatorMode) or "auto")
-    panelWidgets.separatorCustom:setValue(cfg.separatorCustom ~= nil and tostring(cfg.separatorCustom) or "")
-    panelWidgets.basePitch:setValue(cfg.basePitch ~= nil and tonumber(cfg.basePitch) or 60)
-    panelWidgets.soloFonemas:setValue(cfg.soloFonemas == true)
-    panelWidgets.modoMelodia:setValue(cfg.modoMelodia ~= nil and tonumber(cfg.modoMelodia) or 0)
-    panelWidgets.modoRitmo:setValue(cfg.modoRitmo ~= nil and tonumber(cfg.modoRitmo) or 0)
-    panelWidgets.escalaMelodica:setValue(cfg.escalaMelodica ~= nil and tonumber(cfg.escalaMelodica) or 2)
-    panelWidgets.targetNotesMode:setValue(cfg.targetNotesMode ~= nil and tonumber(cfg.targetNotesMode) or 0)
+        panelWidgets.idiomaUI:setValue(idiomaInicial)
+        panelWidgets.preset:setValue(cfg.preset ~= nil and tonumber(cfg.preset) or 0)
+        panelWidgets.intensidad:setValue(cfg.intensidad ~= nil and tonumber(cfg.intensidad) or 100)
+        panelWidgets.letra:setValue(cfg.letra ~= nil and tostring(cfg.letra) or "")
+        panelWidgets.separatorMode:setValue(cfg.separatorMode ~= nil and tostring(cfg.separatorMode) or "auto")
+        panelWidgets.separatorCustom:setValue(cfg.separatorCustom ~= nil and tostring(cfg.separatorCustom) or "")
+        panelWidgets.basePitch:setValue(cfg.basePitch ~= nil and tonumber(cfg.basePitch) or 60)
+        panelWidgets.soloFonemas:setValue(cfg.soloFonemas == true)
+        panelWidgets.modoMelodia:setValue(cfg.modoMelodia ~= nil and tonumber(cfg.modoMelodia) or 0)
+        panelWidgets.modoRitmo:setValue(cfg.modoRitmo ~= nil and tonumber(cfg.modoRitmo) or 0)
+        panelWidgets.escalaMelodica:setValue(cfg.escalaMelodica ~= nil and tonumber(cfg.escalaMelodica) or 2)
+        panelWidgets.targetNotesMode:setValue(cfg.targetNotesMode ~= nil and tonumber(cfg.targetNotesMode) or 0)
+    end
 
     return panelWidgets
 end
@@ -2668,6 +2728,13 @@ function getSidePanelSectionState()
         }
     }
 
+    if statusText and statusText ~= "" then
+        table.insert(rows, {
+            type = "Label",
+            text = statusText
+        })
+    end
+
     return {
         title = "Lyric & Melody",
         rows = rows
@@ -2754,7 +2821,6 @@ function ejecutarOperacionPrincipal()
     cfg.modo = 0 -- MODO 0: Generar notas desde texto
 
     if panelWidgets then
-        cfg.idiomaUI = tonumber(panelWidgets.idiomaUI:getValue() or cfg.idiomaUI) or cfg.idiomaUI
         cfg.preset = tonumber(panelWidgets.preset:getValue() or cfg.preset) or cfg.preset
         cfg.intensidad = tonumber(panelWidgets.intensidad:getValue() or cfg.intensidad) or cfg.intensidad
         cfg.letra = tostring(panelWidgets.letra:getValue() or cfg.letra)
@@ -2808,7 +2874,7 @@ function ejecutarOperacionPrincipal()
     local rangoNotaMax        = 72
     local enableJustIntonation = true
     local vistaSeccion        = 0
-local langIdx                   = cfg.idiomaUI or 0
+    local langIdx                   = _G.idiomaDetectado or 0
     local tr                        = I18N_DATA[langIdx] or I18N_DATA[0]
 
     local modoOperacion       = cfg.modo
@@ -2864,7 +2930,8 @@ local langIdx                   = cfg.idiomaUI or 0
     local pistaActual = editorPrincipal:getCurrentTrack()
 
     if not pistaActual then
-        SV:showMessageBox(tr.errContextTitle, tr.errContextMsg)
+        statusText = "[Error] " .. (tr.errContextMsg or "No active track")
+        SV:refreshSidePanel()
         return
     end
 
@@ -2960,12 +3027,8 @@ local langIdx                   = cfg.idiomaUI or 0
     end
 
     if rangoNotaMin >= rangoNotaMax then
-        SV:showMessageBox(tr.errContextTitle, tr.idiomaUI == 0 and "Rango de nota minimo debe ser menor que el maximo." or "Minimum note range must be lower than maximum.")
-        return
-    end
-
-    local confirmResult = SV:showOkCancelBox(tr.confirmTitle, confirmMsg)
-    if not confirmResult then
+        statusText = tr.errNoteRangeMsg or "[Error] Minimum note range must be lower than maximum."
+        SV:refreshSidePanel()
         return
     end
 
@@ -2992,46 +3055,46 @@ local langIdx                   = cfg.idiomaUI or 0
     end
     if modoOperacion == 2 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local totalArmonias = generarPistasArmonia(proyecto, pistaActual, groupRefActivo, tonicaIdx, escalaIdx, modoArmoniaIdx, presetCoralIdx, antiFaseMs, antiFaseCents, factorIntensidad, configPreset, timeAxis, armoniaIntervalosCustom, enableJustIntonation)
-        local resumenArm = string.format(tr.completedMsg, (totalArmonias or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenArm)
+        statusText = string.format(tr.completedMsg, (totalArmonias or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 3 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local totalContra = generarPistaContrapunto(proyecto, pistaActual, groupRefActivo, especieContrapuntoIdx, tonicaIdx, escalaIdx, factorIntensidad, configPreset, timeAxis)
-        local resumenContra = string.format(tr.completedMsg, (totalContra or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenContra)
+        statusText = string.format(tr.completedMsg, (totalContra or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 4 then
-        local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis)
-        local resumenProg = string.format(tr.completedMsg, (totalAcordes or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenProg)
+        local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis, groupRefActivo)
+        statusText = string.format(tr.completedMsg, (totalAcordes or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 5 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local grupoGuiaTarget = groupRefActivo:getTarget()
         local numNotasGuia = grupoGuiaTarget:getNumNotes()
         if numNotasGuia == 0 then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
@@ -3074,22 +3137,22 @@ local langIdx                   = cfg.idiomaUI or 0
             end
         end
 
-        local resumenSinc = string.format("Operación de sincronización completada.\nGrupos sincronizados con éxito: %d", totalGruposSincronizados)
-        SV:showMessageBox(tr.completedTitle, resumenSinc)
+        statusText = string.format(tr.syncCompletedMsg or "Sincronización completada. Grupos: %d", totalGruposSincronizados)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 6 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local targetGroup = groupRefActivo:getTarget()
         local numNotas = targetGroup:getNumNotes()
         if numNotas == 0 then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
@@ -3128,8 +3191,8 @@ local langIdx                   = cfg.idiomaUI or 0
             end
         end
 
-        local resumenForzar = string.format("Operación de forzado de afinación completada.\nNotas corregidas a la escala diatónica: %d", totalNotasCorregidas)
-        SV:showMessageBox(tr.completedTitle, resumenForzar)
+        statusText = string.format(tr.snapCompletedMsg or "Forzado completado. Notas corregidas: %d", totalNotasCorregidas)
+        SV:refreshSidePanel()
         return
     end
 
@@ -3537,5 +3600,6 @@ local langIdx                   = cfg.idiomaUI or 0
     end
 
     local resumen = string.format(tr.completedMsg, (totalNotasProcesadas or 0), (nomPreset or ""), (valIntensidad or 0), (numGruposAProcesar or 0))
-    SV:showMessageBox(tr.completedTitle, resumen)
-    end
+    statusText = resumen
+    SV:refreshSidePanel()
+end

@@ -71,7 +71,7 @@ local I18N_DATA = {
         confirmTitle = "Confirmar Operación",
         confirmMsgArmonia = "¿Deseas generar armonía vocal (%s) sobre las notas existentes?",
         completedTitle = "Mapeador Expresivo Pro 3",
-        completedMsg = "¡Operación completada exitosamente!\nÍtems procesados/creados: %d\nPreset/Config: %s\nIntensidad: %d%%\nGrupos/Pistas procesados: %d\nDeshacer Atómico registrado (Ctrl+Z para revertir).",
+        completedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "Modo Rápido (EasyLyric & Melodía)",
             "Expresión Vocal (Curvas Hermite)",
@@ -95,7 +95,9 @@ local I18N_DATA = {
             "Menor Húngara",
             "Doble Armónica (Bizantina)"
         },
-        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }
+        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
+        applyButtonLabel = "Aplicar",
+        trackHarmName = "Armonía %s"
     },
     [1] = { -- English
         title = "Expressive Mapper Pro 3",
@@ -132,7 +134,7 @@ local I18N_DATA = {
         confirmTitle = "Confirm Operation",
         confirmMsgArmonia = "Do you want to generate vocal harmony (%s) over the existing notes?",
         completedTitle = "Expressive Mapper Pro 3",
-        completedMsg = "Operation completed successfully.\nItems processed/created: %d\nPreset/Config: %s\nIntensity: %d%%\nGroups/Tracks processed: %d\nAtomic undo registered (Ctrl+Z to revert).",
+        completedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "Quick Mode (EasyLyric & Melody)",
             "Vocal Expression (Hermite Curves)",
@@ -156,7 +158,9 @@ local I18N_DATA = {
             "Hungarian Minor",
             "Double Harmonic (Byzantine)"
         },
-        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }
+        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
+        applyButtonLabel = "Apply",
+        trackHarmName = "Harmony %s"
     },
     [2] = { -- Japanese
         title = "表現力マッパー Pro 3",
@@ -193,7 +197,7 @@ local I18N_DATA = {
         confirmTitle = "操作の確認",
         confirmMsgArmonia = "既存のノートに対してハーモニー（%s）を生成しますか？",
         completedTitle = "表現力マッパー Pro 3",
-        completedMsg = "処理が正常に完了しました！\n処理/生成アイテム数: %d\nプリセット/設定: %s\n強度: %d%%\n処理グループ/トラック数: %d\nAtomic Undo 登録完了（Ctrl+Z で元に戻せます）。",
+        completedMsg = "(≧◡≦)",
         vistaSeccionChoices = {
             "クイックモード (EasyLyric & メロディ)",
             "ボーカル表現 (エルミート曲線)",
@@ -217,7 +221,9 @@ local I18N_DATA = {
             "ハンガリー短音階",
             "ダブルハーモニック (ビザンチン)"
         },
-        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }
+        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
+        applyButtonLabel = "適用",
+        trackHarmName = "ハーモニー %s"
     }
 }
 
@@ -571,7 +577,12 @@ local PROGRESIONES_ACORDES = {
     [12] = { nombre = "Gospel / Soul Elevación", grados = { 1, 1, 4, 4 }, tipos = { "triada_mayor", "dom7", "triada_mayor", "triada_menor" } },
     [13] = { nombre = "Gabber / Hardstyle Stabs", grados = { 1, 6, 7, 1 }, tipos = { "triada_menor", "triada_mayor", "triada_mayor", "triada_menor" } },
     [14] = { nombre = "Chiptune / 8-Bit Heroico", grados = { 1, 7, 6, 5 }, tipos = { "triada_mayor", "triada_mayor", "triada_mayor", "dom7" } },
-    [15] = { nombre = "Uplifting Trance Pad", grados = { 6, 4, 1, 5 }, tipos = { "min7", "maj7", "triada_mayor", "dom7" } }
+    [15] = { nombre = "Uplifting Trance Pad", grados = { 6, 4, 1, 5 }, tipos = { "min7", "maj7", "triada_mayor", "dom7" } },
+    [16] = { nombre = "Canon de Pachelbel (8 Acordes)", grados = { 1, 5, 6, 3, 4, 1, 4, 5 }, tipos = { "triada_mayor", "triada_mayor", "triada_menor", "triada_menor", "triada_mayor", "triada_mayor", "triada_mayor", "triada_mayor" } },
+    [17] = { nombre = "Pop Rock Clásico (8 Acordes)", grados = { 1, 5, 6, 4, 1, 5, 6, 4 }, tipos = { "triada_mayor", "triada_mayor", "triada_menor", "triada_mayor", "triada_mayor", "triada_mayor", "triada_menor", "triada_mayor" } },
+    [18] = { nombre = "Jazz Cadencia Standard (3 Acordes)", grados = { 2, 5, 1 }, tipos = { "min7", "dom7", "maj7" } },
+    [19] = { nombre = "Épico Tráiler Oscuro (2 Acordes)", grados = { 1, 6 }, tipos = { "triada_menor", "maj7" } },
+    [20] = { nombre = "Melancolía Neoclásica (6 Acordes)", grados = { 6, 4, 1, 5, 6, 3 }, tipos = { "triada_menor", "triada_mayor", "triada_mayor", "triada_mayor", "triada_menor", "triada_menor" } }
 }
 
 -- ============================================================================
@@ -2274,6 +2285,76 @@ local function optimizarVoiceLeading(pitchPrevio, pitchCandidatoDirecto, deltaGr
     return pitchCandidatoDirecto
 end
 
+local function ajustarPitchPorRango(pitch, vozIdx, numVoces)
+    local minPitch = 36
+    local maxPitch = 84
+    local targetCenter = 60
+
+    if numVoces >= 4 then
+        if vozIdx == 1 then
+            minPitch, maxPitch, targetCenter = 60, 84, 72
+        elseif vozIdx == 2 then
+            minPitch, maxPitch, targetCenter = 52, 76, 64
+        elseif vozIdx == 3 then
+            minPitch, maxPitch, targetCenter = 45, 69, 57
+        else
+            minPitch, maxPitch, targetCenter = 36, 60, 48
+        end
+    elseif numVoces == 3 then
+        if vozIdx == 1 then
+            minPitch, maxPitch, targetCenter = 56, 84, 69
+        elseif vozIdx == 2 then
+            minPitch, maxPitch, targetCenter = 48, 72, 60
+        else
+            minPitch, maxPitch, targetCenter = 36, 60, 48
+        end
+    elseif numVoces == 2 then
+        if vozIdx == 1 then
+            minPitch, maxPitch, targetCenter = 52, 84, 68
+        else
+            minPitch, maxPitch, targetCenter = 40, 68, 52
+        end
+    end
+
+    while pitch < minPitch do pitch = pitch + 12 end
+    while pitch > maxPitch do pitch = pitch - 12 end
+
+    if math.abs(pitch - targetCenter) > 12 then
+        if pitch < targetCenter then
+            pitch = pitch + 12
+        elseif pitch > targetCenter then
+            pitch = pitch - 12
+        end
+    end
+
+    return math.max(minPitch, math.min(maxPitch, pitch))
+end
+
+local function asegurarSeparacionVoces(pitchActual, pitchAnterior, vozIdx, numVoces)
+    if not pitchAnterior then
+        return pitchActual
+    end
+
+    local separacionMinima = 0
+    if numVoces >= 4 then
+        separacionMinima = (vozIdx == 4) and 5 or 3
+    elseif numVoces == 3 then
+        separacionMinima = (vozIdx == 3) and 5 or 3
+    else
+        separacionMinima = 3
+    end
+
+    while pitchActual >= pitchAnterior - separacionMinima do
+        pitchActual = pitchActual - 12
+    end
+
+    while pitchActual < 24 do
+        pitchActual = pitchActual + 12
+    end
+
+    return pitchActual
+end
+
 --- Generar conjunto de voces armónicas para una nota base
 --- Soporta presets corales (SATB, Dúo, Trío) y transposición interválica
 local function generarVocesArmonicasNota(pitchBase, deltaGrados, tonica, escalaIndices, presetCoralConfig)
@@ -2354,15 +2435,29 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
     local numVoces = #listaIntervalos
     local pistasCreadas = 0
     local notasTotalCreadas = 0
+    local pitchFinalPorVoz = {}
 
     for vIdx = 1, numVoces do
         local intInfo = listaIntervalos[vIdx]
-        local nombreVoz = "Armonía " .. (intInfo.val >= 0 and "+" or "") .. intInfo.val .. (intInfo.tipo == "c" and " (Cromático)" or " (Diatónico)")
+        local langIdx = _G.idiomaDetectado or 0
+        local tr = I18N_DATA[langIdx] or I18N_DATA[0]
+        local descVoz = (intInfo.val >= 0 and "+" or "") .. intInfo.val .. (intInfo.tipo == "c" and " (Cromático)" or " (Diatónico)")
+        local nombrePistaHarm = string.format(tr.trackHarmName or "Armonía %s", descVoz)
 
-        local nuevaPista = SV:create("Track")
-        nuevaPista:setName(pistaBase:getName() .. " - " .. nombreVoz)
-
-        proyecto:addTrack(nuevaPista)
+        local nuevaPista = nil
+        local totalP = proyecto:getNumTracks()
+        for i = 1, totalP do
+            local t = proyecto:getTrack(i)
+            if t:getName() == nombrePistaHarm then
+                nuevaPista = t
+                break
+            end
+        end
+        if not nuevaPista then
+            nuevaPista = SV:create("Track")
+            nuevaPista:setName(nombrePistaHarm)
+            proyecto:addTrack(nuevaPista)
+        end
         pistasCreadas = pistasCreadas + 1
 
         -- Replicar la base de voz (cantante y vocalModeParams) del grupo guía original
@@ -2434,8 +2529,11 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
                 pitchHarmTarget = transponerPorGradosEscala(pitchOrg, intInfo.val, tonica, escalaIndices)
             end
             local pitchHarm = optimizarVoiceLeading(pitchPrevioVoz, pitchHarmTarget, intInfo.val, tonica, escalaIndices)
+            pitchHarm = ajustarPitchPorRango(pitchHarm, vIdx, numVoces)
+            pitchHarm = asegurarSeparacionVoces(pitchHarm, pitchFinalPorVoz[vIdx - 1], vIdx, numVoces)
             pitchHarm = math.max(24, math.min(96, pitchHarm)) -- C1 a C7 rango seguro vocal
             pitchPrevioVoz = pitchHarm
+            pitchFinalPorVoz[vIdx] = pitchHarm
 
             -- Entonación Justa (Just Intonation) vs Temperamento Igual Pop
             local detuneJustIntonation = 0
@@ -2555,13 +2653,24 @@ local function deserializarJSONSimple(jsonStr)
         elseif v == "false" then
             t[k] = false
         elseif string.sub(v, 1, 1) == '"' and string.sub(v, -1) == '"' then
-            t[k] = string.sub(v, 2, -2)
+            local s = string.sub(v, 2, -2)
+            s = string.gsub(s, '\\"', '"')
+            s = string.gsub(s, '\\\\', '\\')
+            s = string.gsub(s, '\\n', '\n')
+            t[k] = s
         else
             local num = tonumber(v)
             if num ~= nil then t[k] = num else t[k] = v end
         end
     end
     return t
+end
+
+local function normalizarConfiguracionIdioma(config)
+    if config then
+        config.idiomaUI = nil
+    end
+    return config
 end
 
 local function serializarJSONSimple(t)
@@ -2588,6 +2697,7 @@ end
 local function guardarConfiguracionUsuario(answers)
     if not answers then return end
     pcall(function()
+        answers = normalizarConfiguracionIdioma(answers)
         local ruta = obtenerRutaConfigUsuario()
         local f = io.open(ruta, "w")
         if f then
@@ -2611,7 +2721,7 @@ local function cargarConfiguracionUsuario()
             end
         end
     end)
-    return config
+    return normalizarConfiguracionIdioma(config)
 end
 
 --- Mostrar diálogo de preset personalizado y retornar tabla de configuración
@@ -2739,8 +2849,7 @@ local valEnableJustIntonation, valEnableVocalModes, valEnableDetune, valEnableEx
 local valEnableSmartVibrato, valMergeMode, valLimpiarPrevios, valAdaptarTempo
 local valCompensarGanancia, valProcesarTodosGrupos, valHumanizacion, valRegistro, valFonema
 local valCustomTension, valCustomBreath, valCustomVolume, valCustomGender, valCustomVoicing, valCustomTimbre
-
-
+local statusText = ""
 
 local panelWidgets = nil
 
@@ -2754,11 +2863,26 @@ local function leerValorWidget(widget, fallback)
     return fallback
 end
 
+local function refrescarEstadoPanel3()
+    statusText = ""
+    local currentCfg = cargarConfiguracionUsuario()
+    if panelWidgets then
+        currentCfg.modoArmonia = tonumber(panelWidgets.modoArmonia:getValue() or currentCfg.modoArmonia) or currentCfg.modoArmonia or 0
+        currentCfg.presetCoral = tonumber(panelWidgets.presetCoral:getValue() or currentCfg.presetCoral) or currentCfg.presetCoral or 0
+        currentCfg.antiFaseMs = tonumber(panelWidgets.antiFaseMs:getValue() or currentCfg.antiFaseMs) or currentCfg.antiFaseMs or 0
+        currentCfg.antiFaseCents = tonumber(panelWidgets.antiFaseCents:getValue() or currentCfg.antiFaseCents) or currentCfg.antiFaseCents or 0
+        currentCfg.armoniaIntervalosCustom = tostring(panelWidgets.armoniaIntervalosCustom:getValue() or currentCfg.armoniaIntervalosCustom)
+        currentCfg.enableJustIntonation = panelWidgets.enableJustIntonation:getValue() == true
+        currentCfg.escalaMelodica = tonumber(panelWidgets.escalaMelodica:getValue() or currentCfg.escalaMelodica) or currentCfg.escalaMelodica or 2
+        currentCfg.tonica = tonumber(panelWidgets.tonica:getValue() or currentCfg.tonica) or currentCfg.tonica or 0
+        currentCfg.autoDetectKey = panelWidgets.autoDetectKey:getValue() == true
+        guardarConfiguracionUsuario(currentCfg)
+    end
+    SV:refreshSidePanel()
+end
+
 local function asegurarWidgetsPanel3(cfg)
     local idiomaInicial = _G.idiomaDetectado or 0
-    if cfg.idiomaUI ~= nil then
-        idiomaInicial = tonumber(cfg.idiomaUI) or 0
-    end
 
     if not panelWidgets then
         panelWidgets = {
@@ -2774,21 +2898,32 @@ local function asegurarWidgetsPanel3(cfg)
             autoDetectKey = SV:create("WidgetValue"),
             runButton = SV:create("WidgetValue")
         }
+        panelWidgets.idiomaUI:setValueChangeCallback(refrescarEstadoPanel3)
+        panelWidgets.modoArmonia:setValueChangeCallback(refrescarEstadoPanel3)
+        panelWidgets.presetCoral:setValueChangeCallback(refrescarEstadoPanel3)
+        panelWidgets.antiFaseMs:setValueChangeCallback(refrescarEstadoPanel3)
+        panelWidgets.antiFaseCents:setValueChangeCallback(refrescarEstadoPanel3)
+        panelWidgets.armoniaIntervalosCustom:setValueChangeCallback(refrescarEstadoPanel3)
+        panelWidgets.enableJustIntonation:setValueChangeCallback(refrescarEstadoPanel3)
+        panelWidgets.escalaMelodica:setValueChangeCallback(refrescarEstadoPanel3)
+        panelWidgets.tonica:setValueChangeCallback(refrescarEstadoPanel3)
+        panelWidgets.autoDetectKey:setValueChangeCallback(refrescarEstadoPanel3)
+
+        panelWidgets.idiomaUI:setValue(idiomaInicial)
+        panelWidgets.modoArmonia:setValue(cfg.modoArmonia ~= nil and tonumber(cfg.modoArmonia) or 0)
+        panelWidgets.presetCoral:setValue(cfg.presetCoral ~= nil and tonumber(cfg.presetCoral) or 0)
+        panelWidgets.antiFaseMs:setValue(cfg.antiFaseMs ~= nil and tonumber(cfg.antiFaseMs) or 0)
+        panelWidgets.antiFaseCents:setValue(cfg.antiFaseCents ~= nil and tonumber(cfg.antiFaseCents) or 0)
+        panelWidgets.armoniaIntervalosCustom:setValue(cfg.armoniaIntervalosCustom ~= nil and tostring(cfg.armoniaIntervalosCustom) or "+3, +7, -5")
+        panelWidgets.enableJustIntonation:setValue(cfg.enableJustIntonation == nil and true or (cfg.enableJustIntonation == true))
+        panelWidgets.escalaMelodica:setValue(cfg.escalaMelodica ~= nil and tonumber(cfg.escalaMelodica) or 2)
+        panelWidgets.tonica:setValue(cfg.tonica ~= nil and tonumber(cfg.tonica) or 0)
+        panelWidgets.autoDetectKey:setValue(cfg.autoDetectKey == nil and true or (cfg.autoDetectKey == true))
+
         panelWidgets.runButton:setValueChangeCallback(function()
             ejecutarOperacionPrincipal()
         end)
     end
-
-    panelWidgets.idiomaUI:setValue(tonumber(cfg.idiomaUI) or idiomaInicial)
-    panelWidgets.modoArmonia:setValue(cfg.modoArmonia ~= nil and tonumber(cfg.modoArmonia) or 0)
-    panelWidgets.presetCoral:setValue(cfg.presetCoral ~= nil and tonumber(cfg.presetCoral) or 0)
-    panelWidgets.antiFaseMs:setValue(cfg.antiFaseMs ~= nil and tonumber(cfg.antiFaseMs) or 0)
-    panelWidgets.antiFaseCents:setValue(cfg.antiFaseCents ~= nil and tonumber(cfg.antiFaseCents) or 0)
-    panelWidgets.armoniaIntervalosCustom:setValue(cfg.armoniaIntervalosCustom ~= nil and tostring(cfg.armoniaIntervalosCustom) or "+3, +7, -5")
-    panelWidgets.enableJustIntonation:setValue(cfg.enableJustIntonation == nil and true or (cfg.enableJustIntonation == true))
-    panelWidgets.escalaMelodica:setValue(cfg.escalaMelodica ~= nil and tonumber(cfg.escalaMelodica) or 2)
-    panelWidgets.tonica:setValue(cfg.tonica ~= nil and tonumber(cfg.tonica) or 0)
-    panelWidgets.autoDetectKey:setValue(cfg.autoDetectKey == nil and true or (cfg.autoDetectKey == true))
 
     return panelWidgets
 end
@@ -2889,6 +3024,13 @@ function getSidePanelSectionState()
         }
     }
 
+    if statusText and statusText ~= "" then
+        table.insert(rows, {
+            type = "Label",
+            text = statusText
+        })
+    end
+
     return {
         title = "Vocal Harmonies",
         rows = rows
@@ -2896,21 +3038,24 @@ function getSidePanelSectionState()
 end
 
 function ejecutarOperacionPrincipal()
-    local cfg = {
-        modo = 2, -- MODO 2: Armonías vocales
-        idiomaUI = valIdiomaUI or 0,
-        modoArmonia = valModoArmonia or 0,
-        presetCoral = valPresetCoral or 0,
-        antiFaseMs = valAntiFaseMs or 12,
-        antiFaseCents = valAntiFaseCents or 10,
-        armoniaIntervalosCustom = valArmoniaIntervalosCustom or "+3, +7, -5",
-        enableJustIntonation = valEnableJustIntonation == nil and true or valEnableJustIntonation,
-        intensidad = 100,
-        preset = 0,
-        valHumanizacion = 100,
-        valRegistro = 100,
-        valFonema = 100
-    }
+    local cfg = cargarConfiguracionUsuario()
+    cfg.modo = 2 -- MODO 2: Armonías vocales
+    if panelWidgets then
+        cfg.modoArmonia = tonumber(panelWidgets.modoArmonia:getValue() or cfg.modoArmonia) or cfg.modoArmonia or 0
+        cfg.presetCoral = tonumber(panelWidgets.presetCoral:getValue() or cfg.presetCoral) or cfg.presetCoral or 0
+        cfg.antiFaseMs = tonumber(panelWidgets.antiFaseMs:getValue() or cfg.antiFaseMs) or cfg.antiFaseMs or 0
+        cfg.antiFaseCents = tonumber(panelWidgets.antiFaseCents:getValue() or cfg.antiFaseCents) or cfg.antiFaseCents or 0
+        cfg.armoniaIntervalosCustom = tostring(panelWidgets.armoniaIntervalosCustom:getValue() or cfg.armoniaIntervalosCustom)
+        cfg.enableJustIntonation = panelWidgets.enableJustIntonation:getValue() == true
+        cfg.escalaMelodica = tonumber(panelWidgets.escalaMelodica:getValue() or cfg.escalaMelodica) or cfg.escalaMelodica or 2
+        cfg.tonica = tonumber(panelWidgets.tonica:getValue() or cfg.tonica) or cfg.tonica or 0
+        cfg.autoDetectKey = panelWidgets.autoDetectKey:getValue() == true
+    end
+    cfg.intensidad = 100
+    cfg.preset = 0
+    cfg.valHumanizacion = 100
+    cfg.valRegistro = 100
+    cfg.valFonema = 100
     guardarConfiguracionUsuario(cfg)
 
     -- Mapear variables para compatibilidad con el backend
@@ -2921,9 +3066,9 @@ function ejecutarOperacionPrincipal()
     local densityChoice       = 0
     local modoRitmoIdx        = 0
     local modoMelodiaIdx      = 0
-    local escalaIdx           = valEscalaMelodica:getValue()
-    local tonicaIdx           = valTonica:getValue()
-    local autoDetectKey       = valAutoDetectKey:getValue()
+    local escalaIdx           = cfg.escalaMelodica or 2
+    local tonicaIdx           = cfg.tonica or 0
+    local autoDetectKey       = (cfg.autoDetectKey ~= false)
     local modoArmoniaIdx      = cfg.modoArmonia
     local presetCoralIdx      = cfg.presetCoral
     local antiFaseMs          = cfg.antiFaseMs
@@ -2952,7 +3097,7 @@ function ejecutarOperacionPrincipal()
     local rangoNotaMax        = 72
     local enableJustIntonation = cfg.enableJustIntonation
     local vistaSeccion        = 2
-local langIdx                   = cfg.idiomaUI or 0
+    local langIdx                   = _G.idiomaDetectado or 0
     local tr                        = I18N_DATA[langIdx] or I18N_DATA[0]
 
     local modoOperacion       = cfg.modo
@@ -3007,7 +3152,8 @@ local langIdx                   = cfg.idiomaUI or 0
     local pistaActual = editorPrincipal:getCurrentTrack()
 
     if not pistaActual then
-        SV:showMessageBox(tr.errContextTitle, tr.errContextMsg)
+        statusText = "[Error] " .. (tr.errContextMsg or "No active track")
+        SV:refreshSidePanel()
         return
     end
 
@@ -3101,12 +3247,8 @@ local langIdx                   = cfg.idiomaUI or 0
     end
 
     if rangoNotaMin >= rangoNotaMax then
-        SV:showMessageBox(tr.errContextTitle, tr.idiomaUI == 0 and "Rango de nota minimo debe ser menor que el maximo." or "Minimum note range must be lower than maximum.")
-        return
-    end
-
-    local confirmResult = SV:showOkCancelBox(tr.confirmTitle, confirmMsg)
-    if not confirmResult then
+        statusText = tr.idiomaUI == 0 and "[Error] Rango de nota mínimo debe ser menor que el máximo." or "[Error] Minimum note range must be lower than maximum."
+        SV:refreshSidePanel()
         return
     end
 
@@ -3133,46 +3275,46 @@ local langIdx                   = cfg.idiomaUI or 0
     end
     if modoOperacion == 2 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local totalArmonias = generarPistasArmonia(proyecto, pistaActual, groupRefActivo, tonicaIdx, escalaIdx, modoArmoniaIdx, presetCoralIdx, antiFaseMs, antiFaseCents, factorIntensidad, configPreset, timeAxis, armoniaIntervalosCustom, enableJustIntonation)
-        local resumenArm = string.format(tr.completedMsg, (totalArmonias or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenArm)
+        statusText = string.format(tr.completedMsg, (totalArmonias or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 3 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local totalContra = generarPistaContrapunto(proyecto, pistaActual, groupRefActivo, especieContrapuntoIdx, tonicaIdx, escalaIdx, factorIntensidad, configPreset, timeAxis)
-        local resumenContra = string.format(tr.completedMsg, (totalContra or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenContra)
+        statusText = string.format(tr.completedMsg, (totalContra or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 4 then
-        local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis)
-        local resumenProg = string.format(tr.completedMsg, (totalAcordes or 0), (nomPreset or ""), (valIntensidad or 0), 1)
-        SV:showMessageBox(tr.completedTitle, resumenProg)
+        local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis, groupRefActivo)
+        statusText = string.format(tr.completedMsg, (totalAcordes or 0), (nomPreset or ""), (valIntensidad or 0), 1)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 5 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local grupoGuiaTarget = groupRefActivo:getTarget()
         local numNotasGuia = grupoGuiaTarget:getNumNotes()
         if numNotasGuia == 0 then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
@@ -3215,22 +3357,22 @@ local langIdx                   = cfg.idiomaUI or 0
             end
         end
 
-        local resumenSinc = string.format("Operación de sincronización completada.\nGrupos sincronizados con éxito: %d", totalGruposSincronizados)
-        SV:showMessageBox(tr.completedTitle, resumenSinc)
+        statusText = string.format("Sincronización completada. Grupos: %d", totalGruposSincronizados)
+        SV:refreshSidePanel()
         return
 
     elseif modoOperacion == 6 then
         if not groupRefActivo then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
         local targetGroup = groupRefActivo:getTarget()
         local numNotas = targetGroup:getNumNotes()
         if numNotas == 0 then
-            SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            
+            statusText = "[Error] " .. (tr.errNoNotesMsg or "No notes found")
+            SV:refreshSidePanel()
             return
         end
 
@@ -3269,8 +3411,8 @@ local langIdx                   = cfg.idiomaUI or 0
             end
         end
 
-        local resumenForzar = string.format("Operación de forzado de afinación completada.\nNotas corregidas a la escala diatónica: %d", totalNotasCorregidas)
-        SV:showMessageBox(tr.completedTitle, resumenForzar)
+        statusText = string.format("Forzado completado. Notas corregidas: %d", totalNotasCorregidas)
+        SV:refreshSidePanel()
         return
     end
 
@@ -3603,5 +3745,6 @@ local langIdx                   = cfg.idiomaUI or 0
     end
 
     local resumen = string.format(tr.completedMsg, (totalNotasProcesadas or 0), (nomPreset or ""), (valIntensidad or 0), (numGruposAProcesar or 0))
-    SV:showMessageBox(tr.completedTitle, resumen)
-    end
+    statusText = resumen
+    SV:refreshSidePanel()
+end
