@@ -128,7 +128,9 @@ local I18N_DATA = {
             "1ra Especie (Nota contra nota - 1:1)",
             "2da Especie (2 notas contra 1 - 2:1)",
             "3ra Especie (4 notas contra 1 - 4:1)",
-            "Contrapunto Libre (Florido / Adornado)"
+            "4ta Especie (Síncopas / Retardos - Suspensiones)",
+            "5ta Especie (Florido / Mixto - Ornamentado)",
+            "Contrapunto Libre (Rítmico / Improv)"
         },
         progresionAcordesLabel = "14. Estilo de Progresión",
         progresionAcordesChoices = {
@@ -168,10 +170,15 @@ local I18N_DATA = {
         enableExpPad = "XY Pad de Expresividad Integrada",
         enableSmartVibrato = "Envolvente de Vibrato Inteligente",
         mergeMode = "Modo Fusión (No Destructivo)",
+        mergeModeLabel = "Modo Fusión (No Destructivo)",
         limpiarPrevios = "Limpiar automatizaciones previas",
+        limpiarPreviosLabel = "Limpiar automatizaciones previas",
         adaptarTempo = "Ajustar longitud de nodos al tempo BPM",
+        adaptarTempoLabel = "Ajustar longitud de nodos al tempo BPM",
         compensarGanancia = "Compensar ganancia de volumen por preset",
+        compensarGananciaLabel = "Compensar ganancia de volumen por preset",
         procesarTodosGrupos = "Procesar todos los grupos del track",
+        procesarTodosGruposLabel = "Procesar todos los grupos del track",
         idiomaLabel = "Idioma / Language",
         errContextTitle = "Error de Contexto",
         errContextMsg = "Por favor, selecciona una pista activa en el editor antes de ejecutar.",
@@ -188,6 +195,7 @@ local I18N_DATA = {
         confirmMsgSincronizar = "¿Deseas sincronizar los grupos de coros no enlazados tomando como referencia el grupo guía activo?",
         confirmMsgForzar = "¿Deseas forzar las notas del grupo a la escala diatónica '%s' en '%s'?",
         completedTitle = "Mapeador Expresivo Pro 3",
+        applyButtonLabel = "Aplicar",
         completedMsg = "¡Operación completada exitosamente!\nÍtems procesados/creados: %d\nPreset/Config: %s\nIntensidad: %d%%\nGrupos/Pistas procesados: %d\nDeshacer Atómico registrado (Ctrl+Z para revertir).",
         customTensionLabel = "Tensión Personalizada (-1.0 a 1.0)",
         customBreathLabel = "Tensión de Aire (-1.0 a 1.0)",
@@ -203,7 +211,7 @@ local I18N_DATA = {
         rangoNotaMinLabel = "24. Límite de Nota Mínimo",
         rangoNotaMaxLabel = "25. Límite de Nota Máximo",
         targetNotesModeLabel = "22. Destino de la Generación",
-        targetNotesModeChoices = { "Crear notas nuevas", "Reemplazar en notas seleccionadas" },
+        targetNotesModeChoices = { "Añadir en Playhead (Nuevas notas)", "Reemplazar todo en Playhead (Pruebas)", "Reemplazar en notas seleccionadas" },
         vistaSeccionLabel = "0. Sección de Panel (Filtro de UX)",
         vistaSeccionChoices = {
             "Modo Rápido (EasyLyric: Letra y Melodía)",
@@ -333,7 +341,9 @@ local I18N_DATA = {
             "1st Species (Note against note - 1:1)",
             "2nd Species (2 notes against 1 - 2:1)",
             "3rd Species (4 notes against 1 - 4:1)",
-            "Free Counterpoint (Florid / Adorned)"
+            "4th Species (Suspensions / Syncopations)",
+            "5th Species (Florid / Mixed Counterpoint)",
+            "Free Counterpoint (Rhythmic / Improv)"
         },
         progresionAcordesLabel = "14. Chord Progression Style",
         progresionAcordesChoices = {
@@ -373,10 +383,15 @@ local I18N_DATA = {
         enableExpPad = "Expression XY Pad (ExpPad)",
         enableSmartVibrato = "Smart Vibrato Envelope",
         mergeMode = "Non-Destructive Merge Mode",
+        mergeModeLabel = "Non-Destructive Merge Mode",
         limpiarPrevios = "Clear Previous Automations",
+        limpiarPreviosLabel = "Clear Previous Automations",
         adaptarTempo = "Sync to Project Tempo (BPM)",
+        adaptarTempoLabel = "Sync to Project Tempo (BPM)",
         compensarGanancia = "Compensate Track Volume Gain",
+        compensarGananciaLabel = "Compensate Track Volume Gain",
         procesarTodosGrupos = "Process All Track Groups",
+        procesarTodosGruposLabel = "Process All Track Groups",
         idiomaLabel = "Interface Language",
         errContextTitle = "Context Error",
         errContextMsg = "Please select an active track in the editor before running.",
@@ -393,6 +408,7 @@ local I18N_DATA = {
         confirmMsgSincronizar = "Will synchronize unlinked choir groups using the active group as a reference.\nContinue?",
         confirmMsgForzar = "Will force existing pitches to the diatonic scale '%s' in '%s'.\nContinue?",
         completedTitle = "Expressive Mapper Pro 3",
+        applyButtonLabel = "Apply",
         completedMsg = "Operation completed successfully.\nItems processed/created: %d\nPreset/Config: %s\nIntensity: %d%%\nGroups/Tracks processed: %d\nAtomic undo registered (Ctrl+Z to revert).",
         customTensionLabel = "Custom Tension (-1.0 to 1.0)",
         customBreathLabel = "Custom Breathiness (-1.0 to 1.0)",
@@ -408,7 +424,7 @@ local I18N_DATA = {
         rangoNotaMinLabel = "24. Minimum Note Range",
         rangoNotaMaxLabel = "25. Maximum Note Range",
         targetNotesModeLabel = "22. Generation Destination",
-        targetNotesModeChoices = { "Create New Notes", "Replace Selected Notes" },
+        targetNotesModeChoices = { "Append at Playhead (New Notes)", "Replace at Playhead (Testing)", "Replace Selected Notes" },
         vistaSeccionLabel = "0. Panel View Section (UX Filter)",
         vistaSeccionChoices = {
             "Quick Mode (EasyLyric: Lyrics & Melody)",
@@ -538,7 +554,9 @@ local I18N_DATA = {
             "第1類 (1:1 音対音)",
             "第2類 (2:1 2音対1音)",
             "第3類 (4:1 4音対1音)",
-            "自由対位法 / 装飾"
+            "第4類 (シンコペーション / 懸垂音 - 2:1)",
+            "第5類 (華麗対位法 / 複合装飾)",
+            "自由対位法 (リズム / インプロ)"
         },
         progresionAcordesLabel = "14. コード進行スタイル",
         progresionAcordesChoices = {
@@ -578,10 +596,15 @@ local I18N_DATA = {
         enableExpPad = "エクスプレッション XY パッド",
         enableSmartVibrato = "スマートビブラートエンベロープ",
         mergeMode = "非破壊マージ (Merge)",
+        mergeModeLabel = "非破壊マージ (Merge)",
         limpiarPrevios = "範囲内の既存オートメーションを消去",
+        limpiarPreviosLabel = "範囲内の既存オートメーションを消去",
         adaptarTempo = "プロジェクトテンポ (BPM) に同期",
+        adaptarTempoLabel = "プロジェクトテンポ (BPM) に同期",
         compensarGanancia = "トラックゲインに応じて補正",
+        compensarGananciaLabel = "トラックゲインに応じて補正",
         procesarTodosGrupos = "トラック内の全グループを処理",
+        procesarTodosGruposLabel = "トラック内の全グループを処理",
         idiomaLabel = "Idioma / Language",
         errContextTitle = "コンテキストエラー",
         errContextMsg = "実行する前にエディタでアクティブなトラックを選択してください。",
@@ -598,6 +621,7 @@ local I18N_DATA = {
         confirmMsgSincronizar = "アクティブなグループを参照して、リンクされていないコーラスグループを同期します。\n続行しますか？",
         confirmMsgForzar = "既存ノートのピッチをスケール '%s' (主音 '%s') に強制します。\n続行しますか？",
         completedTitle = "表現力マッパー Pro 3",
+        applyButtonLabel = "適用",
         completedMsg = "処理が正常に完了しました！\n処理/生成アイテム数: %d\nプリセット/設定: %s\n強度: %d%%\n処理グループ/トラック数: %d\nAtomic Undo 登録完了（Ctrl+Z で元に戻せます）。",
         customTensionLabel = "カスタムテンション (-1.0〜1.0)",
         customBreathLabel = "カスタムブレシネス (-1.0〜1.0)",
@@ -613,7 +637,7 @@ local I18N_DATA = {
         rangoNotaMinLabel = "24. 最小ノート範囲",
         rangoNotaMaxLabel = "25. 最大ノート範囲",
         targetNotesModeLabel = "22. 生成先ターゲット",
-        targetNotesModeChoices = { "新規ノートを生成", "選択されたノートを置換" },
+        targetNotesModeChoices = { "Playheadに追加（新規ノート）", "Playhead位置を置換（テスト用）", "選択されたノートを置換" },
         vistaSeccionLabel = "0. パネル表示セクション (UXフィルター)",
         vistaSeccionChoices = {
             "クイックモード (EasyLyric: 歌詞 & メロディ)",
@@ -625,3 +649,19 @@ local I18N_DATA = {
         enableJustIntonation = "純正律を有効化 (オフ = POP向け平均律)"
     }
 }
+
+-- Variable global para guardar el idioma detectado por el host
+_G.idiomaDetectado = nil
+
+function getTranslations(langCode)
+    local lc = string.lower(langCode or "")
+    if string.find(lc, "es") then
+        _G.idiomaDetectado = 0
+    elseif string.find(lc, "ja") or string.find(lc, "jp") then
+        _G.idiomaDetectado = 2
+    elseif string.find(lc, "en") then
+        _G.idiomaDetectado = 1
+    end
+    return {}
+end
+

@@ -1,0 +1,292 @@
+--[[
+  Expressive Panel 1 (Lyric & Melody) Localization Dictionary
+--]]
+
+local I18N_DATA = {
+    [0] = { -- Español
+        title = "Mapeador Expresivo Pro 3",
+        presetLabel = "2. Estilo Vocal / Preset",
+        presetChoices = {
+            "[Recomendado] Estándar Universal (Balanceado)",
+            "[Sesión Previa] Cargar configuración guardada",
+            "Personalizado...",
+            "Belting Operático Potente",
+            "Melancólico / Triste",
+            "Whisper / Susurro Íntimo",
+            "Synth-Pop / Vocalo Clásico",
+            "Rock / Agresivo Grit",
+            "Dark Ambient / Terror Psicológico",
+            "Jazz / Soul Expresivo",
+            "J-Pop Idol High Energy",
+            "Coral Estándar (Balanceado)",
+            "Artcore Kinetic Orchestral",
+            "Breakcore Glitchy Kinetic",
+            "Amenbreak Chop Loop",
+            "Amencore Hardcore Speed",
+            "Gabber / Speedcore Stab",
+            "Neurofunk Techstep Bass",
+            "Eurobeat Hi-NRG Fast",
+            "Future Bass Kawaii Swell",
+            "Cyberpunk Midtempo Heavy",
+            "Chiptune 8-Bit Retro",
+            "Hardstyle Raw Screamer",
+            "Uplifting Trance Anthem"
+        },
+                targetNotesModeLabel = "Destino de la Generación",
+        targetNotesModeChoices = { "Añadir en Playhead (Nuevas notas)", "Reemplazar todo en Playhead (Pruebas)", "Reemplazar en notas seleccionadas" },
+        intensidadLabel = "3. Intensidad del Efecto (%)",
+        letraLabel = "Letra de entrada:",
+        letraDefault = "pa pa pa /y aa/ ma ka fi iss firr",
+        basePitchLabel = "Nota MIDI Base",
+        soloFonemasLabel = "Modo Chops (Staccato & Gate)",
+        modoMelodiaLabel = "Contorno Melódico",
+        modoMelodiaChoices = {
+            "Arco Prosódico Cantado (Orgánico)",
+            "Pentatónico R&B/Pop (Hooks)",
+            "Onda Armónica Fluida (Sine)",
+            "Glitch Kinético (Caótico)",
+            "Plano Expresivo (Intonación)",
+            "Arpegio Ascendente",
+            "Arpegio Descendente",
+            "Paso de Escala Aleatorio",
+            "Saltos Consonantes"
+        },
+        modoRitmoLabel = "Patrón Rítmico",
+        modoRitmoChoices = {
+            "Pop Sincopado (1/4)",
+            "Micro-Chop Kinético (1/16)",
+            "Legato Swell (1/2)",
+            "Driving Hardcore (3illo)",
+            "Plano Estándar"
+        },
+        escalaLabel = "Escala Armónica",
+        escalaChoices = {
+            "Pentatónica Mayor",
+            "Pentatónica Menor",
+            "Mayor Natural (Jónica)",
+            "Menor Natural (Eólica)",
+            "Dórica",
+            "Frigia",
+            "Lidia",
+            "Mixolidia",
+            "Menor Armónica",
+            "Cromática Total"
+        },
+        errContextTitle = "Error de Contexto",
+        errContextMsg = "Por favor, selecciona una pista activa en el editor antes de ejecutar.",
+        errNoNotesTitle = "Error de Estructura",
+        errNoNotesMsg = "No se encontraron grupos o notas válidas para procesar.",
+        errNoSyllablesTitle = "Aviso",
+        errNoSyllablesMsg = "No has ingresado sílabas de texto válidas para la generación.",
+        confirmTitle = "Confirmar Operación",
+        confirmMsgGenerar = "¿Deseas generar notas a partir de %d sílabas en %s%d usando el preset '%s' al %d%%?",
+        completedTitle = "Mapeador Expresivo Pro 3",
+        completedMsg = "¡Operación completada exitosamente!\nÍtems procesados/creados: %d\nPreset/Config: %s\nIntensidad: %d%%\nGrupos/Pistas procesados: %d\nDeshacer Atómico registrado (Ctrl+Z para revertir).",
+        vistaSeccionChoices = {
+            "Modo Rápido (EasyLyric & Melodía)",
+            "Expresión Vocal (Curvas Hermite)",
+            "Armonías Vocales (Coros SATB)",
+            "Acordes & Contrapunto Algorítmico"
+        },
+        ayudaGuiaSyllable = "  (-) Dividir sílabas",
+        ayudaGuiaPhoneme = "  (/) Fonemas directos",
+        ayudaGuiaSlur = "  (_) Nota ligada",
+        ayudaGuiaInflection = "  (\\) Inflexión de tono",
+        ayudaGuiaTimeMark = "  (%) Marcas de tiempo (%10.5s)"
+    },
+    [1] = { -- English
+        title = "Expressive Mapper Pro 3",
+        presetLabel = "2. Vocal Style / Preset",
+        presetChoices = {
+            "[Recommended] Universal Standard (Balanced)",
+            "[Previous Session] Load saved configuration",
+            "Custom...",
+            "Powerful Operatic Belting",
+            "Melancholy / Sad",
+            "Intimate Whisper",
+            "Synth-Pop / Classic Vocalo",
+            "Rock / Aggressive Grit",
+            "Dark Ambient / Psychological Terror",
+            "Expressive Jazz / Soul",
+            "High Energy J-Pop Idol",
+            "Standard Choir (Balanced)",
+            "Kinetic Orchestral Artcore",
+            "Glitchy Kinetic Breakcore",
+            "Chop Loop Amenbreak",
+            "Hardcore Speed Amencore",
+            "Speedcore Stab Gabber",
+            "Techstep Bass Neurofunk",
+            "Hi-NRG Fast Eurobeat",
+            "Kawaii Swell Future Bass",
+            "Heavy Midtempo Cyberpunk",
+            "8-Bit Retro Chiptune",
+            "Raw Screamer Hardstyle",
+            "Anthem Uplifting Trance"
+        },
+                targetNotesModeLabel = "Generation Destination",
+        targetNotesModeChoices = { "Append at Playhead (New Notes)", "Replace at Playhead (Testing)", "Replace Selected Notes" },
+        intensidadLabel = "3. Effect Intensity (%)",
+        letraLabel = "Input lyrics:",
+        letraDefault = "pa pa pa /y aa/ ma ka fi iss firr",
+        basePitchLabel = "Base MIDI Note",
+        soloFonemasLabel = "Chops Mode (Staccato & Gate)",
+        modoMelodiaLabel = "Melodic Contour",
+        modoMelodiaChoices = {
+            "Prosodic Sung Arch (Organic)",
+            "Pentatonic R&B/Pop (Hooks)",
+            "Fluid Harmonic Wave (Sine)",
+            "Kinetic Glitch (Chaotic)",
+            "Flat Expressive (Speech)",
+            "Ascending Arpeggio",
+            "Descending Arpeggio",
+            "Random Scale Step",
+            "Consonant Leaps"
+        },
+        modoRitmoLabel = "Rhythmic Pattern",
+        modoRitmoChoices = {
+            "Syncopated Pop (1/4)",
+            "Kinetic Micro-Chop (1/16)",
+            "Legato Swell (1/2)",
+            "Driving Hardcore (Triplet)",
+            "Standard Flat"
+        },
+        escalaLabel = "Harmonic Scale",
+        escalaChoices = {
+            "Major Pentatonic",
+            "Minor Pentatonic",
+            "Natural Major (Ionian)",
+            "Natural Minor (Aeolian)",
+            "Dorian",
+            "Phrygian",
+            "Lydian",
+            "Mixolydian",
+            "Harmonic Minor",
+            "Full Chromatic"
+        },
+        errContextTitle = "Context Error",
+        errContextMsg = "Please select an active track in the editor before running.",
+        errNoNotesTitle = "Structure Error",
+        errNoNotesMsg = "No valid groups or notes found to process.",
+        errNoSyllablesTitle = "Notice",
+        errNoSyllablesMsg = "No valid syllables entered for generation.",
+        confirmTitle = "Confirm Operation",
+        confirmMsgGenerar = "Will generate notes from %d syllables starting at %s%d with preset '%s' at %d%%.\nContinue?",
+        completedTitle = "Expressive Mapper Pro 3",
+        completedMsg = "Operation completed successfully.\nItems processed/created: %d\nPreset/Config: %s\nIntensity: %d%%\nGroups/Tracks processed: %d\nAtomic undo registered (Ctrl+Z to revert).",
+        vistaSeccionChoices = {
+            "Quick Mode (EasyLyric & Melody)",
+            "Vocal Expression (Hermite Curves)",
+            "Vocal Harmonies (SATB Choir)",
+            "Chords & Algorithmic Counterpoint"
+        },
+        ayudaGuiaSyllable = "  - (-) Syllable split",
+        ayudaGuiaPhoneme = "  - (/) Raw phonemes",
+        ayudaGuiaSlur = "  - (_) Note slur",
+        ayudaGuiaInflection = "  - (\\) Pitch inflection",
+        ayudaGuiaTimeMark = "  - (%) Time markers (%10.5s)"
+    },
+    [2] = { -- Japanese
+        title = "表現力マッパー Pro 3",
+        presetLabel = "2. ボーカルスタイル / プリセット",
+        presetChoices = {
+            "【推奨】ユニバーサルスタンダード（バランス型）",
+            "【前回セッション】保存された設定をロード",
+            "カスタム...",
+            "力強いオペラ風ベルティング",
+            "哀愁 / 悲しい",
+            "親密なウィスパー",
+            "シンセポップ / クラシックボーカロ",
+            "ロック / アグレッシブグリット",
+            "ダークアンビエント / 精神的ホラー",
+            "表現力豊かなジャズ / ソウル",
+            "ハイエナジー J-Pop アイドル",
+            "標準合唱（バランス型）",
+            "キネティックオーケストラアートコア",
+            "グリッチキネティックブレイクコア",
+            "チョップループアメンブレイク",
+            "ハードコアスピードアメンコア",
+            "スピードコアスタブガバ",
+            "テックステップベースニューロファンク",
+            "ハイエナジーファストユーロビート",
+            "カワイイスウェルフューチャーベース",
+            "ヘビーミドルテンポサイバーパンク",
+            "8ビットレトロチップチューン",
+            "ロースクリーマーハードスタイル",
+            "アンセムアップリフティングトランス"
+        },
+                targetNotesModeLabel = "生成先ターゲット",
+        targetNotesModeChoices = { "Playheadに追加（新規ノート）", "Playhead位置を置換（テスト用）", "選択されたノートを置換" },
+        intensidadLabel = "3. エフェクト強度 (%)",
+        letraLabel = "入力歌詞:",
+        letraDefault = "ko-n-ni-chi-ha /y aa/ _ ko-re-ha cho-ppu \\",
+        basePitchLabel = "基準 MIDI ノート",
+        soloFonemasLabel = "チョップモード (直接音素)",
+        modoMelodiaLabel = "メロディ輪郭",
+        modoMelodiaChoices = {
+            "プロソディ歌唱アーチ (自然)",
+            "ペンタトニック R&B/Pop",
+            "流麗ハーモニックウェーブ",
+            "キネティックグリッチ (カオス)",
+            "フラットエクスプレッシブ",
+            "アルペジオ上昇",
+            "アルペジオ下降",
+            "ランダムスケールステップ",
+            "協調的跳躍"
+        },
+        modoRitmoLabel = "リズムパターン",
+        modoRitmoChoices = {
+            "シンコペーション Pop (1/4)",
+            "キネティックマイクロチョップ (1/16)",
+            "レガートスウェル (1/2)",
+            "ドライビングハードコア (3連)",
+            "フラット標準"
+        },
+        escalaLabel = "和声スケール",
+        escalaChoices = {
+            "メジャーペンタトニック",
+            "マイナーペンタトニック",
+            "自然長音階 (イオニアン)",
+            "自然短音階 (エオリアン)",
+            "ドリアン",
+            "フリジアン",
+            "リディアン",
+            "ミクソリディアン",
+            "和声的短音階",
+            "フルクロマチック"
+        },
+        errContextTitle = "コンテキストエラー",
+        errContextMsg = "実行する前にエディタでアクティブなトラックを選択してください。",
+        errNoNotesTitle = "構造エラー",
+        errNoNotesMsg = "処理対象の有効なグループまたはノートが見つかりません。",
+        errNoSyllablesTitle = "通知",
+        errNoSyllablesMsg = "生成のための有効な音節が入力されていません。",
+        confirmTitle = "操作の確認",
+        confirmMsgGenerar = "%d音節から%s%dを基準にプリセット'%s'（%d%%）でノートを生成します。\n続行しますか？",
+        completedTitle = "表現力マッパー Pro 3",
+        completedMsg = "処理が正常に完了しました！\n処理/生成アイテム数: %d\nプリセット/設定: %s\n強度: %d%%\n処理グループ/トラック数: %d\nAtomic Undo 登録完了（Ctrl+Z で元に戻せます）。",
+        vistaSeccionChoices = {
+            "クイックモード (EasyLyric & メロディ)",
+            "ボーカル表現 (エルミート曲線)",
+            "ボーカルハーモニー (SATBコーラス)",
+            "コード & アルゴリズム対位法"
+        },
+        ayudaGuiaSyllable = "  - (-) 音節分割",
+        ayudaGuiaPhoneme = "  - (/) 直接音素",
+        ayudaGuiaSlur = "  - (_) スラー",
+        ayudaGuiaInflection = "  - (v) 音程変化"
+    }
+}
+
+function getTranslations(langCode)
+    local code = string.lower(langCode or "")
+    if string.find(code, "en") then
+        _G.idiomaDetectado = 1
+        return I18N_DATA[1]
+    elseif string.find(code, "ja") or string.find(code, "jp") then
+        _G.idiomaDetectado = 2
+        return I18N_DATA[2]
+    else
+        _G.idiomaDetectado = 0
+        return I18N_DATA[0]
+    end
+end

@@ -1,3 +1,37 @@
+
+-- Limitar un valor dentro de un rango minimo y maximo
+local function limitarValor(val, minVal, maxVal)
+    if val < minVal then return minVal end
+    if val > maxVal then return maxVal end
+    return val
+end
+
+-- Calcular factor de escala de tiempo en base al tempo BPM
+local function factorTempo(bpm)
+    if bpm <= 0 then return 1.0 end
+    return 120.0 / bpm
+end
+
+-- Obtener tempo BPM en una posición de blicks específica
+local function obtenerTempoEnBlick(timeAxis, blickPos)
+    local numMarks = timeAxis:getAllTempoMarks()
+    if numMarks and #numMarks > 0 then
+        local bpmActual = 120.0
+        for i = 1, #numMarks do
+            local mark = numMarks[i]
+            if mark and mark.position ~= nil then
+                if mark.position <= blickPos then
+                    bpmActual = mark.bpm or 120.0
+                else
+                    break
+                end
+            end
+        end
+        return bpmActual
+    end
+    return 120.0
+end
+
 -- ============================================================================
 -- MÓDULO 3: TOKENIZADOR MULTILINGÜE Y GENERADOR MELÓDICO PROSÓDICO (ES, EN, JA)
 -- ============================================================================
@@ -322,10 +356,54 @@ local EXCEPCIONES_SILABAS_ES = {
     mario = { "Ma-", "rio" },
     jaime = { "Jai-", "me" },
     paula = { "Pau-", "la" },
-    raul = { "Ra-", "úl" }
+    raul = { "Ra-", "úl" },
+    maria = { "Ma-", "rí-", "a" },
+    sofia = { "So-", "fí-", "a" },
+    lucia = { "Lu-", "cí-", "a" },
+    diego = { "Die-", "go" },
+    miguel = { "Mi-", "guel" },
+    angel = { "Án-", "gel" },
+    jose = { "Jo-", "sé" },
+    jesus = { "Je-", "sús" },
+    teatro = { "Te-", "a-", "tro" },
+    poesia = { "Po-", "e-", "sí-", "a" },
+    caotico = { "Ca-", "ó-", "ti-", "co" },
+    heroe = { "Hé-", "ro-", "e" },
+    linea = { "Lí-", "ne-", "a" },
+    aereo = { "A-", "é-", "re-", "o" }
 }
 
---- Auto-silabificador avanzado para español con reglas RAE (0 GC Alloc en buffers estáticos)
+-- Diccionario de excepciones de hiatos y nombres propios comunes en inglés
+local EXCEPCIONES_SILABAS_EN = {
+    create = { "cre-", "ate" },
+    giant = { "gi-", "ant" },
+    lion = { "li-", "on" },
+    chaos = { "cha-", "os" },
+    poet = { "po-", "et" },
+    neon = { "ne-", "on" },
+    real = { "re-", "al" },
+    ruin = { "ru-", "in" },
+    idea = { "i-", "de-", "a" },
+    science = { "sci-", "ence" },
+    quiet = { "qui-", "et" },
+    violet = { "vi-", "o-", "let" },
+    video = { "vi-", "de-", "o" },
+    casual = { "ca-", "su-", "al" },
+    theater = { "the-", "a-", "ter" }
+}
+
+-- Normalizador de variantes de teclado Romaji japonés (IME)
+local function normalizarRomajiJapones(palabra)
+    local p = string.lower(palabra)
+    p = string.gsub(p, "ti", "chi")
+    p = string.gsub(p, "tu", "tsu")
+    p = string.gsub(p, "si", "shi")
+    p = string.gsub(p, "hu", "fu")
+    return p
+end
+
+
+--- Auto-silabificador avanzado para español con reglas RAE (Optimizado en buffers estáticos)
 local function silabificarEspanol(palabra)
     local silabas = {}
     local len = #palabra
@@ -457,18 +535,207 @@ end
 --- 1. Texto con guiones manuales (modo tradicional): "Can-ta-me_ u-na"
 --- 2. Texto plano sin guiones (auto-tokenización): "Cántame una"
 --- 3. JA (UTF-8 Kana/Romaji): caracteres individuales
-local function extraerSilabas(texto, idiomaIdx)
+--- Heurística de auto-silabificación para inglés (Optimizado en memoria)
+local function silabificarIngles(palabra)
+    local len = #palabra
+    if len <= 3 then return { palabra } end
+
+    local palabraLower = string.lower(palabra)
+    local syllables = {}
+    local chars = {}
+    for i = 1, len do
+        chars[i] = string.sub(palabra, i, i)
+    end
+
+    local tipos = {}
+    local esVocal = { a=true, e=true, i=true, o=true, u=true, y=true }
+    for i = 1, len do
+        local c = string.lower(chars[i])
+        if esVocal[c] then
+            tipos[i] = "V"
+        else
+            tipos[i] = "C"
+        end
+    end
+
+    -- 'e' muda al final de la palabra
+    if string.sub(palabraLower, len, len) == "e" and len > 3 then
+        local antepenultima = string.sub(palabraLower, len-1, len-1)
+        if antepenultima ~= "l" then
+            tipos[len] = "C"
+        end
+    end
+
+    local cortarDespues = {}
+    for i = 1, len do cortarDespues[i] = false end
+
+    local i = 1
+    while i < len do
+        if tipos[i] == "V" then
+            local nextVowelIdx = nil
+            for k = i + 1, len do
+                if tipos[k] == "V" then
+                    nextVowelIdx = k
+                    break
+                end
+            end
+
+            if nextVowelIdx then
+                local numCons = nextVowelIdx - i - 1
+                if numCons == 1 then
+                    cortarDespues[i] = true
+                elseif numCons == 2 then
+                    local pair = string.lower(chars[i+1] .. chars[i+2])
+                    local digrafos = { th=true, ch=true, sh=true, ph=true, gh=true, ck=true }
+                    if digrafos[pair] then
+                        cortarDespues[i] = true
+                    else
+                        cortarDespues[i+1] = true
+                    end
+                elseif numCons >= 3 then
+                    cortarDespues[i+1] = true
+                end
+                i = nextVowelIdx - 1
+            end
+        end
+        i = i + 1
+    end
+
+    local currentSyl = ""
+    for ci = 1, len do
+        currentSyl = currentSyl .. chars[ci]
+        if cortarDespues[ci] then
+            syllables[#syllables + 1] = currentSyl
+            currentSyl = ""
+        end
+    end
+    if currentSyl ~= "" then
+        syllables[#syllables + 1] = currentSyl
+    end
+
+    if #syllables == 0 then
+        syllables[1] = palabra
+    end
+
+    return syllables
+end
+
+-- Tokenizador inteligente que agrupa bloques de fonemas /y aa/
+local function dividirTextoEnPalabrasConFonemas(texto)
+    local palabras = {}
+    local startIdx = 1
+    local len = #texto
+    
+    while startIdx <= len do
+        local wordStart = string.find(texto, "%S", startIdx)
+        if not wordStart then break end
+        
+        if string.sub(texto, wordStart, wordStart) == "/" then
+            local nextSlash = string.find(texto, "/", wordStart + 1)
+            if nextSlash then
+                local token = string.sub(texto, wordStart, nextSlash)
+                table.insert(palabras, token)
+                startIdx = nextSlash + 1
+            else
+                local wordEnd = string.find(texto, "%s", wordStart + 1) or (len + 1)
+                table.insert(palabras, string.sub(texto, wordStart, wordEnd - 1))
+                startIdx = wordEnd
+            end
+        else
+            local wordEnd = string.find(texto, "%s", wordStart + 1) or (len + 1)
+            table.insert(palabras, string.sub(texto, wordStart, wordEnd - 1))
+            startIdx = wordEnd
+        end
+    end
+    
+    return palabras
+end
+
+local function normalizarTextoParaLyrics(str)
+    if not str then return "" end
+    local s = str
+    -- Normalizar vocales con tildes ortográficas en español (á, é, í, ó, ú, ü)
+    s = string.gsub(s, "á", "a")
+    s = string.gsub(s, "é", "e")
+    s = string.gsub(s, "í", "i")
+    s = string.gsub(s, "ó", "o")
+    s = string.gsub(s, "ú", "u")
+    s = string.gsub(s, "ü", "u")
+    s = string.gsub(s, "Á", "a")
+    s = string.gsub(s, "É", "e")
+    s = string.gsub(s, "Í", "i")
+    s = string.gsub(s, "Ó", "o")
+    s = string.gsub(s, "Ú", "u")
+    s = string.gsub(s, "Ü", "u")
+    -- Convertir 'ñ' / 'Ñ' a 'ny' (estándar G2P del motor de Synthesizer V)
+    s = string.gsub(s, "ñ", "ny")
+    s = string.gsub(s, "Ñ", "ny")
+    -- Mapeo directo por secuencias de bytes UTF-8
+    s = string.gsub(s, "\195\161", "a")
+    s = string.gsub(s, "\195\169", "e")
+    s = string.gsub(s, "\195\173", "i")
+    s = string.gsub(s, "\195\179", "o")
+    s = string.gsub(s, "\195\186", "u")
+    s = string.gsub(s, "\195\188", "u")
+    s = string.gsub(s, "\195\177", "ny")
+    s = string.gsub(s, "\195\145", "ny")
+    return s
+end
+
+local function normalizarPuntuacionEspecial(txt)
+    if not txt then return "" end
+    local s = txt
+    s = string.gsub(s, "\226\128\153", "'")  -- apostrofe derecho ’
+    s = string.gsub(s, "\226\128\152", "'")  -- apostrofe izquierdo ‘
+    s = string.gsub(s, "\226\128\156", '"')  -- comillas “
+    s = string.gsub(s, "\226\128\157", '"')  -- comillas ”
+    s = string.gsub(s, "\226\128\166", "...") -- puntos suspensivos …
+    s = string.gsub(s, "\226\128\148", "-")  -- guion largo —
+    s = string.gsub(s, "\226\128\147", "-")  -- guion corto –
+    return s
+end
+
+local function esPalabraCJK(palabra)
+    if string.find(palabra, "[a-zA-Z]") then
+        return false
+    end
+    return string.find(palabra, "[\227-\233]") ~= nil
+end
+
+local function extraerSilabas(texto, idiomaIdx, separatorMode, separatorCustom, soloFonemas)
     local silabas = {}
 
-    -- Reemplazar barras verticales con guiones para unificar la separación manual
-    local textoNormalizado = string.gsub(texto, "|", "-")
-    local tieneSeparadores = string.find(textoNormalizado, "%-") ~= nil
+    local textoNormalizado = normalizarPuntuacionEspecial(texto or "")
+    if soloFonemas then
+        for palabra in string.gmatch(textoNormalizado, "%S+") do
+            silabas[#silabas + 1] = palabra
+        end
+        return silabas
+    end
+    local tieneSeparadores = false
+    if separatorMode == nil or separatorMode == "auto" then
+        textoNormalizado = string.gsub(textoNormalizado, "|", "-")
+        tieneSeparadores = string.find(textoNormalizado, "%-") ~= nil
+    elseif separatorMode == "pipe" then
+        tieneSeparadores = string.find(textoNormalizado, "|", 1, true) ~= nil
+    elseif separatorMode == "custom" and separatorCustom and separatorCustom ~= "" then
+        tieneSeparadores = string.find(textoNormalizado, separatorCustom, 1, true) ~= nil
+    else
+        -- space mode: don't treat extra separators
+        tieneSeparadores = false
+    end
 
     if tieneSeparadores then
-        -- Modo tradicional / manual: separar por guiones/barras y espacios
-        local textoLimpio = string.gsub(textoNormalizado, "%-", " ")
+        local textoLimpio = textoNormalizado
+        if separatorMode == nil or separatorMode == "auto" then
+            textoLimpio = string.gsub(textoLimpio, "%-", " ")
+        elseif separatorMode == "pipe" then
+            textoLimpio = string.gsub(textoLimpio, "|", " ")
+        elseif separatorMode == "custom" and separatorCustom and separatorCustom ~= "" then
+            textoLimpio = string.gsub(textoLimpio, separatorCustom, " ")
+        end
         for palabra in string.gmatch(textoLimpio, "%S+") do
-            if string.find(palabra, "[\224-\239]") then
+            if esPalabraCJK(palabra) then
                 for char in string.gmatch(palabra, "[%z\1-\127\194-\244][\128-\191]*") do
                     silabas[#silabas + 1] = char
                 end
@@ -477,25 +744,51 @@ local function extraerSilabas(texto, idiomaIdx)
             end
         end
     else
-        -- Modo auto-tokenización: separar por palabras y luego silabificar
-        for palabra in string.gmatch(textoNormalizado, "%S+") do
-            -- Detectar marcadores especiales: pausas, holds, etc.
+        local palabras = dividirTextoEnPalabrasConFonemas(textoNormalizado)
+        for pi = 1, #palabras do
+            local palabra = palabras[pi]
+            -- Limpiar puntuación molesta pegada a palabras ("Leaving," -> "Leaving")
+            local palabraSinPuntuacion = string.gsub(palabra, "^[%p%s]+", "")
+            palabraSinPuntuacion = string.gsub(palabraSinPuntuacion, "[%p%s]+$", "")
+            if palabraSinPuntuacion == "" then palabraSinPuntuacion = palabra end
+
             if palabra == "_" or palabra == "," or palabra == "." or palabra == "、" or palabra == "。" then
                 silabas[#silabas + 1] = palabra
-            elseif string.find(palabra, "[\224-\239]") then
-                -- Japonés: cada grafema es una mora/sílaba
-                for char in string.gmatch(palabra, "[%z\1-\127\194-\244][\128-\191]*") do
+            elseif esPalabraCJK(palabraSinPuntuacion) then
+                for char in string.gmatch(palabraSinPuntuacion, "[%z\1-\127\194-\244][\128-\191]*") do
                     silabas[#silabas + 1] = char
                 end
             elseif idiomaIdx == 0 then
-                -- Español: auto-silabificación en legato continuo
-                local silabasPalabra = silabificarEspanol(palabra)
+                local silabasPalabra = silabificarEspanol(palabraSinPuntuacion)
                 for si = 1, #silabasPalabra do
                     silabas[#silabas + 1] = silabasPalabra[si]
                 end
+            elseif idiomaIdx == 1 then
+                local palabraLower = string.lower(palabraSinPuntuacion)
+                if EXCEPCIONES_SILABAS_EN[palabraLower] then
+                    local exc = EXCEPCIONES_SILABAS_EN[palabraLower]
+                    for ei = 1, #exc do
+                        silabas[#silabas + 1] = exc[ei]
+                    end
+                else
+                    -- Inglés: auto-silabificación basada en heurísticas
+                    local silabasPalabra = silabificarIngles(palabraSinPuntuacion)
+                    for si = 1, #silabasPalabra do
+                        silabas[#silabas + 1] = silabasPalabra[si]
+                    end
+                end
+            elseif idiomaIdx == 2 then
+                -- Normalizar variantes comunes del teclado Romaji japonés (IME)
+                local palabraNorm = normalizarRomajiJapones(palabraSinPuntuacion)
+                if esPalabraCJK(palabraNorm) then
+                    for char in string.gmatch(palabraNorm, "[%z\1-\127\194-\244][\128-\191]*") do
+                        silabas[#silabas + 1] = char
+                    end
+                else
+                    silabas[#silabas + 1] = palabraNorm
+                end
             else
-                -- Inglés u otros: cada palabra es una sílaba en legato continuo
-                silabas[#silabas + 1] = palabra
+                silabas[#silabas + 1] = palabraSinPuntuacion
             end
         end
 
@@ -505,10 +798,40 @@ local function extraerSilabas(texto, idiomaIdx)
         end
     end
 
+    -- Post-process: detect timing markers in form {+N} / {-N} (milliseconds relative)
+    for i = 1, #silabas do
+        local t = silabas[i]
+        if type(t) == "string" then
+            -- find patterns like {+120} or {-80}
+            local offsetMs = string.match(t, "{([%+%-]?%d+)}")
+            if offsetMs then
+                local clean = string.gsub(t, "{[%+%-]?%d+}", "")
+                clean = string.gsub(clean, "^%s+", "")
+                clean = string.gsub(clean, "%s+$", "")
+                silabas[i] = { text = (clean ~= "" and clean) or "", offsetMs = tonumber(offsetMs) }
+            else
+                -- also support {+120ms} or {+1.25s}
+                local offMs2 = string.match(t, "{([%+%-]?%d+)%s*ms}")
+                local offS = string.match(t, "{=?(%d+%.?%d*)s}")
+                if offMs2 then
+                    local clean = string.gsub(t, "{[%+%-]?%d+%s*ms}", "")
+                    clean = string.gsub(clean, "^%s+", "")
+                    clean = string.gsub(clean, "%s+$", "")
+                    silabas[i] = { text = (clean ~= "" and clean) or "", offsetMs = tonumber(offMs2) }
+                elseif offS then
+                    local clean = string.gsub(t, "{=?%d+%.?%d*s}", "")
+                    clean = string.gsub(clean, "^%s+", "")
+                    clean = string.gsub(clean, "%s+$", "")
+                    silabas[i] = { text = (clean ~= "" and clean) or "", offsetMs = tonumber(offS) * 1000 }
+                end
+            end
+        end
+    end
+
     return silabas
 end
 
---- Convertir una sílaba española/latina a fonemas universales de Synthesizer V (0 GC Alloc)
+--- Convertir una sílaba española/latina a fonemas universales de Synthesizer V
 local function convertirSilabaAFonemasEspanol(silaba)
     if not silaba or silaba == "" or silaba == "_" then return "" end
     local sLow = string.lower(silaba)
@@ -568,8 +891,23 @@ local function convertirSilabaAFonemasEspanol(silaba)
     return fonemas
 end
 
-local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMelodiaIdx, escalaIdx, modoRitmoIdx, idiomaIdx, noteGroup, reproductor, rangoMin, rangoMax)
-    local silabas = extraerSilabas(letraRaw, idiomaIdx)
+local function msToBlicks(ms, timeAxis)
+    -- Convert ms (milliseconds) to blicks using current BPM/timeAxis
+    if not timeAxis or not ms then return 0 end
+    local bpm = 120.0
+    local marks = timeAxis:getAllTempoMarks()
+    if marks and #marks > 0 then
+        -- use first mark as approximate BPM
+        if marks[1] and marks[1].bpm then bpm = marks[1].bpm end
+    end
+    -- 1 minute = 60000 ms; quarter note duration in blicks is SV.QUARTER
+    local msPerQuarter = 60000.0 / bpm
+    local blicks = (ms / msPerQuarter) * SV.QUARTER
+    return math.floor(blicks + 0.5)
+end
+
+local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMelodiaIdx, escalaIdx, modoRitmoIdx, idiomaIdx, noteGroup, reproductor, rangoMin, rangoMax, timeAxis, separatorMode, separatorCustom, soloFonemas, startBlickOverride)
+    local silabas = extraerSilabas(letraRaw, idiomaIdx, separatorMode, separatorCustom, soloFonemas)
     local numSilabas = #silabas
     if numSilabas == 0 then
         return {}
@@ -583,9 +921,11 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
 
     local escala = ESCALAS[escalaIdx] or ESCALAS[0]
     local numNotasEscala = #escala
-    local currentBlick = reproductor:getPlayhead()
+    local currentBlick = startBlickOverride or reproductor:getPlayhead()
     local notasCreadas = {}
     local pitchPrevio = basePitch
+    _G.prevImprovGrado = 1
+    _G.lastLeapDirection = 0
 
     local totalCantadas = 0
     for i = 1, numSilabas do
@@ -599,33 +939,74 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
 
     for i = 1, numSilabas do
         local token = silabas[i]
+        local explicitOffsetBlick = nil
+        if type(token) == "table" and token.offsetMs then
+            explicitOffsetBlick = msToBlicks(token.offsetMs, timeAxis)
+            -- if token.text is empty, treat as pause of that offset
+            token = token.text
+        end
 
         -- Silencio o pausa (_, ,, ., 、, 。)
         if token == "_" or token == "," or token == "." or token == "、" or token == "。" then
             currentBlick = currentBlick + stepBlickBase
+        elseif token == "\\" or token == "\\\\" or token == "v" or token == "vv" or token == "^" or token == "^^" or token == "+" or token == "++" then
+            -- Modificador de inflexión de tono independiente (aplica a la nota previa sin crear una nueva nota en el piano roll)
+            if #notasCreadas > 0 then
+                local notaPrev = notasCreadas[#notasCreadas]
+                local deltaInflection = (token == "\\\\" or token == "vv" or token == "++" or token == "^^") and 4 or 2
+                if token == "\\" or token == "\\\\" or token == "v" or token == "vv" then
+                    deltaInflection = -deltaInflection
+                end
+                notaPrev:setPitch(limitarValor(notaPrev:getPitch() + deltaInflection, rangoMin, rangoMax))
+            end
         else
             indiceNota = indiceNota + 1
+
+            -- Determinar si el token es un fonema explícito (/fonema/)
+            local letraLimpia = tostring(token or ""):gsub("^%s*(.-)%s*$", "%1")
+            
+            local esFonemaExplicito = false
+            local fonemasLimpios = ""
+            
+            if string.sub(letraLimpia, 1, 1) == "/" and string.sub(letraLimpia, -1, -1) == "/" then
+                esFonemaExplicito = true
+                fonemasLimpios = string.sub(letraLimpia, 2, -2)
+                letraLimpia = "." -- placeholder de Synthesizer V para fonemas explícitos
+            else
+                -- Limpiar modificadores de control de la letra de la nota (evita que \, v, ~, ^ leaqueen al Piano Roll)
+                letraLimpia = string.gsub(letraLimpia, "\\+$", "")
+                letraLimpia = string.gsub(letraLimpia, "v+$", "")
+                letraLimpia = string.gsub(letraLimpia, "%^+$", "")
+                letraLimpia = string.gsub(letraLimpia, "%++$", "")
+                letraLimpia = string.gsub(letraLimpia, "%-+$", "")
+                letraLimpia = string.gsub(letraLimpia, "~+", "")
+                letraLimpia = string.gsub(letraLimpia, "%[[^%]]+%]", "")
+            end
+
+            if letraLimpia == "" then letraLimpia = "la" end
+
+            local aplicarChopsFX = (soloFonemas == true) or esFonemaExplicito
 
             -- Analizar prosodia por idioma
             local deltaPitchProsodico, multDurProsodico = analizarProsodiaSilaba(token, idiomaIdx, indiceNota, totalCantadas, esPregunta, esExclamacion)
 
-            -- Modulador Rítmico de Duración
+            -- Modulador Rítmico de Duración (optimizado para canto fluido humano)
             local multRitmo = 1.0
             if modoRitmoIdx == 0 then -- Pop Sincopado
-                if (indiceNota % 4 == 1) then multRitmo = 1.5
-                elseif (indiceNota % 4 == 2) then multRitmo = 0.75
-                elseif (indiceNota % 4 == 3) then multRitmo = 1.25
-                else multRitmo = 0.50 end
+                if (indiceNota % 4 == 1) then multRitmo = 1.25
+                elseif (indiceNota % 4 == 2) then multRitmo = 0.90
+                elseif (indiceNota % 4 == 3) then multRitmo = 1.10
+                else multRitmo = 0.85 end
             elseif modoRitmoIdx == 1 then -- Micro-Chop Kinético (Breakcore / Glitchcore)
-                if (indiceNota % 3 == 0) then multRitmo = 0.25 -- 1/32 chop
-                elseif (indiceNota % 2 == 0) then multRitmo = 0.50 -- 1/16 chop
-                else multRitmo = 0.75 end
+                if (indiceNota % 3 == 0) then multRitmo = 0.35 -- 1/32 chop
+                elseif (indiceNota % 2 == 0) then multRitmo = 0.60 -- 1/16 chop
+                else multRitmo = 0.85 end
             elseif modoRitmoIdx == 2 then -- Legato Emotivo Swell (Artcore / Trance)
-                if (indiceNota % 2 == 1) then multRitmo = 2.0
-                else multRitmo = 1.5 end
+                if (indiceNota % 2 == 1) then multRitmo = 1.80
+                else multRitmo = 1.40 end
             elseif modoRitmoIdx == 3 then -- Driving Hardcore (Gabber / Rock)
-                if (indiceNota % 3 == 0) then multRitmo = 0.66 -- Tresillo
-                else multRitmo = 0.75 end
+                if (indiceNota % 3 == 0) then multRitmo = 0.80 -- Tresillo
+                else multRitmo = 0.90 end
             end
 
             -- Duración extendida por tildes explicitas (~)
@@ -638,7 +1019,8 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
                 token = string.gsub(token, "~", "")
             end
 
-            local durBlick = math.max(math.floor(SV.QUARTER / 16), math.floor(stepBlickBase * multDurProsodico * multRitmo))
+            local minDurBlick = aplicarChopsFX and math.floor(SV.QUARTER / 16) or math.floor(SV.QUARTER * 0.65)
+            local durBlick = math.max(minDurBlick, math.floor(stepBlickBase * multDurProsodico * multRitmo))
             local pitchTarget = nil
 
             -- Pitch explícito [C4], [G4], etc.
@@ -657,34 +1039,37 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
                 end
             end
 
-            -- Símbolos de inflexión (+, ++, -, --, ^, v)
+            -- Símbolos de inflexión (\, \\, v, vv, ^, ^^, +, ++)
             if not pitchTarget then
-                if string.find(token, "%+%+") or string.find(token, "%^%^") then
-                    pitchTarget = pitchPrevio + 4
-                    token = string.gsub(token, "%+%+", "")
-                    token = string.gsub(token, "%^%^", "")
-                elseif string.find(token, "%+") or string.find(token, "%^") then
-                    pitchTarget = pitchPrevio + 2
-                    token = string.gsub(token, "%+", "")
-                    token = string.gsub(token, "%^", "")
-                elseif string.find(token, "%-%-") or string.find(token, "vv") then
+                if string.find(token, "\\\\") or string.find(token, "vv$") or string.find(token, "%^%^") or string.find(token, "%+%+") then
+                    local isDown = string.find(token, "\\\\") or string.find(token, "vv$")
+                    pitchTarget = pitchPrevio + (isDown and -4 or 4)
+                elseif string.find(token, "\\") or string.find(token, "v$") or string.find(token, "%^") or string.find(token, "%+") then
+                    local isDown = string.find(token, "\\") or string.find(token, "v$")
+                    pitchTarget = pitchPrevio + (isDown and -2 or 2)
+                elseif string.find(token, "%-%-") then
                     pitchTarget = pitchPrevio - 4
-                    token = string.gsub(token, "%-%-", "")
-                    token = string.gsub(token, "vv", "")
-                elseif string.find(token, "%-") or string.find(token, "v") then
+                elseif string.find(token, "%-") then
                     pitchTarget = pitchPrevio - 2
-                    token = string.gsub(token, "%-", "")
-                    token = string.gsub(token, "v", "")
                 end
             end
 
             -- Generador Melódico Prosódico Avanzado
             if not pitchTarget then
                 if modoMelodiaIdx == 0 then
-                    -- Arco Prosódico Emotivo
-                    local progress = (totalCantadas > 1) and ((indiceNota - 1) / (totalCantadas - 1)) or 0.5
-                    local deltaArc = math.sin(progress * math.pi) * 6.0
-                    pitchTarget = basePitch + math.floor(deltaArc + deltaPitchProsodico + 0.5)
+                    -- Generador de Arco Vocal Prosódico Humano (Orgánico y Expresivo)
+                    -- Crea un arco melódico natural que asciende hacia un pico y desciende suavemente a la tónica
+                    local escala = ESCALAS[escalaIdx] or ESCALAS[2]
+                    local numGrados = #escala
+                    
+                    local progresoFrase = (indiceNota - 1) / math.max(1, totalCantadas - 1)
+                    local formaArco = math.sin(progresoFrase * math.pi) * 7.0 -- Arco de hasta 7 semitonos
+                    
+                    -- Adicionar variación orgánicamente
+                    local microOffset = (math.sin(indiceNota * 1.3) * 2.0) + deltaPitchProsodico
+                    local pitchCalculado = basePitch + math.floor(formaArco + microOffset + 0.5)
+                    
+                    pitchTarget = pitchCalculado
                 elseif modoMelodiaIdx == 1 then
                     -- Pentatónico Expresivo con Saltos de 4tas y 5tas
                     local idxEscala = ((indiceNota - 1) % numNotasEscala) + 1
@@ -733,19 +1118,55 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
                 pitchFinal = rangoMax - (math.abs(rangoMax - pitchFinal) % 12)
             end
 
+            -- Si es chop o fonema explicito, recortar la duracion de la nota al 50% para crear silencios (staccato)
+            local activeDurBlick = durBlick
+            if aplicarChopsFX then
+                activeDurBlick = math.max(math.floor(SV.QUARTER / 32), math.floor(durBlick * 0.5))
+            end
+
             local nuevaNota = SV:create("Note")
-            nuevaNota:setTimeRange(currentBlick, durBlick)
+            nuevaNota:setTimeRange(currentBlick, activeDurBlick)
             nuevaNota:setPitch(pitchFinal)
 
-            local letraLimpia = string.gsub(token, "%s+", "")
-            if letraLimpia == "" then letraLimpia = "la" end
+            -- Eliminar vibrato y oscilaciones para lograr chops limpios y definidos (estilo Artcore/Glitch)
+            if aplicarChopsFX then
+                nuevaNota:setAttributes({
+                    dF0Vbr = 0.0,
+                    dF0VbrMod = 0.0
+                })
+            end
+
+            -- Aplicar compuerta de volumen (Gate) estricta para forzar silencio en los huecos (evitar release AI)
+            if aplicarChopsFX then
+                local loudness = noteGroup:getParameter("loudness")
+                if loudness then
+                    local sigBlick = explicitOffsetBlick or durBlick
+                    loudness:remove(currentBlick, currentBlick + sigBlick)
+                    
+                    loudness:add(currentBlick, 0.0)
+                    loudness:add(currentBlick + activeDurBlick - 1, 0.0)
+                    loudness:add(currentBlick + activeDurBlick, -48.0)
+                    loudness:add(currentBlick + sigBlick - 1, -48.0)
+                end
+            end
+
+            if not esFonemaExplicito then
+                letraLimpia = normalizarTextoParaLyrics(letraLimpia)
+            end
             nuevaNota:setLyrics(letraLimpia)
+            if esFonemaExplicito then
+                nuevaNota:setPhonemes(fonemasLimpios)
+            end
 
             noteGroup:addNote(nuevaNota)
             notasCreadas[#notasCreadas + 1] = nuevaNota
 
             pitchPrevio = pitchFinal
-            currentBlick = currentBlick + durBlick
+            if explicitOffsetBlick then
+                currentBlick = currentBlick + explicitOffsetBlick
+            else
+                currentBlick = currentBlick + durBlick
+            end
         end
     end
 

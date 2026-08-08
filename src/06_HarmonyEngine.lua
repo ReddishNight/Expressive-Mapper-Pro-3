@@ -1,5 +1,5 @@
 -- ============================================================================
--- MÓDULO 6: MOTOR DE ARMONÍAS VOCALES Y VOICE LEADING (0 GC ALLOC)
+-- MÓDULO 6: MOTOR DE ARMONÍAS VOCALES Y VOICE LEADING
 -- ============================================================================
 
 local function generarGaussianNoise(mean, stdDev)
@@ -175,11 +175,18 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
         -- Replicar la base de voz (cantante y vocalModeParams) del grupo guía original
         local settingsVozGuia = groupRefBase:getVoice()
 
+        -- Obtener offset y rango visual del grupo guía original
+        local sourceOffset = groupRefBase:getTimeOffset()
+        local sourceOnset  = groupRefBase:getOnset()
+        local sourceDur    = groupRefBase:getDuration()
+
         -- Crear NoteGroup y NoteGroupReference con el flujo correcto de la API
         local nuevoGroupRef = SV:create("NoteGroup")
         proyecto:addNoteGroup(nuevoGroupRef)
         local mainRef = SV:create("NoteGroupReference")
         mainRef:setTarget(nuevoGroupRef)
+        mainRef:setTimeOffset(sourceOffset)
+        mainRef:setTimeRange(sourceOnset, sourceDur)
         
         -- Copiar la base de voz
         if settingsVozGuia then
@@ -203,6 +210,7 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
         local offsetGenderVoz = (vIdx % 2 == 1) and (0.08 * fIntensidad) or (-0.08 * fIntensidad)
         local offsetBreathVoz = 0.05 * fIntensidad
         local pitchPrevioVoz = nil
+        local ultimaNotaCreada = nil
 
         for i = 1, totalNotas do
             local notaOriginal = notasBase[i]
@@ -253,6 +261,20 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
                 end
             end
 
+            -- Evitar colisiones/solapamientos de notas anteriores en la pista
+            if ultimaNotaCreada then
+                local onsetPrev = ultimaNotaCreada:getOnset()
+                local endBlickPrev = onsetPrev + ultimaNotaCreada:getDuration()
+                if endBlickPrev > onsetHarm then
+                    local nuevaDurPrev = onsetHarm - onsetPrev
+                    if nuevaDurPrev > 0 then
+                        ultimaNotaCreada:setTimeRange(onsetPrev, nuevaDurPrev)
+                    else
+                        ultimaNotaCreada:setTimeRange(onsetPrev, math.floor(SV.QUARTER / 8))
+                    end
+                end
+            end
+
             -- Crear nota de armonía
             local nuevaNotaHarm = SV:create("Note")
             nuevaNotaHarm:setTimeRange(onsetHarm, durHarm)
@@ -267,6 +289,7 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
 
             nuevoGroupRef:addNote(nuevaNotaHarm)
             notasTotalCreadas = notasTotalCreadas + 1
+            ultimaNotaCreada = nuevaNotaHarm
 
             -- Generar automáticamente AI Retakes en la nota si la versión del editor lo soporta
             pcall(function()

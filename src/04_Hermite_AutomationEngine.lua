@@ -1,12 +1,8 @@
 -- ============================================================================
--- MÓDULO 4: MOTOR DE AUTOMATIZACIÓN E INTERPOLACIÓN HERMITE (0 GC ALLOC)
+-- MÓDULO 4: MOTOR DE AUTOMATIZACIÓN E INTERPOLACIÓN HERMITE (LOW GC ALLOC)
 -- ============================================================================
 
-local function limitarValor(val, minVal, maxVal)
-    if val < minVal then return minVal end
-    if val > maxVal then return maxVal end
-    return val
-end
+-- limitarValor removido (definido en Tokenizer_MelodyGen.lua)
 
 local function evaluarHermite(t, p0, p1, m0, m1)
     local t2 = t * t
@@ -103,25 +99,7 @@ local function obtenerToleranciaSimplificacion(paramObj)
     return math.max(0.001, rango * 0.002)
 end
 
-local function obtenerTempoEnBlick(timeAxis, blickPos)
-    -- Iterar tempo marks para encontrar el BPM vigente en blickPos
-    local numMarks = timeAxis:getAllTempoMarks()
-    if numMarks and #numMarks > 0 then
-        local bpmActual = 120.0
-        for i = 1, #numMarks do
-            local mark = numMarks[i]
-            if mark and mark.position ~= nil then
-                if mark.position <= blickPos then
-                    bpmActual = mark.bpm or 120.0
-                else
-                    break
-                end
-            end
-        end
-        return bpmActual
-    end
-    return 120.0
-end
+-- obtenerTempoEnBlick removido (definido en Tokenizer_MelodyGen.lua)
 
 local function factorTempo(bpm)
     if bpm <= 0.0 then return 1.0 end
@@ -131,8 +109,10 @@ end
 local function aplicarPortamentoSCurve(pitchDeltaParam, onset, duration, saltoSemitonos, factorIntensidad, mergeMode)
     if not pitchDeltaParam or math.abs(saltoSemitonos) < 2 then return end
 
-    local valInitial = -saltoSemitonos * 100.0 * factorIntensidad
-    valInitial = limitarValor(valInitial, -1200.0, 1200.0)
+    -- Portamento natural sutil (máximo 80 cents para evitar saltos antinaturales de octava)
+    local signo = (saltoSemitonos > 0) and -1.0 or 1.0
+    local valInitial = signo * math.min(80.0, math.abs(saltoSemitonos) * 15.0) * factorIntensidad
+    valInitial = limitarValor(valInitial, -100.0, 100.0)
 
     -- Duración del glissando en blicks proporcional a la magnitud del salto e intervalo
     local maxDurBlick = math.floor(duration * 0.45)
@@ -161,7 +141,7 @@ local function aplicarPortamentoSCurve(pitchDeltaParam, onset, duration, saltoSe
     end
 end
 
---- Cálculo de desviación de registro (Pitch Height Scaling) (0 GC Alloc)
+--- Cálculo de desviación de registro (Pitch Height Scaling)
 local function calcularFactorRegistro(pitchMidi, basePitch, pitchSens, factorUI)
     if not pitchMidi then return 0.0 end
     local deltaOctaves = (pitchMidi - (basePitch or 60)) / 12.0
@@ -170,7 +150,7 @@ local function calcularFactorRegistro(pitchMidi, basePitch, pitchSens, factorUI)
     return limitarValor(deltaOctaves * 0.25 * sens * uiMult, -1.0, 1.0)
 end
 
---- Cálculo de modulación por fonema (Phoneme-Class Awareness) (0 GC Alloc)
+--- Cálculo de modulación por fonema (Phoneme-Class Awareness)
 local function calcularModulacionFonema(fonemaStr, phonemeSens, factorUI)
     if not fonemaStr or fonemaStr == "" then return 0.0, 0.0, 0.0 end
     local fLow = string.lower(fonemaStr)
@@ -204,7 +184,7 @@ local function calcularModulacionFonema(fonemaStr, phonemeSens, factorUI)
     return tensDelta * mult, breathDelta * mult, loudDelta * mult
 end
 
---- Jitter de humanización orgánico y determinista (0 GC Alloc)
+--- Jitter de humanización orgánico y determinista
 local function calcularJitterDeterministico(idxNota, blickPos, jitterSens, factorUI)
     local nIdx = idxNota or 1
     local bPos = blickPos or 0

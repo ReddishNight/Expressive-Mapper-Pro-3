@@ -1,5 +1,5 @@
 -- ============================================================================
--- MÓDULO 8: MOTOR AVANZADO DE PROGRESIONES DE ACORDES Y VOICINGS (0 GC ALLOC)
+-- MÓDULO 8: MOTOR AVANZADO DE PROGRESIONES DE ACORDES Y VOICINGS (MINIMAL ENERGY & MICRO-SWING)
 -- ============================================================================
 
 local INTERVALOS_TIPO_ACORDE = {
@@ -22,7 +22,8 @@ local INTERVALOS_TIPO_ACORDE = {
 --- Construir las notas en pitch absoluto para un grado y tipo de acorde
 local function construirNotasAcorde(gradoRaiz, tipoAcorde, tonica, escalaIndices)
     local escala = escalaIndices or { 0, 2, 4, 5, 7, 9, 11 }
-    local pitchRaiz = transponerPorGradosEscala(tonica + 48, gradoRaiz - 1, tonica, escala)
+    -- Subir la raiz a octava 5 (tonica + 60, ej. C4 = 60) para adaptarse perfectamente a voces femeninas (Teto/Mai)
+    local pitchRaiz = transponerPorGradosEscala(tonica + 60, gradoRaiz - 1, tonica, escala)
 
     local relIntervals = INTERVALOS_TIPO_ACORDE[tipoAcorde] or INTERVALOS_TIPO_ACORDE.triada_mayor
     local notasSuperiores = {}
@@ -31,9 +32,9 @@ local function construirNotasAcorde(gradoRaiz, tipoAcorde, tonica, escalaIndices
         notasSuperiores[i] = pitchRaiz + relIntervals[i]
     end
 
-    -- Nota del bajo en registro grave (C2 - C3)
-    local pitchBajo = (pitchRaiz % 12) + 36
-    if pitchBajo < 36 then pitchBajo = pitchBajo + 12 end
+    -- Nota del bajo en registro comodo de contralto/baritono (C3 - B3, rango 48-59)
+    local pitchBajo = (pitchRaiz % 12) + 48
+    if pitchBajo < 48 then pitchBajo = pitchBajo + 12 end
 
     return pitchBajo, notasSuperiores
 end
@@ -74,7 +75,7 @@ local function optimizarConduccionVoces(notasNuevas, notasPrevias)
 end
 
 --- Generar notas y pistas para una progresión de acordes profesional
-local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, tonica, escalaIdx, ritmoIdx, fIntensidad, configPreset, timeAxis)
+local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, tonica, escalaIdx, ritmoIdx, fIntensidad, configPreset, timeAxis, factorSwing)
     local escalaIndices = ESCALAS_AVANZADAS[escalaIdx] or ESCALAS_AVANZADAS[2]
     local datosProgresion = PROGRESIONES_ACORDES[progresionIdx] or PROGRESIONES_ACORDES[0]
     local gradosAcordes = datosProgresion.grados or { 4, 5, 3, 6 }
@@ -82,23 +83,54 @@ local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, toni
 
     local numCompases = #gradosAcordes
     local durCompasBlicks = SV.QUARTER * 4
+    local totalChordBlicks = numCompases * durCompasBlicks
 
     local reproductor = SV:getPlayback()
     local startBlick = reproductor:getPlayhead()
+    -- Crear pista y note group para el Bajo
+    local pistaBajo = SV:create("Track")
+    pistaBajo:setName(pistaBase:getName() .. " - Acordes Bajo")
+    proyecto:addTrack(pistaBajo)
+    local groupBajo = SV:create("NoteGroup")
+    proyecto:addNoteGroup(groupBajo)
+    local refBajo = SV:create("NoteGroupReference")
+    refBajo:setTarget(groupBajo)
+    refBajo:setTimeOffset(startBlick)
+    refBajo:setTimeRange(startBlick, totalChordBlicks)
+    pistaBajo:addGroupReference(refBajo)
 
-    local nuevaPista = SV:create("Track")
-    nuevaPista:setName(pistaBase:getName() .. " - Acordes (" .. datosProgresion.nombre .. ")")
-    proyecto:addTrack(nuevaPista)
+    -- Determinar el máximo número de voces superiores
+    local maxVocesSuperiores = 3
+    for cIdx = 1, numCompases do
+        local tipoActual = tiposAcordes[cIdx] or "triada_mayor"
+        local relInt = INTERVALOS_TIPO_ACORDE[tipoActual] or { 0, 4, 7 }
+        if #relInt > maxVocesSuperiores then
+            maxVocesSuperiores = #relInt
+        end
+    end
 
-    local nuevoGroupRef = SV:create("NoteGroup")
-    proyecto:addNoteGroup(nuevoGroupRef)
-    local mainRef = SV:create("NoteGroupReference")
-    mainRef:setTarget(nuevoGroupRef)
-    nuevaPista:addGroupReference(mainRef)
+    -- Crear pistas y note groups para las voces superiores
+    local pistasVoces = {}
+    local groupsVoces = {}
+    for v = 1, maxVocesSuperiores do
+        local pV = SV:create("Track")
+        pV:setName(pistaBase:getName() .. " - Acordes Voz " .. v)
+        proyecto:addTrack(pV)
+        local gV = SV:create("NoteGroup")
+        proyecto:addNoteGroup(gV)
+        local rV = SV:create("NoteGroupReference")
+        rV:setTarget(gV)
+        rV:setTimeOffset(startBlick)
+        rV:setTimeRange(startBlick, totalChordBlicks)
+        pV:addGroupReference(rV)
+        pistasVoces[v] = pV
+        groupsVoces[v] = gV
+    end
 
     local notasCreadas = 0
-    local currBlick = startBlick
+    local currBlick = 0 -- Posición relativa a startBlick dentro del grupo
     local vocesSuperioresPrevias = nil
+    local swingAmount = factorSwing or 0.20 -- 20% micro-swing por defecto
 
     for cIdx = 1, numCompases do
         local gradoActual = gradosAcordes[cIdx]
@@ -108,82 +140,96 @@ local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, toni
         local vocesSuperiores = optimizarConduccionVoces(vocesBrutas, vocesSuperioresPrevias)
         vocesSuperioresPrevias = vocesSuperiores
 
-        -- 1. Agregar Nota de Bajo Sostenida en Registro Grave
+        -- 1. Agregar Nota de Bajo
         local notaBajo = SV:create("Note")
         notaBajo:setTimeRange(currBlick, durCompasBlicks)
         notaBajo:setPitch(pitchBajo)
         notaBajo:setLyrics("u")
-        nuevoGroupRef:addNote(notaBajo)
+        groupBajo:addNote(notaBajo)
         notasCreadas = notasCreadas + 1
 
-        -- 2. Patrones Rítmicos para Voces Superiores
+        -- 2. Patrones Rítmicos para Voces Superiores con Micro-Swing
         if ritmoIdx == 0 then
-            -- Pad Sostenido Legato (Full Bar Swell)
+            -- Pad Sostenido Legato
             for v = 1, #vocesSuperiores do
                 local nUpper = SV:create("Note")
                 nUpper:setTimeRange(currBlick, durCompasBlicks)
                 nUpper:setPitch(vocesSuperiores[v])
                 nUpper:setLyrics((v % 2 == 0) and "a" or "o")
-                nuevoGroupRef:addNote(nUpper)
+                if groupsVoces[v] then
+                    groupsVoces[v]:addNote(nUpper)
+                end
                 notasCreadas = notasCreadas + 1
             end
         elseif ritmoIdx == 1 then
-            -- Comping Rítmico Sincopado (Negras 1/4)
+            -- Comping Sincopado (Negras con micro-swing en tiempos 2 y 4)
             local durPulso = SV.QUARTER
             for p = 0, 3 do
-                local bPulse = currBlick + (p * durPulso)
+                local offbeatShift = (p % 2 == 1) and math.floor(durPulso * swingAmount * 0.5) or 0
+                local bPulse = currBlick + (p * durPulso) + offbeatShift
                 for v = 1, #vocesSuperiores do
                     local nUpper = SV:create("Note")
                     nUpper:setTimeRange(bPulse, durPulso - 20)
                     nUpper:setPitch(vocesSuperiores[v])
                     nUpper:setLyrics("la")
-                    nuevoGroupRef:addNote(nUpper)
+                    if groupsVoces[v] then
+                        groupsVoces[v]:addNote(nUpper)
+                    end
                     notasCreadas = notasCreadas + 1
                 end
             end
         elseif ritmoIdx == 2 then
-            -- Arpegio Cascadas Fluido (Corcheas 1/8)
+            -- Arpegio Cascadas (Corcheas 1/8 con micro-swing en corcheas débiles)
             local durCorchea = math.floor(SV.QUARTER / 2)
             local totalPasos = 8
             for a = 0, totalPasos - 1 do
-                local bArp = currBlick + (a * durCorchea)
+                local swingShift = (a % 2 == 1) and math.floor(durCorchea * swingAmount) or 0
+                local bArp = currBlick + (a * durCorchea) + swingShift
                 local idxVoz = (a % #vocesSuperiores) + 1
                 local nUpper = SV:create("Note")
                 nUpper:setTimeRange(bArp, durCorchea - 10)
                 nUpper:setPitch(vocesSuperiores[idxVoz])
                 nUpper:setLyrics("lu")
-                nuevoGroupRef:addNote(nUpper)
+                if groupsVoces[idxVoz] then
+                    groupsVoces[idxVoz]:addNote(nUpper)
+                end
                 notasCreadas = notasCreadas + 1
             end
         elseif ritmoIdx == 3 then
-            -- Chop Electrónico Kinetic (Semicorcheas 1/16)
+            -- Chop Semicorcheas con micro-swing kinético
             local durSemi = math.floor(SV.QUARTER / 4)
             local patronChop = { 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1 }
             for s = 0, 15 do
                 if patronChop[s + 1] == 1 then
-                    local bChop = currBlick + (s * durSemi)
+                    local swingShift = (s % 2 == 1) and math.floor(durSemi * swingAmount * 0.8) or 0
+                    local bChop = currBlick + (s * durSemi) + swingShift
                     for v = 1, #vocesSuperiores do
                         local nUpper = SV:create("Note")
                         nUpper:setTimeRange(bChop, durSemi - 15)
                         nUpper:setPitch(vocesSuperiores[v])
                         nUpper:setLyrics("da")
-                        nuevoGroupRef:addNote(nUpper)
+                        if groupsVoces[v] then
+                            groupsVoces[v]:addNote(nUpper)
+                        end
                         notasCreadas = notasCreadas + 1
                     end
                 end
             end
         else
-            -- Bajo Alternado + Acorde Strum
+            -- Bajo Alternado + Strum con micro-swing en acentos
             local durPulso = SV.QUARTER
             for p = 0, 3 do
-                local bPulse = currBlick + (p * durPulso)
+                local swingShift = (p % 2 == 1) and math.floor(durPulso * swingAmount * 0.5) or 0
+                local bPulse = currBlick + (p * durPulso) + swingShift
                 if p == 1 or p == 3 then
                     for v = 1, #vocesSuperiores do
                         local nUpper = SV:create("Note")
                         nUpper:setTimeRange(bPulse, durPulso - 25)
                         nUpper:setPitch(vocesSuperiores[v])
                         nUpper:setLyrics("pa")
-                        nuevoGroupRef:addNote(nUpper)
+                        if groupsVoces[v] then
+                            groupsVoces[v]:addNote(nUpper)
+                        end
                         notasCreadas = notasCreadas + 1
                     end
                 end

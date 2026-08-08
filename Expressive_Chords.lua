@@ -1,42 +1,23 @@
 --[[
 ===============================================================================
-  Mapeador Expresivo Pro 3 - Synthesizer V Studio Pro 2
-  Lenguaje: Lua 5.4 / LuaJIT (Entorno SynthV Studio Pro 2)
+  Expressive Chords & Counterpoint - Synthesizer V Studio Pro 2 Panel
   Autor: Nyoru.X
-  Versión Script: 3.6.1 (Entonación Justa, TCB Splines, Contrapunto Fux & Voice Leading Minimal Energy)
-  Compatibilidad Estricta: Synthesizer V Studio 2 PRO v2.2.1+
-  Build Objetivado: Mar 2 2026 13:09:42 (editorVersion >= 67072)
-
-  Descripción:
-    Motor modular definitivo de expresividad vocal, generación melódica prosódica, automatización Hermite/TCB,
-    armonía vocal con Entonación Justa (Just Intonation), contrapunto algorítmico fuxiano estricto
-    y progresiones de acordes con Voice Leading de matriz de energía mínima.
-    Arquitectura orientada a datos (Data-Oriented Design) con 0 GC Alloc en runtime.
-
-  Funcionalidades Principales:
-    - Modo 0: Generación prosódica RAE multilingüe (diptongos, hiatos, curvas emocionales de entonación).
-    - Modo 1: Automatización Hermite / Kochanek-Bartels (TCB) Splines con micro-expresión fonémica y RDP.
-    - Modo 2: Armonías Vocales con Entonación Justa (-14c en 3ra Maj, +16c en 3ra Min) y formantes por registro.
-    - Modo 3: Contrapunto Fuxiano Estricto (5 Especies con retardos, compensación de saltos y clímax único).
-    - Modo 4: Progresiones de acordes con Voice Leading Minimal Energy (\sum \Delta pitch^2) y Micro-swing.
+  Versión: v3.6.2 (SidePanelSection)
 ===============================================================================
 --]]
 
--- ============================================================================
--- METADATOS DEL SCRIPT
--- ============================================================================
-
 function getClientInfo()
     return {
-        name = "Mapeador Expresivo Pro 3 (SynthV Studio 2 PRO v2.2.1)",
+        name = "Expressive Chords & Counterpoint",
         author = "Nyoru.X",
         versionNumber = 3,
-        minEditorVersion = 67072
+        minEditorVersion = 131330,
+        type = "SidePanelSection"
     }
 end
 
 function getScriptTitle()
-    return "Mapeador Expresivo Pro 3 (SynthV Studio 2 PRO v2.2.1)"
+    return "Expressive Chords & Counterpoint"
 end
 
 function getScriptVersion()
@@ -48,139 +29,23 @@ function getScriptSide()
 end
 
 function getMinEditorVersion()
-    return 67072
+    return 131330
 end
 --[[
-  Mapeador Expresivo Pro 3 - Idiomas e Internacionalización (I18n)
-  Lenguaje: Lua 5.4 / LuaJIT (Entorno SynthV Studio Pro 2)
-  Autor: Nyoru.X
-  Licencia: Propia / Cerrada (Uso y Modificación Permitida para Anti-Note)
-  
-  Este archivo contiene el diccionario de idiomas completo (ES, EN, JA) para la
-  interfaz de usuario dinámica del Mapeador Expresivo Pro 3.
+  Expressive Panel 4 (Chords & Counterpoint) Localization Dictionary
 --]]
 
 local I18N_DATA = {
-    [0] = { -- Español (Default)
+    [0] = { -- Español
         title = "Mapeador Expresivo Pro 3",
-        message = "--- Configuración de Expresividad, Armonía y Melodías ---",
-        modoLabel = "1. Modo de Operación",
-        modoChoices = {
-            "Generar notas desde texto",
-            "Aplicar expresividad a notas existentes",
-            "Generar armonía vocal (dúo/coro)",
-            "Generar contramelodía (Contrapunto)",
-            "Generar progresión de acordes",
-            "Sincronizar grupos de coros",
-            "Forzar afinación a escala diatónica"
-        },
-        presetLabel = "2. Estilo Vocal / Preset",
-        presetChoices = {
-            "[Recomendado] Estándar Universal (Balanceado)",
-            "[Sesión Previa] Cargar configuración guardada",
-            "Personalizado...",
-            "Belting Operático Potente",
-            "Melancólico / Triste",
-            "Whisper / Susurro Íntimo",
-            "Synth-Pop / Vocalo Clásico",
-            "Rock / Agresivo Grit",
-            "Dark Ambient / Terror Psicológico",
-            "Jazz / Soul Expresivo",
-            "J-Pop Idol High Energy",
-            "Coral Estándar (Balanceado)",
-            "Artcore Kinetic Orchestral",
-            "Breakcore Glitchy Kinetic",
-            "Amenbreak Chop Loop",
-            "Amencore Hardcore Speed",
-            "Gabber / Speedcore Stab",
-            "Neurofunk Techstep Bass",
-            "Eurobeat Hi-NRG Fast",
-            "Future Bass Kawaii Swell",
-            "Cyberpunk Midtempo Heavy",
-            "Chiptune 8-Bit Retro",
-            "Hardstyle Raw Screamer",
-            "Uplifting Trance Anthem"
-        },
-        intensidadLabel = "3. Intensidad del Efecto (%)",
-        densityLabel = "4. Resolución del Spline",
-        densityChoices = {
-            "Smart Spline (Adaptativo)",
-            "Ultra Alta (1/64 de compás)",
-            "Alta (1/32 de compás)",
-            "Estándar (1/16 de compás)",
-            "Media (1/8 de compás)",
-            "Baja (1/4 de compás)",
-            "Solo Nodos Clave",
-            "Paso de Fonema"
-        },
-        modoRitmoLabel = "5. Patrón Rítmico",
-        modoRitmoChoices = {
-            "Pop / J-Pop Sincopado",
-            "Chop Kinetic Micro",
-            "Legato Emocional",
-            "Driving Hardcore Heavy",
-            "Cuantización Plana Estándar"
-        },
-        modoMelodiaLabel = "6. Contorno Melódico",
-        modoMelodiaChoices = {
-            "Arco Expresivo Prosódico",
-            "Salto Pentatónico Expresivo",
-            "Onda Armónica",
-            "Glitch Cromático Caótico",
-            "Plano Expresivo",
-            "Arpegio Ascendente",
-            "Arpegio Descendente",
-            "Paso de Escala Aleatorio",
-            "Saltos de Consonancia"
-        },
-        escalaLabel = "7. Escala Melódica",
-        escalaChoices = {
-            "Pentatónica Mayor",
-            "Pentatónica Menor",
-            "Mayor Natural (Jónica)",
-            "Menor Natural (Eólica)",
-            "Menor Armónica",
-            "Menor Melódica",
-            "Dórica",
-            "Frigia",
-            "Lidia",
-            "Mixolidia",
-            "Locria",
-            "Blues",
-            "Cromática",
-            "Menor Húngara",
-            "Doble Armónica (Bizantina)"
-        },
-        tonicaLabel = "8. Tónica de la Escala (Root)",
-        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
-        autoDetectKeyLabel = "Auto-detectar Tonalidad (Krumhansl)",
-        modoArmoniaLabel = "9. Tipo de Armonía Vocal",
-        modoArmoniaChoices = {
-            "Tercera Arriba (Dúo)",
-            "Tercera Abajo (Dúo)",
-            "Quinta Arriba (Dúo)",
-            "Sexta Arriba (Dúo)",
-            "Octava Abajo",
-            "Presets Corales Multi-voz",
-            "Intervalo Personalizado"
-        },
-        presetCoralLabel = "10. Preset Coral",
-        presetCoralChoices = {
-            "Dúo 3ras Superiores",
-            "Dúo 3ras Inferiores",
-            "Trío Pop (3ras y 5tas)",
-            "Cuarteto Coral SATB",
-            "Power Duo (5tas y 8vas)",
-            "Coro Unísono Anti-fase"
-        },
-        antiFaseMsLabel = "11. Delay de Anti-fase (ms)",
-        antiFaseCentsLabel = "12. Detune de Anti-fase (cents)",
         especieContrapuntoLabel = "13. Especie del Contrapunto",
         especieContrapuntoChoices = {
             "1ra Especie (Nota contra nota - 1:1)",
             "2da Especie (2 notas contra 1 - 2:1)",
             "3ra Especie (4 notas contra 1 - 4:1)",
-            "Contrapunto Libre (Florido / Adornado)"
+            "4ta Especie (Síncopas / Retardos - Suspensiones)",
+            "5ta Especie (Florido / Mixto - Ornamentado)",
+            "Contrapunto Libre (Rítmico / Improv)"
         },
         progresionAcordesLabel = "14. Estilo de Progresión",
         progresionAcordesChoices = {
@@ -209,476 +74,147 @@ local I18N_DATA = {
             "4. Chop Electrónico Kinético (Semicorcheas - 1/16)",
             "5. Bajo + Rasgueo Alternado"
         },
-        letraLabel = "16. Texto / Sílabas de Entrada (ej: la-la-la)",
-        letraHelp = nil,
-        letraDefault = "ah~ oo~ ee~ ah~ uu~ ah~",
-        basePitchLabel = "17. Nota MIDI Base",
-        noteDurLabel = "18. Duración Base",
-        durChoices = { "Blanca (1/2)", "Negra (1/4)", "Corchea (1/8)", "Semicorchea (1/16)" },
-        enableVocalModes = "Automatizar Vocal Modes (vocalMode_*)",
-        enableDetune = "Curvas de Detune y Micro-Afinación",
-        enableExpPad = "XY Pad de Expresividad Integrada",
-        enableSmartVibrato = "Envolvente de Vibrato Inteligente",
-        mergeMode = "Modo Fusión (No Destructivo)",
-        limpiarPrevios = "Limpiar automatizaciones previas",
-        adaptarTempo = "Ajustar longitud de nodos al tempo BPM",
-        compensarGanancia = "Compensar ganancia de volumen por preset",
-        procesarTodosGrupos = "Procesar todos los grupos del track",
-        idiomaLabel = "Idioma / Language",
         errContextTitle = "Error de Contexto",
         errContextMsg = "Por favor, selecciona una pista activa en el editor antes de ejecutar.",
         errNoNotesTitle = "Error de Estructura",
         errNoNotesMsg = "No se encontraron grupos o notas válidas para procesar.",
-        errNoSyllablesTitle = "Aviso",
-        errNoSyllablesMsg = "No has ingresado sílabas de texto válidas para la generación.",
         confirmTitle = "Confirmar Operación",
-        confirmMsgGenerar = "¿Deseas generar notas a partir de %d sílabas en %s%d usando el preset '%s' al %d%%?",
-        confirmMsgExpresar = "¿Deseas aplicar la expresividad del preset '%s' al %d%% sobre las notas seleccionadas?",
-        confirmMsgArmonia = "¿Deseas generar armonía vocal (%s) sobre las notas existentes?",
         confirmMsgContrapunto = "¿Deseas generar una contramelodía (%s) en una pista nueva?",
         confirmMsgProgresion = "¿Deseas generar una progresión de acordes (%s)?",
-        confirmMsgSincronizar = "¿Deseas sincronizar los grupos de coros no enlazados tomando como referencia el grupo guía activo?",
-        confirmMsgForzar = "¿Deseas forzar las notas del grupo a la escala diatónica '%s' en '%s'?",
         completedTitle = "Mapeador Expresivo Pro 3",
         completedMsg = "¡Operación completada exitosamente!\nÍtems procesados/creados: %d\nPreset/Config: %s\nIntensidad: %d%%\nGrupos/Pistas procesados: %d\nDeshacer Atómico registrado (Ctrl+Z para revertir).",
-        customTensionLabel = "Tensión Personalizada (-1.0 a 1.0)",
-        customBreathLabel = "Tensión de Aire (-1.0 a 1.0)",
-        customVolumeLabel = "Volumen Personalizado (dB) (-6.0 a 6.0)",
-        customGenderLabel = "Género Personalizado (-1.0 a 1.0)",
-        customVoicingLabel = "Voicing Personalizado (0.0 a 1.0)",
-        customTimbreLabel = "Timbre / Desplazamiento Tonal (-1.0 a 1.0)",
-        humanizeLabel = "19. Humanización Orgánica Vocálica (%)",
-        registerScaleLabel = "20. Escalamiento de Registro (%)",
-        phonemeModLabel = "21. Modulación Tipo de Fonema (%)",
-        armoniaIntervalosCustomLabel = "23. Intervalos Personalizados (ej: +3, +7, -5)",
-        armoniaIntervalosCustomHelp = "Separar por comas. Ej: +3, +7, -5 o d3, d5, c-5 (d=diatónico, c=cromático)",
-        rangoNotaMinLabel = "24. Límite de Nota Mínimo",
-        rangoNotaMaxLabel = "25. Límite de Nota Máximo",
-        targetNotesModeLabel = "22. Destino de la Generación",
-        targetNotesModeChoices = { "Crear notas nuevas", "Reemplazar en notas seleccionadas" },
-        vistaSeccionLabel = "0. Sección de Panel (Filtro de UX)",
         vistaSeccionChoices = {
-            "Modo Rápido (EasyLyric: Letra y Melodía)",
-            "Expresión Vocal y Curvas Hermite",
-            "Armonía, Coros y Afinación Temperada",
-            "Contrapunto y Progresiones de Acordes",
-            "Parámetros Avanzados y Rangos de Notas"
-        },
-        enableJustIntonation = "Activar Afinación Justa Diatónica (Off = Temperamento Igual POP)"
+            "Modo Rápido (EasyLyric & Melodía)",
+            "Expresión Vocal (Curvas Hermite)",
+            "Armonías Vocales (Coros SATB)",
+            "Acordes & Contrapunto Algorítmico"
+        }
     },
-    [1] = { -- Inglés
+    [1] = { -- English
         title = "Expressive Mapper Pro 3",
-        message = "--- Vocal Expressiveness, Harmony & Melody Settings ---",
-        modoLabel = "1. Operating Mode",
-        modoChoices = {
-            "Generate notes from text",
-            "Apply expressiveness to existing notes",
-            "Generate vocal harmony (duo/choir)",
-            "Generate countermelody (Counterpoint)",
-            "Generate chord progression",
-            "Synchronize choir groups",
-            "Force pitch to diatonic scale"
-        },
-        presetLabel = "2. Vocal Style / Preset",
-        presetChoices = {
-            "[Recommended] Universal Standard (Balanced)",
-            "[Previous Session] Load saved configuration",
-            "Custom...",
-            "Powerful Operatic Belting",
-            "Melancholic / Sad",
-            "Whisper / Intimate Soft",
-            "Synth-Pop / Classic Vocalo",
-            "Rock / Aggressive Grit",
-            "Dark Ambient / Psychological Terror",
-            "Jazz / Expressive Soul",
-            "J-Pop Idol High Energy",
-            "Standard Coral (Balanced)",
-            "Artcore Kinetic Orchestral",
-            "Breakcore Glitchy Kinetic",
-            "Amenbreak Chop Loop",
-            "Amencore Hardcore Speed",
-            "Gabber / Speedcore Stab",
-            "Neurofunk Techstep Bass",
-            "Eurobeat Hi-NRG Fast",
-            "Future Bass Kawaii Swell",
-            "Cyberpunk Midtempo Heavy",
-            "Chiptune 8-Bit Retro",
-            "Hardstyle Raw Screamer",
-            "Uplifting Trance Anthem"
-        },
-        intensidadLabel = "3. Effect Intensity (%)",
-        densityLabel = "4. Spline Resolution",
-        densityChoices = {
-            "Smart Spline (Adaptive)",
-            "Ultra High (1/64 Note)",
-            "High (1/32 Note)",
-            "Standard (1/16 Note)",
-            "Medium (1/8 Note)",
-            "Low (1/4 Note)",
-            "Key Nodes Only",
-            "Phoneme Transition"
-        },
-        modoRitmoLabel = "5. Rhythmic Pattern",
-        modoRitmoChoices = {
-            "Syncopated Pop / J-Pop",
-            "Chop Kinetic Micro",
-            "Emotional Legato",
-            "Driving Hardcore Heavy",
-            "Standard Quantized Flat"
-        },
-        modoMelodiaLabel = "6. Melodic Contour",
-        modoMelodiaChoices = {
-            "Expressive Prosodic Arc",
-            "Expressive Pentatonic Leap",
-            "Harmonic Wave",
-            "Chaotic Chromatic Glitch",
-            "Expressive Flat",
-            "Ascending Arpeggio",
-            "Descending Arpeggio",
-            "Random Scale Step",
-            "Consonant Leaps"
-        },
-        escalaLabel = "7. Melodic Scale",
-        escalaChoices = {
-            "Major Pentatonic",
-            "Minor Pentatonic",
-            "Natural Major (Ionian)",
-            "Natural Minor (Aeolian)",
-            "Harmonic Minor",
-            "Melodic Minor",
-            "Dorian",
-            "Phrygian",
-            "Lydian",
-            "Mixolydian",
-            "Locrian",
-            "Blues",
-            "Chromatic",
-            "Hungarian Minor",
-            "Double Harmonic (Byzantine)"
-        },
-        tonicaLabel = "8. Scale Root (Tonic)",
-        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
-        autoDetectKeyLabel = "Auto-detect Key (Krumhansl)",
-        modoArmoniaLabel = "9. Vocal Harmony Type",
-        modoArmoniaChoices = {
-            "Third Up (Duo)",
-            "Third Down (Duo)",
-            "Fifth Up (Duo)",
-            "Sixth Up (Duo)",
-            "Octave Down",
-            "Multi-voice Choir Presets",
-            "Custom Interval"
-        },
-        presetCoralLabel = "10. Choir Preset",
-        presetCoralChoices = {
-            "Upper 3rd Duo",
-            "Lower 3rd Duo",
-            "Pop Trio (3rds & 5ths)",
-            "SATB Choir Quartet",
-            "Power Duo (5ths & Octaves)",
-            "Anti-Phase Unison Choir"
-        },
-        antiFaseMsLabel = "11. Anti-Phase Delay (ms)",
-        antiFaseCentsLabel = "12. Anti-Phase Detune (cents)",
         especieContrapuntoLabel = "13. Counterpoint Species",
         especieContrapuntoChoices = {
             "1st Species (Note against note - 1:1)",
             "2nd Species (2 notes against 1 - 2:1)",
             "3rd Species (4 notes against 1 - 4:1)",
-            "Free Counterpoint (Florid / Adorned)"
+            "4th Species (Suspensions / Syncopations)",
+            "5th Species (Florid / Mixed Counterpoint)",
+            "Free Counterpoint (Rhythmic / Improv)"
         },
-        progresionAcordesLabel = "14. Chord Progression Style",
+        progresionAcordesLabel = "14. Progression Style",
         progresionAcordesChoices = {
-            "1. J-Pop / Anime Royal (IVmaj7 - V7 - iii7 - vi)",
+            "1. Royal J-Pop / Anime (IVmaj7 - V7 - iii7 - vi)",
             "2. Pop / EDM Anthem (Iadd9 - V - vi7 - IVmaj7)",
             "3. Neo-Soul / R&B Lounge (ii9 - V13 - Imaj9 - VI7alt)",
-            "4. Jazz Cadence 2-5-1 (ii7 - V7 - Imaj7 - VI7)",
+            "4. Jazz 2-5-1 Cadence (ii7 - V7 - Imaj7 - VI7)",
             "5. Dark Ambient Horror (i - bVI - bIII - bVII)",
-            "6. Artcore / Breakcore Kinetic (iv7 - v7 - i9 - VImaj7)",
+            "6. Kinetic Artcore / Breakcore (iv7 - v7 - i9 - VImaj7)",
             "7. City Pop / 80s Funk (IVmaj7 - III7 - vi7 - II7)",
-            "8. Math Rock / Midwest Emo (Iadd9 - IVmaj7 - vi7 - V6)",
-            "9. Future Bass / Kawaii Chords (IVmaj9 - V6/9 - iii7 - vi9)",
+            "8. Midwest Emo / Math Rock (Iadd9 - IVmaj7 - vi7 - V6)",
+            "9. Kawaii Chords / Future Bass (IVmaj9 - V6/9 - iii7 - vi9)",
             "10. Lo-Fi Chill Hop (Imaj7 - VI7 - ii7 - V7alt)",
             "11. Cyberpunk Midtempo Dystopia (i - bII - i - bVI)",
-            "12. Orchestral Dramatic Swell (i - iv7 - V7 - i)",
+            "12. Dramatic Orchestral Swell (i - iv7 - V7 - i)",
             "13. Gospel / Soul Elevation (I - I7 - IV - iv6)",
-            "14. Gabber / Hardstyle Stabs (i - bVI - bVII - i)",
-            "15. Chiptune / 8-Bit Heroic (I - bVII - bVI - V7)",
+            "14. Hardstyle / Gabber Stabs (i - bVI - bVII - i)",
+            "15. 8-Bit Heroic Chiptune (I - bVII - bVI - V7)",
             "16. Uplifting Trance Pad (vi7 - IVmaj7 - I - V)"
         },
         ritmoAcordesLabel = "15. Accompaniment Rhythm",
         ritmoAcordesChoices = {
-            "1. Sustained Legato Pad (Full Bar)",
-            "2. Syncopated Rhythmic Comping (1/4 Notes)",
-            "3. Cascading Arpeggiator (1/8 Notes)",
-            "4. Kinetic Electronic Chop (1/16 Notes)",
+            "1. Sustained Pad (Legato)",
+            "2. Syncopated Chords (Quarter Notes - 1/4)",
+            "3. Fluid Arpeggios (Eighth Notes - 1/8)",
+            "4. Kinetic Electronic Chop (16th Notes - 1/16)",
             "5. Alternating Bass + Strum"
         },
-        letraLabel = "16. Input Text / Lyrics (Ex. ah~ oo~)",
-        letraHelp = nil,
-        letraDefault = "ah~ oo~ ee~ ah~ uu~ ah~",
-        basePitchLabel = "17. Base MIDI Note (C4 = 60)",
-        noteDurLabel = "18. Base Note Duration",
-        durChoices = { "Half (1/2)", "Quarter (1/4)", "Eighth (1/8)", "Sixteenth (1/16)" },
-        enableVocalModes = "Automate Vocal Modes (vocalMode_*)",
-        enableDetune = "Micro-Detune & Pitch Scoops",
-        enableExpPad = "Expression XY Pad (ExpPad)",
-        enableSmartVibrato = "Smart Vibrato Envelope",
-        mergeMode = "Non-Destructive Merge Mode",
-        limpiarPrevios = "Clear Previous Automations",
-        adaptarTempo = "Sync to Project Tempo (BPM)",
-        compensarGanancia = "Compensate Track Volume Gain",
-        procesarTodosGrupos = "Process All Track Groups",
-        idiomaLabel = "Interface Language",
         errContextTitle = "Context Error",
         errContextMsg = "Please select an active track in the editor before running.",
         errNoNotesTitle = "Structure Error",
         errNoNotesMsg = "No valid groups or notes found to process.",
-        errNoSyllablesTitle = "Notice",
-        errNoSyllablesMsg = "No valid syllables entered for generation.",
         confirmTitle = "Confirm Operation",
-        confirmMsgGenerar = "Will generate notes from %d syllables starting at %s%d with preset '%s' at %d%%.\nContinue?",
-        confirmMsgExpresar = "Will apply expressiveness to existing notes with preset '%s' at %d%%.\nContinue?",
-        confirmMsgArmonia = "Will generate vocal harmony (%s) over existing notes.\nContinue?",
-        confirmMsgContrapunto = "Will generate countermelody (%s) over track notes.\nContinue?",
-        confirmMsgProgresion = "Will generate chord progression (%s).\nContinue?",
-        confirmMsgSincronizar = "Will synchronize unlinked choir groups using the active group as a reference.\nContinue?",
-        confirmMsgForzar = "Will force existing pitches to the diatonic scale '%s' in '%s'.\nContinue?",
+        confirmMsgContrapunto = "Do you want to generate a countermelody (%s) in a new track?",
+        confirmMsgProgresion = "Do you want to generate a chord progression (%s)?",
         completedTitle = "Expressive Mapper Pro 3",
         completedMsg = "Operation completed successfully.\nItems processed/created: %d\nPreset/Config: %s\nIntensity: %d%%\nGroups/Tracks processed: %d\nAtomic undo registered (Ctrl+Z to revert).",
-        customTensionLabel = "Custom Tension (-1.0 to 1.0)",
-        customBreathLabel = "Custom Breathiness (-1.0 to 1.0)",
-        customVolumeLabel = "Custom Volume (dB) (-6.0 to 6.0)",
-        customGenderLabel = "Custom Gender (-1.0 to 1.0)",
-        customVoicingLabel = "Custom Voicing (0.0 to 1.0)",
-        customTimbreLabel = "Timbre / Tone Shift (-1.0 to 1.0)",
-        humanizeLabel = "19. Organic Vocal Humanization (%)",
-        registerScaleLabel = "20. Pitch Register Scaling (%)",
-        phonemeModLabel = "21. Phoneme-Class Modulation (%)",
-        armoniaIntervalosCustomLabel = "23. Custom Intervals (e.g. +3, +7, -5)",
-        armoniaIntervalosCustomHelp = "Use commas to separate. E.g. +3, +7, -5 or d3, d5, c-5 (d=diatonic, c=chromatic)",
-        rangoNotaMinLabel = "24. Minimum Note Range",
-        rangoNotaMaxLabel = "25. Maximum Note Range",
-        targetNotesModeLabel = "22. Generation Destination",
-        targetNotesModeChoices = { "Create New Notes", "Replace Selected Notes" },
-        vistaSeccionLabel = "0. Panel View Section (UX Filter)",
         vistaSeccionChoices = {
-            "Quick Mode (EasyLyric: Lyrics & Melody)",
-            "Vocal Expression & Hermite Curves",
-            "Harmonies, Choir & Tuning Temperament",
-            "Counterpoint & Chord Progressions",
-            "Advanced Settings & Note Ranges"
-        },
-        enableJustIntonation = "Enable Pure Just Intonation (Off = Pop Equal Temperament)"
+            "Quick Mode (EasyLyric & Melody)",
+            "Vocal Expression (Hermite Curves)",
+            "Vocal Harmonies (SATB Choir)",
+            "Chords & Algorithmic Counterpoint"
+        }
     },
-    [2] = { -- Japonés
+    [2] = { -- Japanese
         title = "表現力マッパー Pro 3",
-        message = "--- ボーカル表現力・ハモり・メロディ設定 ---",
-        modoLabel = "1. 動作モード",
-        modoChoices = {
-            "テキストからノート生成",
-            "既存ノートに表現力を適用",
-            "ボーカルハモり生成 (デュオ/合唱)",
-            "対主旋律 (カウンターメロディ) 生成",
-            "コード進行生成",
-            "コーラス同期 / グループの同期",
-            "既存ノートのピッチをスケールに強制"
-        },
-        presetLabel = "2. ボーカルスタイル / プリセット",
-        presetChoices = {
-            "[推奨] 標準ユニバーサル (万能バランス)",
-            "[前回セッション] 保存した設定を読み込む",
-            "カスタム...",
-            "オペラティック・ベルティング",
-            "哀愁 / メランコリック",
-            "ウィスパー / ソフト",
-            "シンセポップ / 王道ボカロ",
-            "ロック / アグレッシブ",
-            "ダークアンビエント / ホラー",
-            "ジャズ / エクスプレッシブソウル",
-            "J-Pop アイドルハイエナジー",
-            "標準バランス (コーラス)",
-            "オーケストラ Artcore",
-            "ブレイクコア / グリッチコア",
-            "アーメンブレイク / Jungle",
-            "Amencore Hardcore",
-            "ガバ / スピードコア",
-            "ニューロファンク / テックステップ",
-            "ユーロビート / Hi-NRG",
-            "フューチャーベース / カワイイ",
-            "サイバーパンク ミッドテンポ",
-            "チップチューン / 8-Bit",
-            "ハードスタイル / ロースタイル",
-            "アップリフティング・トランス"
-        },
-        intensidadLabel = "3. エフェクト強度 (%)",
-        densityLabel = "4. オートメーション解像度",
-        densityChoices = {
-            "Smart Spline (適応型)",
-            "超高 (1/64)",
-            "高 (1/32)",
-            "標準 (1/16)",
-            "中 (1/8)",
-            "低 (1/4)",
-            "キーノードのみ",
-            "音素単位"
-        },
-        modoRitmoLabel = "5. リズムパターン",
-        modoRitmoChoices = {
-            "Pop / J-Pop シンコペーション",
-            "キネティック・マイクロチョップ",
-            "エモーショナル・レガート",
-            "ドライビング・ハードコア",
-            "標準量子化"
-        },
-        modoMelodiaLabel = "6. メロディライン",
-        modoMelodiaChoices = {
-            "エモーショナル・プロソディ・アーク",
-            "表現力ペンタトニック跳躍",
-            "ハーモニック・ウェーブ",
-            "クロマチック・グリッチ",
-            "フラット表現力",
-            "上昇アルペジオ",
-            "下降アルペジオ",
-            "ランダムスケールステップ",
-            "協和音跳躍移動"
-        },
-        escalaLabel = "7. メロディスケール",
-        escalaChoices = {
-            "メジャー・ペンタトニック",
-            "マイナー・ペンタトニック",
-            "ナチュラル・メジャー",
-            "ナチュラル・マイナー",
-            "ハーモニック・マイナー",
-            "メロディック・マイナー",
-            "ドリアン",
-            "フリジアン",
-            "リディアン",
-            "ミクソリディアン",
-            "ロクリアン",
-            "ブルース",
-            "クロマチック",
-            "ハンガリアン・マイナー",
-            "ダブル・ハーモニック (ビザンチン)"
-        },
-        tonicaLabel = "8. スケール主音 (Root)",
-        tonicaChoices = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
-        autoDetectKeyLabel = "キー自動検出 (Krumhansl)",
-        modoArmoniaLabel = "9. ハモりタイプ",
-        modoArmoniaChoices = {
-            "3度上",
-            "3度下",
-            "5度上",
-            "6度上",
-            "オクターブ下",
-            "マルチボイス合唱プリセット",
-            "カスタムインターバル"
-        },
-        presetCoralLabel = "10. コーラスプリセット",
-        presetCoralChoices = {
-            "上3度デュオ",
-            "下3度デュオ",
-            "Popトリオ (3度 & 5度)",
-            "SATB 4部合唱クァルテット",
-            "Powerデュオ (5度 & オクターブ)",
-            "ユニゾンアンチフェーズコーラス"
-        },
-        antiFaseMsLabel = "11. Delay de Anti-fase (ms)",
-        antiFaseCentsLabel = "12. Detune de Anti-fase (cents)",
-        especieContrapuntoLabel = "13. 对位法类 (Counterpoint)",
+        especieContrapuntoLabel = "13. 対位法の種類",
         especieContrapuntoChoices = {
-            "第1類 (1:1 音対音)",
-            "第2類 (2:1 2音対1音)",
-            "第3類 (4:1 4音対1音)",
-            "自由対位法 / 装飾"
+            "第1類 (ノート対ノート - 1:1)",
+            "第2類 (1対2ノート - 2:1)",
+            "第3類 (1対4ノート - 4:1)",
+            "第4類 (シンコペーション / 懸垂音 - 2:1)",
+            "第5類 (華麗対位法 / 複合装飾)",
+            "自由対位法 (リズム / インプロ)"
         },
         progresionAcordesLabel = "14. コード進行スタイル",
         progresionAcordesChoices = {
-            "1. J-Pop / アニメ王道 (IVmaj7 - V7 - iii7 - vi)",
-            "2. Pop / EDM アンセム (Iadd9 - V - vi7 - IVmaj7)",
-            "3. Neo-Soul / R&B ラウンジ (ii9 - V13 - Imaj9 - VI7alt)",
-            "4. Jazz 2-5-1 カデンツ (ii7 - V7 - Imaj7 - VI7)",
-            "5. ダークアンビエント (i - bVI - bIII - bVII)",
-            "6. Artcore / Breakcore キネティック (iv7 - v7 - i9 - VImaj7)",
+            "1. 王道 J-Pop / アニメ (IVmaj7 - V7 - iii7 - vi)",
+            "2. ポップス / EDM アンセム (Iadd9 - V - vi7 - IVmaj7)",
+            "3. ネオソウル / R&B ラウンジ (ii9 - V13 - Imaj9 - VI7alt)",
+            "4. ジャズ 2-5-1 ケーデンス (ii7 - V7 - Imaj7 - VI7)",
+            "5. ダークアンビエントホラー (i - bVI - bIII - bVII)",
+            "6. キネティックアートコア / ブレイクコア (iv7 - v7 - i9 - VImaj7)",
             "7. シティポップ / 80s ファンク (IVmaj7 - III7 - vi7 - II7)",
-            "8. マスロック / Midwest Emo (Iadd9 - IVmaj7 - vi7 - V6)",
-            "9. Future Bass / カワイイコード (IVmaj9 - V6/9 - iii7 - vi9)",
-            "10. Lo-Fi Chill Hop (Imaj7 - VI7 - ii7 - V7alt)",
-            "11. サイバーパンク ディストピア (i - bII - i - bVI)",
-            "12. オーケストラ・スウェル (i - iv7 - V7 - i)",
-            "13. ゴスペル / ソウル (I - I7 - IV - iv6)",
-            "14. ガバ / ハードスタイル (i - bVI - bVII - i)",
-            "15. チップチューン / 8-Bit (I - bVII - bVI - V7)",
-            "16. アップリフティング・トランス (vi7 - IVmaj7 - I - V)"
+            "8. ミッドウェストエモ / マスロック (Iadd9 - IVmaj7 - vi7 - V6)",
+            "9. カワイイコード / フューチャーベース (IVmaj9 - V6/9 - iii7 - vi9)",
+            "10. ローファイチルホップ (Imaj7 - VI7 - ii7 - V7alt)",
+            "11. サイバーパンクミドルテンボディストピア (i - bII - i - bVI)",
+            "12. ドラマチックオーケストラスウェル (i - iv7 - V7 - i)",
+            "13. ゴスペル / ソウルエレベーション (I - I7 - IV - iv6)",
+            "14. ハードスタイル / ガバスタブ (i - bVI - bVII - i)",
+            "15. 8ビットヒーローチップチューン (I - bVII - bVI - V7)",
+            "16. アップリフティングトランスパッド (vi7 - IVmaj7 - I - V)"
         },
-        ritmoAcordesLabel = "15. 伴奏リズム",
+        ritmoAcordesLabel = "15. 伴奏リズムパターン",
         ritmoAcordesChoices = {
-            "1. サステイン・レガート (Pad / 全音符)",
-            "2. リズミカル・シンコペーション (4分音符 1/4)",
-            "3. アルペジオ・カスケード (8分音符 1/8)",
-            "4. キネティック・チョップ (16分音符 1/16)",
-            "5. ベース & ストラム (交互奏法)"
+            "1. 持続パッド (レガート)",
+            "2. シンコペーション伴奏 (4分音符 - 1/4)",
+            "3. 流麗なアルペジオ (8分音符 - 1/8)",
+            "4. キネティック電子チョップ (16分音符 - 1/16)",
+            "5. 交互ベース + ストローク"
         },
-        letraLabel = "16. 入力テキスト / 歌詞 (例: アー~ オー~)",
-        letraHelp = nil,
-        letraDefault = "アー~ オー~ イー~ アー~ ウー~ アー~",
-        basePitchLabel = "17. 基準 MIDI ノート",
-        noteDurLabel = "18. 基準音節長",
-        durChoices = { "2分音符 (1/2)", "4分音符 (1/4)", "8分音符 (1/8)", "16分音符 (1/16)" },
-        enableVocalModes = "ボーカルモードの自動化 (vocalMode_*)",
-        enableDetune = "ピッチスクープ / マイクロディチューン",
-        enableExpPad = "エクスプレッション XY パッド",
-        enableSmartVibrato = "スマートビブラートエンベロープ",
-        mergeMode = "非破壊マージ (Merge)",
-        limpiarPrevios = "範囲内の既存オートメーションを消去",
-        adaptarTempo = "プロジェクトテンポ (BPM) に同期",
-        compensarGanancia = "トラックゲインに応じて補正",
-        procesarTodosGrupos = "トラック内の全グループを処理",
-        idiomaLabel = "Idioma / Language",
         errContextTitle = "コンテキストエラー",
-        errContextMsg = "実行する前にエディタでアクティブなトラックを選択してください。",
+        errContextMsg = "実行する antes de エディタでアクティブなトラックを選択してください。",
         errNoNotesTitle = "構造エラー",
         errNoNotesMsg = "処理対象の有効なグループまたはノートが見つかりません。",
-        errNoSyllablesTitle = "通知",
-        errNoSyllablesMsg = "生成のための有効な音節が入力されていません。",
         confirmTitle = "操作の確認",
-        confirmMsgGenerar = "%d音節から%s%dを基準にプリセット'%s'（%d%%）でノートを生成します。\n続行しますか？",
-        confirmMsgExpresar = "プリセット'%s'（%d%%）で既存ノートに表現力を適用します。\n続行しますか？",
-        confirmMsgArmonia = "既存ノート上にボーカルハモり（%s）を生成します。\n続行しますか？",
-        confirmMsgContrapunto = "トラック上にカウンターメロディ（%s）を生成します。\n続行しますか？",
-        confirmMsgProgresion = "コード進行（%s）を生成します。\n続行しますか？",
-        confirmMsgSincronizar = "アクティブなグループを参照して、リンクされていないコーラスグループを同期します。\n続行しますか？",
-        confirmMsgForzar = "既存ノートのピッチをスケール '%s' (主音 '%s') に強制します。\n続行しますか？",
+        confirmMsgContrapunto = "新しいトラックに対位法メロディ（%s）を生成しますか？",
+        confirmMsgProgresion = "コード進行（%s）を生成しますか？",
         completedTitle = "表現力マッパー Pro 3",
         completedMsg = "処理が正常に完了しました！\n処理/生成アイテム数: %d\nプリセット/設定: %s\n強度: %d%%\n処理グループ/トラック数: %d\nAtomic Undo 登録完了（Ctrl+Z で元に戻せます）。",
-        customTensionLabel = "カスタムテンション (-1.0〜1.0)",
-        customBreathLabel = "カスタムブレシネス (-1.0〜1.0)",
-        customVolumeLabel = "カスタム音量 (dB) (-6.0〜6.0)",
-        customGenderLabel = "カスタムジェンダー (-1.0〜1.0)",
-        customVoicingLabel = "カスタムボイシング (0.0〜1.0)",
-        customTimbreLabel = "音色 / トーンシフト (-1.0〜1.0)",
-        humanizeLabel = "19. 有機的ボーカルヒューマナイズ (%)",
-        registerScaleLabel = "20. ピッチレジスタ感度 (%)",
-        phonemeModLabel = "21. 音素クラス変調 (%)",
-        armoniaIntervalosCustomLabel = "23. カスタムインターバル (例: +3, +7, -5)",
-        armoniaIntervalosCustomHelp = "カンマ区切り。例: +3, +7, -5 または d3, d5, c-5 (d=ダイアトニック, c=クロマチック)",
-        rangoNotaMinLabel = "24. 最小ノート範囲",
-        rangoNotaMaxLabel = "25. 最大ノート範囲",
-        targetNotesModeLabel = "22. 生成先ターゲット",
-        targetNotesModeChoices = { "新規ノートを生成", "選択されたノートを置換" },
-        vistaSeccionLabel = "0. パネル表示セクション (UXフィルター)",
         vistaSeccionChoices = {
-            "クイックモード (EasyLyric: 歌詞 & メロディ)",
-            "ボーカル表現力 & Hermiteカーブ",
-            "ハモり・コーラス & 調律・平均律",
-            "対位法 & コード進行",
-            "詳細設定 & ノート範囲"
-        },
-        enableJustIntonation = "純正律を有効化 (オフ = POP向け平均律)"
+            "クイックモード (EasyLyric & メロディ)",
+            "ボーカル表現 (エルミート曲線)",
+            "ボーカルハーモニー (SATBコーラス)",
+            "コード & アルゴリズム対位法"
+        }
     }
 }
+
+function getTranslations(langCode)
+    local code = string.lower(langCode or "")
+    if string.find(code, "en") then
+        _G.idiomaDetectado = 1
+        return I18N_DATA[1]
+    elseif string.find(code, "ja") or string.find(code, "jp") then
+        _G.idiomaDetectado = 2
+        return I18N_DATA[2]
+    else
+        _G.idiomaDetectado = 0
+        return I18N_DATA[0]
+    end
+end
 -- ============================================================================
--- MÓDULO 2: DATOS Y PRESETS DE EXPRESIVIDAD VOCAL (0 GC ALLOC)
+-- MÓDULO 2: DATOS Y PRESETS DE EXPRESIVIDAD VOCAL (LOW GC ALLOC)
 -- ============================================================================
 
 local VOCAL_MODE_NOMBRES = {
@@ -692,7 +228,7 @@ for i = 1, #VOCAL_MODE_NOMBRES do
     VOCAL_MODE_KEYS[i] = "vocalMode_" .. VOCAL_MODE_NOMBRES[i]
 end
 
--- Buffers globales pre-asignados para interpolación Hermite y automatizaciones (0 GC Alloc)
+-- Buffers globales pre-asignados para interpolación Hermite y automatizaciones (Optimización de memoria)
 local EVAL_NODOS = {
     t   = { 0.0, 0.15, 0.50, 0.85, 1.0 },
     val = { 0.0, 0.0, 0.0, 0.0, 0.0 },
@@ -1029,6 +565,40 @@ local PRESETS_CORALES = {
     [5] = { nombre = "Coro Unísono Anti-fase", intervalos = { 0, 0 }, nombresVoces = { "Doblaje A", "Doblaje B" } }
 }
 
+
+-- Limitar un valor dentro de un rango minimo y maximo
+local function limitarValor(val, minVal, maxVal)
+    if val < minVal then return minVal end
+    if val > maxVal then return maxVal end
+    return val
+end
+
+-- Calcular factor de escala de tiempo en base al tempo BPM
+local function factorTempo(bpm)
+    if bpm <= 0 then return 1.0 end
+    return 120.0 / bpm
+end
+
+-- Obtener tempo BPM en una posición de blicks específica
+local function obtenerTempoEnBlick(timeAxis, blickPos)
+    local numMarks = timeAxis:getAllTempoMarks()
+    if numMarks and #numMarks > 0 then
+        local bpmActual = 120.0
+        for i = 1, #numMarks do
+            local mark = numMarks[i]
+            if mark and mark.position ~= nil then
+                if mark.position <= blickPos then
+                    bpmActual = mark.bpm or 120.0
+                else
+                    break
+                end
+            end
+        end
+        return bpmActual
+    end
+    return 120.0
+end
+
 -- ============================================================================
 -- MÓDULO 3: TOKENIZADOR MULTILINGÜE Y GENERADOR MELÓDICO PROSÓDICO (ES, EN, JA)
 -- ============================================================================
@@ -1353,10 +923,54 @@ local EXCEPCIONES_SILABAS_ES = {
     mario = { "Ma-", "rio" },
     jaime = { "Jai-", "me" },
     paula = { "Pau-", "la" },
-    raul = { "Ra-", "úl" }
+    raul = { "Ra-", "úl" },
+    maria = { "Ma-", "rí-", "a" },
+    sofia = { "So-", "fí-", "a" },
+    lucia = { "Lu-", "cí-", "a" },
+    diego = { "Die-", "go" },
+    miguel = { "Mi-", "guel" },
+    angel = { "Án-", "gel" },
+    jose = { "Jo-", "sé" },
+    jesus = { "Je-", "sús" },
+    teatro = { "Te-", "a-", "tro" },
+    poesia = { "Po-", "e-", "sí-", "a" },
+    caotico = { "Ca-", "ó-", "ti-", "co" },
+    heroe = { "Hé-", "ro-", "e" },
+    linea = { "Lí-", "ne-", "a" },
+    aereo = { "A-", "é-", "re-", "o" }
 }
 
---- Auto-silabificador avanzado para español con reglas RAE (0 GC Alloc en buffers estáticos)
+-- Diccionario de excepciones de hiatos y nombres propios comunes en inglés
+local EXCEPCIONES_SILABAS_EN = {
+    create = { "cre-", "ate" },
+    giant = { "gi-", "ant" },
+    lion = { "li-", "on" },
+    chaos = { "cha-", "os" },
+    poet = { "po-", "et" },
+    neon = { "ne-", "on" },
+    real = { "re-", "al" },
+    ruin = { "ru-", "in" },
+    idea = { "i-", "de-", "a" },
+    science = { "sci-", "ence" },
+    quiet = { "qui-", "et" },
+    violet = { "vi-", "o-", "let" },
+    video = { "vi-", "de-", "o" },
+    casual = { "ca-", "su-", "al" },
+    theater = { "the-", "a-", "ter" }
+}
+
+-- Normalizador de variantes de teclado Romaji japonés (IME)
+local function normalizarRomajiJapones(palabra)
+    local p = string.lower(palabra)
+    p = string.gsub(p, "ti", "chi")
+    p = string.gsub(p, "tu", "tsu")
+    p = string.gsub(p, "si", "shi")
+    p = string.gsub(p, "hu", "fu")
+    return p
+end
+
+
+--- Auto-silabificador avanzado para español con reglas RAE (Optimizado en buffers estáticos)
 local function silabificarEspanol(palabra)
     local silabas = {}
     local len = #palabra
@@ -1488,18 +1102,207 @@ end
 --- 1. Texto con guiones manuales (modo tradicional): "Can-ta-me_ u-na"
 --- 2. Texto plano sin guiones (auto-tokenización): "Cántame una"
 --- 3. JA (UTF-8 Kana/Romaji): caracteres individuales
-local function extraerSilabas(texto, idiomaIdx)
+--- Heurística de auto-silabificación para inglés (Optimizado en memoria)
+local function silabificarIngles(palabra)
+    local len = #palabra
+    if len <= 3 then return { palabra } end
+
+    local palabraLower = string.lower(palabra)
+    local syllables = {}
+    local chars = {}
+    for i = 1, len do
+        chars[i] = string.sub(palabra, i, i)
+    end
+
+    local tipos = {}
+    local esVocal = { a=true, e=true, i=true, o=true, u=true, y=true }
+    for i = 1, len do
+        local c = string.lower(chars[i])
+        if esVocal[c] then
+            tipos[i] = "V"
+        else
+            tipos[i] = "C"
+        end
+    end
+
+    -- 'e' muda al final de la palabra
+    if string.sub(palabraLower, len, len) == "e" and len > 3 then
+        local antepenultima = string.sub(palabraLower, len-1, len-1)
+        if antepenultima ~= "l" then
+            tipos[len] = "C"
+        end
+    end
+
+    local cortarDespues = {}
+    for i = 1, len do cortarDespues[i] = false end
+
+    local i = 1
+    while i < len do
+        if tipos[i] == "V" then
+            local nextVowelIdx = nil
+            for k = i + 1, len do
+                if tipos[k] == "V" then
+                    nextVowelIdx = k
+                    break
+                end
+            end
+
+            if nextVowelIdx then
+                local numCons = nextVowelIdx - i - 1
+                if numCons == 1 then
+                    cortarDespues[i] = true
+                elseif numCons == 2 then
+                    local pair = string.lower(chars[i+1] .. chars[i+2])
+                    local digrafos = { th=true, ch=true, sh=true, ph=true, gh=true, ck=true }
+                    if digrafos[pair] then
+                        cortarDespues[i] = true
+                    else
+                        cortarDespues[i+1] = true
+                    end
+                elseif numCons >= 3 then
+                    cortarDespues[i+1] = true
+                end
+                i = nextVowelIdx - 1
+            end
+        end
+        i = i + 1
+    end
+
+    local currentSyl = ""
+    for ci = 1, len do
+        currentSyl = currentSyl .. chars[ci]
+        if cortarDespues[ci] then
+            syllables[#syllables + 1] = currentSyl
+            currentSyl = ""
+        end
+    end
+    if currentSyl ~= "" then
+        syllables[#syllables + 1] = currentSyl
+    end
+
+    if #syllables == 0 then
+        syllables[1] = palabra
+    end
+
+    return syllables
+end
+
+-- Tokenizador inteligente que agrupa bloques de fonemas /y aa/
+local function dividirTextoEnPalabrasConFonemas(texto)
+    local palabras = {}
+    local startIdx = 1
+    local len = #texto
+    
+    while startIdx <= len do
+        local wordStart = string.find(texto, "%S", startIdx)
+        if not wordStart then break end
+        
+        if string.sub(texto, wordStart, wordStart) == "/" then
+            local nextSlash = string.find(texto, "/", wordStart + 1)
+            if nextSlash then
+                local token = string.sub(texto, wordStart, nextSlash)
+                table.insert(palabras, token)
+                startIdx = nextSlash + 1
+            else
+                local wordEnd = string.find(texto, "%s", wordStart + 1) or (len + 1)
+                table.insert(palabras, string.sub(texto, wordStart, wordEnd - 1))
+                startIdx = wordEnd
+            end
+        else
+            local wordEnd = string.find(texto, "%s", wordStart + 1) or (len + 1)
+            table.insert(palabras, string.sub(texto, wordStart, wordEnd - 1))
+            startIdx = wordEnd
+        end
+    end
+    
+    return palabras
+end
+
+local function normalizarTextoParaLyrics(str)
+    if not str then return "" end
+    local s = str
+    -- Normalizar vocales con tildes ortográficas en español (á, é, í, ó, ú, ü)
+    s = string.gsub(s, "á", "a")
+    s = string.gsub(s, "é", "e")
+    s = string.gsub(s, "í", "i")
+    s = string.gsub(s, "ó", "o")
+    s = string.gsub(s, "ú", "u")
+    s = string.gsub(s, "ü", "u")
+    s = string.gsub(s, "Á", "a")
+    s = string.gsub(s, "É", "e")
+    s = string.gsub(s, "Í", "i")
+    s = string.gsub(s, "Ó", "o")
+    s = string.gsub(s, "Ú", "u")
+    s = string.gsub(s, "Ü", "u")
+    -- Convertir 'ñ' / 'Ñ' a 'ny' (estándar G2P del motor de Synthesizer V)
+    s = string.gsub(s, "ñ", "ny")
+    s = string.gsub(s, "Ñ", "ny")
+    -- Mapeo directo por secuencias de bytes UTF-8
+    s = string.gsub(s, "\195\161", "a")
+    s = string.gsub(s, "\195\169", "e")
+    s = string.gsub(s, "\195\173", "i")
+    s = string.gsub(s, "\195\179", "o")
+    s = string.gsub(s, "\195\186", "u")
+    s = string.gsub(s, "\195\188", "u")
+    s = string.gsub(s, "\195\177", "ny")
+    s = string.gsub(s, "\195\145", "ny")
+    return s
+end
+
+local function normalizarPuntuacionEspecial(txt)
+    if not txt then return "" end
+    local s = txt
+    s = string.gsub(s, "\226\128\153", "'")  -- apostrofe derecho ’
+    s = string.gsub(s, "\226\128\152", "'")  -- apostrofe izquierdo ‘
+    s = string.gsub(s, "\226\128\156", '"')  -- comillas “
+    s = string.gsub(s, "\226\128\157", '"')  -- comillas ”
+    s = string.gsub(s, "\226\128\166", "...") -- puntos suspensivos …
+    s = string.gsub(s, "\226\128\148", "-")  -- guion largo —
+    s = string.gsub(s, "\226\128\147", "-")  -- guion corto –
+    return s
+end
+
+local function esPalabraCJK(palabra)
+    if string.find(palabra, "[a-zA-Z]") then
+        return false
+    end
+    return string.find(palabra, "[\227-\233]") ~= nil
+end
+
+local function extraerSilabas(texto, idiomaIdx, separatorMode, separatorCustom, soloFonemas)
     local silabas = {}
 
-    -- Reemplazar barras verticales con guiones para unificar la separación manual
-    local textoNormalizado = string.gsub(texto, "|", "-")
-    local tieneSeparadores = string.find(textoNormalizado, "%-") ~= nil
+    local textoNormalizado = normalizarPuntuacionEspecial(texto or "")
+    if soloFonemas then
+        for palabra in string.gmatch(textoNormalizado, "%S+") do
+            silabas[#silabas + 1] = palabra
+        end
+        return silabas
+    end
+    local tieneSeparadores = false
+    if separatorMode == nil or separatorMode == "auto" then
+        textoNormalizado = string.gsub(textoNormalizado, "|", "-")
+        tieneSeparadores = string.find(textoNormalizado, "%-") ~= nil
+    elseif separatorMode == "pipe" then
+        tieneSeparadores = string.find(textoNormalizado, "|", 1, true) ~= nil
+    elseif separatorMode == "custom" and separatorCustom and separatorCustom ~= "" then
+        tieneSeparadores = string.find(textoNormalizado, separatorCustom, 1, true) ~= nil
+    else
+        -- space mode: don't treat extra separators
+        tieneSeparadores = false
+    end
 
     if tieneSeparadores then
-        -- Modo tradicional / manual: separar por guiones/barras y espacios
-        local textoLimpio = string.gsub(textoNormalizado, "%-", " ")
+        local textoLimpio = textoNormalizado
+        if separatorMode == nil or separatorMode == "auto" then
+            textoLimpio = string.gsub(textoLimpio, "%-", " ")
+        elseif separatorMode == "pipe" then
+            textoLimpio = string.gsub(textoLimpio, "|", " ")
+        elseif separatorMode == "custom" and separatorCustom and separatorCustom ~= "" then
+            textoLimpio = string.gsub(textoLimpio, separatorCustom, " ")
+        end
         for palabra in string.gmatch(textoLimpio, "%S+") do
-            if string.find(palabra, "[\224-\239]") then
+            if esPalabraCJK(palabra) then
                 for char in string.gmatch(palabra, "[%z\1-\127\194-\244][\128-\191]*") do
                     silabas[#silabas + 1] = char
                 end
@@ -1508,25 +1311,51 @@ local function extraerSilabas(texto, idiomaIdx)
             end
         end
     else
-        -- Modo auto-tokenización: separar por palabras y luego silabificar
-        for palabra in string.gmatch(textoNormalizado, "%S+") do
-            -- Detectar marcadores especiales: pausas, holds, etc.
+        local palabras = dividirTextoEnPalabrasConFonemas(textoNormalizado)
+        for pi = 1, #palabras do
+            local palabra = palabras[pi]
+            -- Limpiar puntuación molesta pegada a palabras ("Leaving," -> "Leaving")
+            local palabraSinPuntuacion = string.gsub(palabra, "^[%p%s]+", "")
+            palabraSinPuntuacion = string.gsub(palabraSinPuntuacion, "[%p%s]+$", "")
+            if palabraSinPuntuacion == "" then palabraSinPuntuacion = palabra end
+
             if palabra == "_" or palabra == "," or palabra == "." or palabra == "、" or palabra == "。" then
                 silabas[#silabas + 1] = palabra
-            elseif string.find(palabra, "[\224-\239]") then
-                -- Japonés: cada grafema es una mora/sílaba
-                for char in string.gmatch(palabra, "[%z\1-\127\194-\244][\128-\191]*") do
+            elseif esPalabraCJK(palabraSinPuntuacion) then
+                for char in string.gmatch(palabraSinPuntuacion, "[%z\1-\127\194-\244][\128-\191]*") do
                     silabas[#silabas + 1] = char
                 end
             elseif idiomaIdx == 0 then
-                -- Español: auto-silabificación en legato continuo
-                local silabasPalabra = silabificarEspanol(palabra)
+                local silabasPalabra = silabificarEspanol(palabraSinPuntuacion)
                 for si = 1, #silabasPalabra do
                     silabas[#silabas + 1] = silabasPalabra[si]
                 end
+            elseif idiomaIdx == 1 then
+                local palabraLower = string.lower(palabraSinPuntuacion)
+                if EXCEPCIONES_SILABAS_EN[palabraLower] then
+                    local exc = EXCEPCIONES_SILABAS_EN[palabraLower]
+                    for ei = 1, #exc do
+                        silabas[#silabas + 1] = exc[ei]
+                    end
+                else
+                    -- Inglés: auto-silabificación basada en heurísticas
+                    local silabasPalabra = silabificarIngles(palabraSinPuntuacion)
+                    for si = 1, #silabasPalabra do
+                        silabas[#silabas + 1] = silabasPalabra[si]
+                    end
+                end
+            elseif idiomaIdx == 2 then
+                -- Normalizar variantes comunes del teclado Romaji japonés (IME)
+                local palabraNorm = normalizarRomajiJapones(palabraSinPuntuacion)
+                if esPalabraCJK(palabraNorm) then
+                    for char in string.gmatch(palabraNorm, "[%z\1-\127\194-\244][\128-\191]*") do
+                        silabas[#silabas + 1] = char
+                    end
+                else
+                    silabas[#silabas + 1] = palabraNorm
+                end
             else
-                -- Inglés u otros: cada palabra es una sílaba en legato continuo
-                silabas[#silabas + 1] = palabra
+                silabas[#silabas + 1] = palabraSinPuntuacion
             end
         end
 
@@ -1536,10 +1365,40 @@ local function extraerSilabas(texto, idiomaIdx)
         end
     end
 
+    -- Post-process: detect timing markers in form {+N} / {-N} (milliseconds relative)
+    for i = 1, #silabas do
+        local t = silabas[i]
+        if type(t) == "string" then
+            -- find patterns like {+120} or {-80}
+            local offsetMs = string.match(t, "{([%+%-]?%d+)}")
+            if offsetMs then
+                local clean = string.gsub(t, "{[%+%-]?%d+}", "")
+                clean = string.gsub(clean, "^%s+", "")
+                clean = string.gsub(clean, "%s+$", "")
+                silabas[i] = { text = (clean ~= "" and clean) or "", offsetMs = tonumber(offsetMs) }
+            else
+                -- also support {+120ms} or {+1.25s}
+                local offMs2 = string.match(t, "{([%+%-]?%d+)%s*ms}")
+                local offS = string.match(t, "{=?(%d+%.?%d*)s}")
+                if offMs2 then
+                    local clean = string.gsub(t, "{[%+%-]?%d+%s*ms}", "")
+                    clean = string.gsub(clean, "^%s+", "")
+                    clean = string.gsub(clean, "%s+$", "")
+                    silabas[i] = { text = (clean ~= "" and clean) or "", offsetMs = tonumber(offMs2) }
+                elseif offS then
+                    local clean = string.gsub(t, "{=?%d+%.?%d*s}", "")
+                    clean = string.gsub(clean, "^%s+", "")
+                    clean = string.gsub(clean, "%s+$", "")
+                    silabas[i] = { text = (clean ~= "" and clean) or "", offsetMs = tonumber(offS) * 1000 }
+                end
+            end
+        end
+    end
+
     return silabas
 end
 
---- Convertir una sílaba española/latina a fonemas universales de Synthesizer V (0 GC Alloc)
+--- Convertir una sílaba española/latina a fonemas universales de Synthesizer V
 local function convertirSilabaAFonemasEspanol(silaba)
     if not silaba or silaba == "" or silaba == "_" then return "" end
     local sLow = string.lower(silaba)
@@ -1599,8 +1458,23 @@ local function convertirSilabaAFonemasEspanol(silaba)
     return fonemas
 end
 
-local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMelodiaIdx, escalaIdx, modoRitmoIdx, idiomaIdx, noteGroup, reproductor, rangoMin, rangoMax)
-    local silabas = extraerSilabas(letraRaw, idiomaIdx)
+local function msToBlicks(ms, timeAxis)
+    -- Convert ms (milliseconds) to blicks using current BPM/timeAxis
+    if not timeAxis or not ms then return 0 end
+    local bpm = 120.0
+    local marks = timeAxis:getAllTempoMarks()
+    if marks and #marks > 0 then
+        -- use first mark as approximate BPM
+        if marks[1] and marks[1].bpm then bpm = marks[1].bpm end
+    end
+    -- 1 minute = 60000 ms; quarter note duration in blicks is SV.QUARTER
+    local msPerQuarter = 60000.0 / bpm
+    local blicks = (ms / msPerQuarter) * SV.QUARTER
+    return math.floor(blicks + 0.5)
+end
+
+local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMelodiaIdx, escalaIdx, modoRitmoIdx, idiomaIdx, noteGroup, reproductor, rangoMin, rangoMax, timeAxis, separatorMode, separatorCustom, soloFonemas, startBlickOverride)
+    local silabas = extraerSilabas(letraRaw, idiomaIdx, separatorMode, separatorCustom, soloFonemas)
     local numSilabas = #silabas
     if numSilabas == 0 then
         return {}
@@ -1614,9 +1488,11 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
 
     local escala = ESCALAS[escalaIdx] or ESCALAS[0]
     local numNotasEscala = #escala
-    local currentBlick = reproductor:getPlayhead()
+    local currentBlick = startBlickOverride or reproductor:getPlayhead()
     local notasCreadas = {}
     local pitchPrevio = basePitch
+    _G.prevImprovGrado = 1
+    _G.lastLeapDirection = 0
 
     local totalCantadas = 0
     for i = 1, numSilabas do
@@ -1630,33 +1506,74 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
 
     for i = 1, numSilabas do
         local token = silabas[i]
+        local explicitOffsetBlick = nil
+        if type(token) == "table" and token.offsetMs then
+            explicitOffsetBlick = msToBlicks(token.offsetMs, timeAxis)
+            -- if token.text is empty, treat as pause of that offset
+            token = token.text
+        end
 
         -- Silencio o pausa (_, ,, ., 、, 。)
         if token == "_" or token == "," or token == "." or token == "、" or token == "。" then
             currentBlick = currentBlick + stepBlickBase
+        elseif token == "\\" or token == "\\\\" or token == "v" or token == "vv" or token == "^" or token == "^^" or token == "+" or token == "++" then
+            -- Modificador de inflexión de tono independiente (aplica a la nota previa sin crear una nueva nota en el piano roll)
+            if #notasCreadas > 0 then
+                local notaPrev = notasCreadas[#notasCreadas]
+                local deltaInflection = (token == "\\\\" or token == "vv" or token == "++" or token == "^^") and 4 or 2
+                if token == "\\" or token == "\\\\" or token == "v" or token == "vv" then
+                    deltaInflection = -deltaInflection
+                end
+                notaPrev:setPitch(limitarValor(notaPrev:getPitch() + deltaInflection, rangoMin, rangoMax))
+            end
         else
             indiceNota = indiceNota + 1
+
+            -- Determinar si el token es un fonema explícito (/fonema/)
+            local letraLimpia = tostring(token or ""):gsub("^%s*(.-)%s*$", "%1")
+            
+            local esFonemaExplicito = false
+            local fonemasLimpios = ""
+            
+            if string.sub(letraLimpia, 1, 1) == "/" and string.sub(letraLimpia, -1, -1) == "/" then
+                esFonemaExplicito = true
+                fonemasLimpios = string.sub(letraLimpia, 2, -2)
+                letraLimpia = "." -- placeholder de Synthesizer V para fonemas explícitos
+            else
+                -- Limpiar modificadores de control de la letra de la nota (evita que \, v, ~, ^ leaqueen al Piano Roll)
+                letraLimpia = string.gsub(letraLimpia, "\\+$", "")
+                letraLimpia = string.gsub(letraLimpia, "v+$", "")
+                letraLimpia = string.gsub(letraLimpia, "%^+$", "")
+                letraLimpia = string.gsub(letraLimpia, "%++$", "")
+                letraLimpia = string.gsub(letraLimpia, "%-+$", "")
+                letraLimpia = string.gsub(letraLimpia, "~+", "")
+                letraLimpia = string.gsub(letraLimpia, "%[[^%]]+%]", "")
+            end
+
+            if letraLimpia == "" then letraLimpia = "la" end
+
+            local aplicarChopsFX = (soloFonemas == true) or esFonemaExplicito
 
             -- Analizar prosodia por idioma
             local deltaPitchProsodico, multDurProsodico = analizarProsodiaSilaba(token, idiomaIdx, indiceNota, totalCantadas, esPregunta, esExclamacion)
 
-            -- Modulador Rítmico de Duración
+            -- Modulador Rítmico de Duración (optimizado para canto fluido humano)
             local multRitmo = 1.0
             if modoRitmoIdx == 0 then -- Pop Sincopado
-                if (indiceNota % 4 == 1) then multRitmo = 1.5
-                elseif (indiceNota % 4 == 2) then multRitmo = 0.75
-                elseif (indiceNota % 4 == 3) then multRitmo = 1.25
-                else multRitmo = 0.50 end
+                if (indiceNota % 4 == 1) then multRitmo = 1.25
+                elseif (indiceNota % 4 == 2) then multRitmo = 0.90
+                elseif (indiceNota % 4 == 3) then multRitmo = 1.10
+                else multRitmo = 0.85 end
             elseif modoRitmoIdx == 1 then -- Micro-Chop Kinético (Breakcore / Glitchcore)
-                if (indiceNota % 3 == 0) then multRitmo = 0.25 -- 1/32 chop
-                elseif (indiceNota % 2 == 0) then multRitmo = 0.50 -- 1/16 chop
-                else multRitmo = 0.75 end
+                if (indiceNota % 3 == 0) then multRitmo = 0.35 -- 1/32 chop
+                elseif (indiceNota % 2 == 0) then multRitmo = 0.60 -- 1/16 chop
+                else multRitmo = 0.85 end
             elseif modoRitmoIdx == 2 then -- Legato Emotivo Swell (Artcore / Trance)
-                if (indiceNota % 2 == 1) then multRitmo = 2.0
-                else multRitmo = 1.5 end
+                if (indiceNota % 2 == 1) then multRitmo = 1.80
+                else multRitmo = 1.40 end
             elseif modoRitmoIdx == 3 then -- Driving Hardcore (Gabber / Rock)
-                if (indiceNota % 3 == 0) then multRitmo = 0.66 -- Tresillo
-                else multRitmo = 0.75 end
+                if (indiceNota % 3 == 0) then multRitmo = 0.80 -- Tresillo
+                else multRitmo = 0.90 end
             end
 
             -- Duración extendida por tildes explicitas (~)
@@ -1669,7 +1586,8 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
                 token = string.gsub(token, "~", "")
             end
 
-            local durBlick = math.max(math.floor(SV.QUARTER / 16), math.floor(stepBlickBase * multDurProsodico * multRitmo))
+            local minDurBlick = aplicarChopsFX and math.floor(SV.QUARTER / 16) or math.floor(SV.QUARTER * 0.65)
+            local durBlick = math.max(minDurBlick, math.floor(stepBlickBase * multDurProsodico * multRitmo))
             local pitchTarget = nil
 
             -- Pitch explícito [C4], [G4], etc.
@@ -1688,34 +1606,37 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
                 end
             end
 
-            -- Símbolos de inflexión (+, ++, -, --, ^, v)
+            -- Símbolos de inflexión (\, \\, v, vv, ^, ^^, +, ++)
             if not pitchTarget then
-                if string.find(token, "%+%+") or string.find(token, "%^%^") then
-                    pitchTarget = pitchPrevio + 4
-                    token = string.gsub(token, "%+%+", "")
-                    token = string.gsub(token, "%^%^", "")
-                elseif string.find(token, "%+") or string.find(token, "%^") then
-                    pitchTarget = pitchPrevio + 2
-                    token = string.gsub(token, "%+", "")
-                    token = string.gsub(token, "%^", "")
-                elseif string.find(token, "%-%-") or string.find(token, "vv") then
+                if string.find(token, "\\\\") or string.find(token, "vv$") or string.find(token, "%^%^") or string.find(token, "%+%+") then
+                    local isDown = string.find(token, "\\\\") or string.find(token, "vv$")
+                    pitchTarget = pitchPrevio + (isDown and -4 or 4)
+                elseif string.find(token, "\\") or string.find(token, "v$") or string.find(token, "%^") or string.find(token, "%+") then
+                    local isDown = string.find(token, "\\") or string.find(token, "v$")
+                    pitchTarget = pitchPrevio + (isDown and -2 or 2)
+                elseif string.find(token, "%-%-") then
                     pitchTarget = pitchPrevio - 4
-                    token = string.gsub(token, "%-%-", "")
-                    token = string.gsub(token, "vv", "")
-                elseif string.find(token, "%-") or string.find(token, "v") then
+                elseif string.find(token, "%-") then
                     pitchTarget = pitchPrevio - 2
-                    token = string.gsub(token, "%-", "")
-                    token = string.gsub(token, "v", "")
                 end
             end
 
             -- Generador Melódico Prosódico Avanzado
             if not pitchTarget then
                 if modoMelodiaIdx == 0 then
-                    -- Arco Prosódico Emotivo
-                    local progress = (totalCantadas > 1) and ((indiceNota - 1) / (totalCantadas - 1)) or 0.5
-                    local deltaArc = math.sin(progress * math.pi) * 6.0
-                    pitchTarget = basePitch + math.floor(deltaArc + deltaPitchProsodico + 0.5)
+                    -- Generador de Arco Vocal Prosódico Humano (Orgánico y Expresivo)
+                    -- Crea un arco melódico natural que asciende hacia un pico y desciende suavemente a la tónica
+                    local escala = ESCALAS[escalaIdx] or ESCALAS[2]
+                    local numGrados = #escala
+                    
+                    local progresoFrase = (indiceNota - 1) / math.max(1, totalCantadas - 1)
+                    local formaArco = math.sin(progresoFrase * math.pi) * 7.0 -- Arco de hasta 7 semitonos
+                    
+                    -- Adicionar variación orgánicamente
+                    local microOffset = (math.sin(indiceNota * 1.3) * 2.0) + deltaPitchProsodico
+                    local pitchCalculado = basePitch + math.floor(formaArco + microOffset + 0.5)
+                    
+                    pitchTarget = pitchCalculado
                 elseif modoMelodiaIdx == 1 then
                     -- Pentatónico Expresivo con Saltos de 4tas y 5tas
                     local idxEscala = ((indiceNota - 1) % numNotasEscala) + 1
@@ -1764,33 +1685,65 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
                 pitchFinal = rangoMax - (math.abs(rangoMax - pitchFinal) % 12)
             end
 
+            -- Si es chop o fonema explicito, recortar la duracion de la nota al 50% para crear silencios (staccato)
+            local activeDurBlick = durBlick
+            if aplicarChopsFX then
+                activeDurBlick = math.max(math.floor(SV.QUARTER / 32), math.floor(durBlick * 0.5))
+            end
+
             local nuevaNota = SV:create("Note")
-            nuevaNota:setTimeRange(currentBlick, durBlick)
+            nuevaNota:setTimeRange(currentBlick, activeDurBlick)
             nuevaNota:setPitch(pitchFinal)
 
-            local letraLimpia = string.gsub(token, "%s+", "")
-            if letraLimpia == "" then letraLimpia = "la" end
+            -- Eliminar vibrato y oscilaciones para lograr chops limpios y definidos (estilo Artcore/Glitch)
+            if aplicarChopsFX then
+                nuevaNota:setAttributes({
+                    dF0Vbr = 0.0,
+                    dF0VbrMod = 0.0
+                })
+            end
+
+            -- Aplicar compuerta de volumen (Gate) estricta para forzar silencio en los huecos (evitar release AI)
+            if aplicarChopsFX then
+                local loudness = noteGroup:getParameter("loudness")
+                if loudness then
+                    local sigBlick = explicitOffsetBlick or durBlick
+                    loudness:remove(currentBlick, currentBlick + sigBlick)
+                    
+                    loudness:add(currentBlick, 0.0)
+                    loudness:add(currentBlick + activeDurBlick - 1, 0.0)
+                    loudness:add(currentBlick + activeDurBlick, -48.0)
+                    loudness:add(currentBlick + sigBlick - 1, -48.0)
+                end
+            end
+
+            if not esFonemaExplicito then
+                letraLimpia = normalizarTextoParaLyrics(letraLimpia)
+            end
             nuevaNota:setLyrics(letraLimpia)
+            if esFonemaExplicito then
+                nuevaNota:setPhonemes(fonemasLimpios)
+            end
 
             noteGroup:addNote(nuevaNota)
             notasCreadas[#notasCreadas + 1] = nuevaNota
 
             pitchPrevio = pitchFinal
-            currentBlick = currentBlick + durBlick
+            if explicitOffsetBlick then
+                currentBlick = currentBlick + explicitOffsetBlick
+            else
+                currentBlick = currentBlick + durBlick
+            end
         end
     end
 
     return notasCreadas
 end
 -- ============================================================================
--- MÓDULO 4: MOTOR DE AUTOMATIZACIÓN E INTERPOLACIÓN HERMITE (0 GC ALLOC)
+-- MÓDULO 4: MOTOR DE AUTOMATIZACIÓN E INTERPOLACIÓN HERMITE (LOW GC ALLOC)
 -- ============================================================================
 
-local function limitarValor(val, minVal, maxVal)
-    if val < minVal then return minVal end
-    if val > maxVal then return maxVal end
-    return val
-end
+-- limitarValor removido (definido en Tokenizer_MelodyGen.lua)
 
 local function evaluarHermite(t, p0, p1, m0, m1)
     local t2 = t * t
@@ -1887,25 +1840,7 @@ local function obtenerToleranciaSimplificacion(paramObj)
     return math.max(0.001, rango * 0.002)
 end
 
-local function obtenerTempoEnBlick(timeAxis, blickPos)
-    -- Iterar tempo marks para encontrar el BPM vigente en blickPos
-    local numMarks = timeAxis:getAllTempoMarks()
-    if numMarks and #numMarks > 0 then
-        local bpmActual = 120.0
-        for i = 1, #numMarks do
-            local mark = numMarks[i]
-            if mark and mark.position ~= nil then
-                if mark.position <= blickPos then
-                    bpmActual = mark.bpm or 120.0
-                else
-                    break
-                end
-            end
-        end
-        return bpmActual
-    end
-    return 120.0
-end
+-- obtenerTempoEnBlick removido (definido en Tokenizer_MelodyGen.lua)
 
 local function factorTempo(bpm)
     if bpm <= 0.0 then return 1.0 end
@@ -1915,8 +1850,10 @@ end
 local function aplicarPortamentoSCurve(pitchDeltaParam, onset, duration, saltoSemitonos, factorIntensidad, mergeMode)
     if not pitchDeltaParam or math.abs(saltoSemitonos) < 2 then return end
 
-    local valInitial = -saltoSemitonos * 100.0 * factorIntensidad
-    valInitial = limitarValor(valInitial, -1200.0, 1200.0)
+    -- Portamento natural sutil (máximo 80 cents para evitar saltos antinaturales de octava)
+    local signo = (saltoSemitonos > 0) and -1.0 or 1.0
+    local valInitial = signo * math.min(80.0, math.abs(saltoSemitonos) * 15.0) * factorIntensidad
+    valInitial = limitarValor(valInitial, -100.0, 100.0)
 
     -- Duración del glissando en blicks proporcional a la magnitud del salto e intervalo
     local maxDurBlick = math.floor(duration * 0.45)
@@ -1945,7 +1882,7 @@ local function aplicarPortamentoSCurve(pitchDeltaParam, onset, duration, saltoSe
     end
 end
 
---- Cálculo de desviación de registro (Pitch Height Scaling) (0 GC Alloc)
+--- Cálculo de desviación de registro (Pitch Height Scaling)
 local function calcularFactorRegistro(pitchMidi, basePitch, pitchSens, factorUI)
     if not pitchMidi then return 0.0 end
     local deltaOctaves = (pitchMidi - (basePitch or 60)) / 12.0
@@ -1954,7 +1891,7 @@ local function calcularFactorRegistro(pitchMidi, basePitch, pitchSens, factorUI)
     return limitarValor(deltaOctaves * 0.25 * sens * uiMult, -1.0, 1.0)
 end
 
---- Cálculo de modulación por fonema (Phoneme-Class Awareness) (0 GC Alloc)
+--- Cálculo de modulación por fonema (Phoneme-Class Awareness)
 local function calcularModulacionFonema(fonemaStr, phonemeSens, factorUI)
     if not fonemaStr or fonemaStr == "" then return 0.0, 0.0, 0.0 end
     local fLow = string.lower(fonemaStr)
@@ -1988,7 +1925,7 @@ local function calcularModulacionFonema(fonemaStr, phonemeSens, factorUI)
     return tensDelta * mult, breathDelta * mult, loudDelta * mult
 end
 
---- Jitter de humanización orgánico y determinista (0 GC Alloc)
+--- Jitter de humanización orgánico y determinista
 local function calcularJitterDeterministico(idxNota, blickPos, jitterSens, factorUI)
     local nIdx = idxNota or 1
     local bPos = blickPos or 0
@@ -2216,7 +2153,7 @@ local function aplicarEnvolventeHermite(paramObj, valoresNodo, factorInt,
     end
 end
 -- ============================================================================
--- MÓDULO 6: MOTOR DE ARMONÍAS VOCALES Y VOICE LEADING (0 GC ALLOC)
+-- MÓDULO 6: MOTOR DE ARMONÍAS VOCALES Y VOICE LEADING
 -- ============================================================================
 
 local function generarGaussianNoise(mean, stdDev)
@@ -2392,11 +2329,18 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
         -- Replicar la base de voz (cantante y vocalModeParams) del grupo guía original
         local settingsVozGuia = groupRefBase:getVoice()
 
+        -- Obtener offset y rango visual del grupo guía original
+        local sourceOffset = groupRefBase:getTimeOffset()
+        local sourceOnset  = groupRefBase:getOnset()
+        local sourceDur    = groupRefBase:getDuration()
+
         -- Crear NoteGroup y NoteGroupReference con el flujo correcto de la API
         local nuevoGroupRef = SV:create("NoteGroup")
         proyecto:addNoteGroup(nuevoGroupRef)
         local mainRef = SV:create("NoteGroupReference")
         mainRef:setTarget(nuevoGroupRef)
+        mainRef:setTimeOffset(sourceOffset)
+        mainRef:setTimeRange(sourceOnset, sourceDur)
         
         -- Copiar la base de voz
         if settingsVozGuia then
@@ -2420,6 +2364,7 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
         local offsetGenderVoz = (vIdx % 2 == 1) and (0.08 * fIntensidad) or (-0.08 * fIntensidad)
         local offsetBreathVoz = 0.05 * fIntensidad
         local pitchPrevioVoz = nil
+        local ultimaNotaCreada = nil
 
         for i = 1, totalNotas do
             local notaOriginal = notasBase[i]
@@ -2470,6 +2415,20 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
                 end
             end
 
+            -- Evitar colisiones/solapamientos de notas anteriores en la pista
+            if ultimaNotaCreada then
+                local onsetPrev = ultimaNotaCreada:getOnset()
+                local endBlickPrev = onsetPrev + ultimaNotaCreada:getDuration()
+                if endBlickPrev > onsetHarm then
+                    local nuevaDurPrev = onsetHarm - onsetPrev
+                    if nuevaDurPrev > 0 then
+                        ultimaNotaCreada:setTimeRange(onsetPrev, nuevaDurPrev)
+                    else
+                        ultimaNotaCreada:setTimeRange(onsetPrev, math.floor(SV.QUARTER / 8))
+                    end
+                end
+            end
+
             -- Crear nota de armonía
             local nuevaNotaHarm = SV:create("Note")
             nuevaNotaHarm:setTimeRange(onsetHarm, durHarm)
@@ -2484,6 +2443,7 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
 
             nuevoGroupRef:addNote(nuevaNotaHarm)
             notasTotalCreadas = notasTotalCreadas + 1
+            ultimaNotaCreada = nuevaNotaHarm
 
             -- Generar automáticamente AI Retakes en la nota si la versión del editor lo soporta
             pcall(function()
@@ -2519,7 +2479,7 @@ local function generarPistasArmonia(proyecto, pistaBase, groupRefBase, tonica, e
     return notasTotalCreadas
 end
 -- ============================================================================
--- MÓDULO 7: GENERADOR DE CONTRAMELODÍA Y CONTRAPUNTO ALGORÍTMICO (0 GC ALLOC)
+-- MÓDULO 7: GENERADOR DE CONTRAMELODÍA Y CONTRAPUNTO ALGORÍTMICO (5 ESPECIES FUXIANAS)
 -- ============================================================================
 
 --- Intervalos consonantes en semitonos (3ra menor/mayor, 5ta justa, 6ta menor/mayor, 8va)
@@ -2655,16 +2615,30 @@ local function generarPistaContrapunto(proyecto, pistaBase, groupRefBase, especi
     table.sort(notasBase, function(a, b) return a:getOnset() < b:getOnset() end)
 
     local nuevaPista = SV:create("Track")
-    local nombreEspecie = { [0] = "1ra Especie (1:1)", [1] = "2da Especie (2:1)", [2] = "3ra Especie (4:1)", [3] = "Libre (Rítmico)" }
+    local nombreEspecie = {
+        [0] = "1ra Especie (1:1)",
+        [1] = "2da Especie (2:1)",
+        [2] = "3ra Especie (4:1)",
+        [3] = "4ta Especie (Síncopas)",
+        [4] = "5ta Especie (Florido)",
+        [5] = "Libre (Rítmico)"
+    }
     nuevaPista:setName(pistaBase:getName() .. " - Contramelodía " .. (nombreEspecie[especieIdx] or ""))
 
     proyecto:addTrack(nuevaPista)
+
+    -- Obtener offset y rango visual del grupo guía original
+    local sourceOffset = groupRefBase:getTimeOffset()
+    local sourceOnset  = groupRefBase:getOnset()
+    local sourceDur    = groupRefBase:getDuration()
 
     -- Crear NoteGroup y NoteGroupReference con el flujo correcto de la API
     local nuevoGroupRef = SV:create("NoteGroup")
     proyecto:addNoteGroup(nuevoGroupRef)
     local mainRef = SV:create("NoteGroupReference")
     mainRef:setTarget(nuevoGroupRef)
+    mainRef:setTimeOffset(sourceOffset)
+    mainRef:setTimeRange(sourceOnset, sourceDur)
     nuevaPista:addGroupReference(mainRef)
 
     local tensionParam  = nuevoGroupRef:getParameter("tension")
@@ -2677,6 +2651,7 @@ local function generarPistaContrapunto(proyecto, pistaBase, groupRefBase, especi
     local maxPitchRegistrado = nil
     local preferenciaArriba = true -- Alternable o configurable para evitar monotonía de dirección
     local notasCreadas = 0
+    local pitchSincopaRetenido = nil
 
     for i = 1, totalNotas do
         local notaCantus = notasBase[i]
@@ -2750,8 +2725,8 @@ local function generarPistaContrapunto(proyecto, pistaBase, groupRefBase, especi
                 pitchCantusPrev = pitchCantus
                 pitchContraPrev = pitchContra
             end
-        else
-            -- 3ra Especie / Libre: 4 notas por nota base (4:1) o patrón ornamental
+        elseif especieIdx == 2 then
+            -- 3ra Especie: 4 notas por nota base (4:1)
             local durQuarter = math.floor(duration / 4)
             if durQuarter >= math.floor(SV.QUARTER / 16) then
                 local pitchCurr = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
@@ -2790,13 +2765,136 @@ local function generarPistaContrapunto(proyecto, pistaBase, groupRefBase, especi
                 pitchCantusPrev = pitchCantus
                 pitchContraPrev = pitchContra
             end
+        elseif especieIdx == 3 then
+            -- 4ta Especie: Síncopas / Retardos (Suspensiones ligadas que resuelven descendentemente)
+            local durHalf = math.floor(duration / 2)
+            if durHalf >= math.floor(SV.QUARTER / 8) then
+                local pitchPreparacion = pitchSincopaRetenido or seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                -- Retardo disonante/consonante en tiempo fuerte que resuelve 1 grado abajo paso a paso
+                local pitchResolucion = transponerPorGradosEscala(pitchPreparacion, -1, tonica, escalaIndices)
+
+                local notaRetardo = SV:create("Note")
+                notaRetardo:setTimeRange(onset, durHalf)
+                notaRetardo:setPitch(pitchPreparacion)
+                notaRetardo:setLyrics("so")
+
+                local notaResolucion = SV:create("Note")
+                notaResolucion:setTimeRange(onset + durHalf, duration - durHalf)
+                notaResolucion:setPitch(pitchResolucion)
+                notaResolucion:setLyrics("la")
+
+                nuevoGroupRef:addNote(notaRetardo)
+                nuevoGroupRef:addNote(notaResolucion)
+                notasCreadas = notasCreadas + 2
+
+                pitchSincopaRetenido = pitchResolucion
+                pitchContraAntePrev = pitchPreparacion
+                pitchCantusPrev = pitchCantus
+                pitchContraPrev = pitchResolucion
+            else
+                local pitchContra = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                local nuevaNota = SV:create("Note")
+                nuevaNota:setTimeRange(onset, duration)
+                nuevaNota:setPitch(pitchContra)
+                nuevaNota:setLyrics("lu")
+                nuevoGroupRef:addNote(nuevaNota)
+                notasCreadas = notasCreadas + 1
+
+                pitchCantusPrev = pitchCantus
+                pitchContraPrev = pitchContra
+            end
+        elseif especieIdx == 4 then
+            -- 5ta Especie: Contrapunto Florido / Mixto (Mezcla ornamental de especies con síncopas y bordaduras)
+            local patronFlorido = (i % 3)
+            if patronFlorido == 0 then
+                -- Figura rítmica de 3ra especie con bordadura ornamental (4:1)
+                local durQ = math.floor(duration / 4)
+                if durQ >= math.floor(SV.QUARTER / 16) then
+                    local pBase = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                    local deltasFlorido = { 0, 1, -1, 0 }
+                    for q = 0, 3 do
+                        local nO = onset + q * durQ
+                        local nD = (q == 3) and (duration - 3 * durQ) or durQ
+                        local pFlor = transponerPorGradosEscala(pBase, deltasFlorido[q + 1], tonica, escalaIndices)
+                        local nSub = SV:create("Note")
+                        nSub:setTimeRange(nO, nD)
+                        nSub:setPitch(pFlor)
+                        nSub:setLyrics((q % 2 == 0) and "flo" or "ri")
+                        nuevoGroupRef:addNote(nSub)
+                        notasCreadas = notasCreadas + 1
+                    end
+                    pitchContraPrev = pBase
+                else
+                    local pContra = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                    local nF = SV:create("Note")
+                    nF:setTimeRange(onset, duration)
+                    nF:setPitch(pContra)
+                    nF:setLyrics("flo")
+                    nuevoGroupRef:addNote(nF)
+                    notasCreadas = notasCreadas + 1
+                    pitchContraPrev = pContra
+                end
+            elseif patronFlorido == 1 then
+                -- Síncopa con retardo ligado de 4ta especie (2:1)
+                local durH = math.floor(duration / 2)
+                local pPre = pitchContraPrev or seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                local pRes = transponerPorGradosEscala(pPre, -1, tonica, escalaIndices)
+                local n1 = SV:create("Note")
+                n1:setTimeRange(onset, durH)
+                n1:setPitch(pPre)
+                n1:setLyrics("syn")
+                local n2 = SV:create("Note")
+                n2:setTimeRange(onset + durH, duration - durH)
+                n2:setPitch(pRes)
+                n2:setLyrics("co")
+                nuevoGroupRef:addNote(n1)
+                nuevoGroupRef:addNote(n2)
+                notasCreadas = notasCreadas + 2
+                pitchContraPrev = pRes
+            else
+                -- Blanca con salto consonante y resolución (2da Especie 2:1)
+                local durH = math.floor(duration / 2)
+                local pC1 = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                local pC2 = transponerPorGradosEscala(pC1, 2, tonica, escalaIndices)
+                local n1 = SV:create("Note")
+                n1:setTimeRange(onset, durH)
+                n1:setPitch(pC1)
+                n1:setLyrics("me")
+                local n2 = SV:create("Note")
+                n2:setTimeRange(onset + durH, duration - durH)
+                n2:setPitch(pC2)
+                n2:setLyrics("los")
+                nuevoGroupRef:addNote(n1)
+                nuevoGroupRef:addNote(n2)
+                notasCreadas = notasCreadas + 2
+                pitchContraPrev = pC2
+            end
+            pitchCantusPrev = pitchCantus
+        else
+            -- Contrapunto Libre (Rítmico / Improv)
+            local pitchContra = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+            local nuevaNota = SV:create("Note")
+            nuevaNota:setTimeRange(onset, duration)
+            nuevaNota:setPitch(pitchContra)
+            nuevaNota:setLyrics("lu")
+            nuevoGroupRef:addNote(nuevaNota)
+            notasCreadas = notasCreadas + 1
+
+            if pitchContraPrev then
+                pitchContraAntePrev = pitchContraPrev
+            end
+            if not maxPitchRegistrado or pitchContra > maxPitchRegistrado then
+                maxPitchRegistrado = pitchContra
+            end
+            pitchCantusPrev = pitchCantus
+            pitchContraPrev = pitchContra
         end
     end
 
     return notasCreadas
 end
 -- ============================================================================
--- MÓDULO 8: MOTOR AVANZADO DE PROGRESIONES DE ACORDES Y VOICINGS (0 GC ALLOC)
+-- MÓDULO 8: MOTOR AVANZADO DE PROGRESIONES DE ACORDES Y VOICINGS (MINIMAL ENERGY & MICRO-SWING)
 -- ============================================================================
 
 local INTERVALOS_TIPO_ACORDE = {
@@ -2819,7 +2917,8 @@ local INTERVALOS_TIPO_ACORDE = {
 --- Construir las notas en pitch absoluto para un grado y tipo de acorde
 local function construirNotasAcorde(gradoRaiz, tipoAcorde, tonica, escalaIndices)
     local escala = escalaIndices or { 0, 2, 4, 5, 7, 9, 11 }
-    local pitchRaiz = transponerPorGradosEscala(tonica + 48, gradoRaiz - 1, tonica, escala)
+    -- Subir la raiz a octava 5 (tonica + 60, ej. C4 = 60) para adaptarse perfectamente a voces femeninas (Teto/Mai)
+    local pitchRaiz = transponerPorGradosEscala(tonica + 60, gradoRaiz - 1, tonica, escala)
 
     local relIntervals = INTERVALOS_TIPO_ACORDE[tipoAcorde] or INTERVALOS_TIPO_ACORDE.triada_mayor
     local notasSuperiores = {}
@@ -2828,9 +2927,9 @@ local function construirNotasAcorde(gradoRaiz, tipoAcorde, tonica, escalaIndices
         notasSuperiores[i] = pitchRaiz + relIntervals[i]
     end
 
-    -- Nota del bajo en registro grave (C2 - C3)
-    local pitchBajo = (pitchRaiz % 12) + 36
-    if pitchBajo < 36 then pitchBajo = pitchBajo + 12 end
+    -- Nota del bajo en registro comodo de contralto/baritono (C3 - B3, rango 48-59)
+    local pitchBajo = (pitchRaiz % 12) + 48
+    if pitchBajo < 48 then pitchBajo = pitchBajo + 12 end
 
     return pitchBajo, notasSuperiores
 end
@@ -2871,7 +2970,7 @@ local function optimizarConduccionVoces(notasNuevas, notasPrevias)
 end
 
 --- Generar notas y pistas para una progresión de acordes profesional
-local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, tonica, escalaIdx, ritmoIdx, fIntensidad, configPreset, timeAxis)
+local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, tonica, escalaIdx, ritmoIdx, fIntensidad, configPreset, timeAxis, factorSwing)
     local escalaIndices = ESCALAS_AVANZADAS[escalaIdx] or ESCALAS_AVANZADAS[2]
     local datosProgresion = PROGRESIONES_ACORDES[progresionIdx] or PROGRESIONES_ACORDES[0]
     local gradosAcordes = datosProgresion.grados or { 4, 5, 3, 6 }
@@ -2879,23 +2978,54 @@ local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, toni
 
     local numCompases = #gradosAcordes
     local durCompasBlicks = SV.QUARTER * 4
+    local totalChordBlicks = numCompases * durCompasBlicks
 
     local reproductor = SV:getPlayback()
     local startBlick = reproductor:getPlayhead()
+    -- Crear pista y note group para el Bajo
+    local pistaBajo = SV:create("Track")
+    pistaBajo:setName(pistaBase:getName() .. " - Acordes Bajo")
+    proyecto:addTrack(pistaBajo)
+    local groupBajo = SV:create("NoteGroup")
+    proyecto:addNoteGroup(groupBajo)
+    local refBajo = SV:create("NoteGroupReference")
+    refBajo:setTarget(groupBajo)
+    refBajo:setTimeOffset(startBlick)
+    refBajo:setTimeRange(startBlick, totalChordBlicks)
+    pistaBajo:addGroupReference(refBajo)
 
-    local nuevaPista = SV:create("Track")
-    nuevaPista:setName(pistaBase:getName() .. " - Acordes (" .. datosProgresion.nombre .. ")")
-    proyecto:addTrack(nuevaPista)
+    -- Determinar el máximo número de voces superiores
+    local maxVocesSuperiores = 3
+    for cIdx = 1, numCompases do
+        local tipoActual = tiposAcordes[cIdx] or "triada_mayor"
+        local relInt = INTERVALOS_TIPO_ACORDE[tipoActual] or { 0, 4, 7 }
+        if #relInt > maxVocesSuperiores then
+            maxVocesSuperiores = #relInt
+        end
+    end
 
-    local nuevoGroupRef = SV:create("NoteGroup")
-    proyecto:addNoteGroup(nuevoGroupRef)
-    local mainRef = SV:create("NoteGroupReference")
-    mainRef:setTarget(nuevoGroupRef)
-    nuevaPista:addGroupReference(mainRef)
+    -- Crear pistas y note groups para las voces superiores
+    local pistasVoces = {}
+    local groupsVoces = {}
+    for v = 1, maxVocesSuperiores do
+        local pV = SV:create("Track")
+        pV:setName(pistaBase:getName() .. " - Acordes Voz " .. v)
+        proyecto:addTrack(pV)
+        local gV = SV:create("NoteGroup")
+        proyecto:addNoteGroup(gV)
+        local rV = SV:create("NoteGroupReference")
+        rV:setTarget(gV)
+        rV:setTimeOffset(startBlick)
+        rV:setTimeRange(startBlick, totalChordBlicks)
+        pV:addGroupReference(rV)
+        pistasVoces[v] = pV
+        groupsVoces[v] = gV
+    end
 
     local notasCreadas = 0
-    local currBlick = startBlick
+    local currBlick = 0 -- Posición relativa a startBlick dentro del grupo
     local vocesSuperioresPrevias = nil
+    local swingAmount = factorSwing or 0.20 -- 20% micro-swing por defecto
 
     for cIdx = 1, numCompases do
         local gradoActual = gradosAcordes[cIdx]
@@ -2905,82 +3035,96 @@ local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, toni
         local vocesSuperiores = optimizarConduccionVoces(vocesBrutas, vocesSuperioresPrevias)
         vocesSuperioresPrevias = vocesSuperiores
 
-        -- 1. Agregar Nota de Bajo Sostenida en Registro Grave
+        -- 1. Agregar Nota de Bajo
         local notaBajo = SV:create("Note")
         notaBajo:setTimeRange(currBlick, durCompasBlicks)
         notaBajo:setPitch(pitchBajo)
         notaBajo:setLyrics("u")
-        nuevoGroupRef:addNote(notaBajo)
+        groupBajo:addNote(notaBajo)
         notasCreadas = notasCreadas + 1
 
-        -- 2. Patrones Rítmicos para Voces Superiores
+        -- 2. Patrones Rítmicos para Voces Superiores con Micro-Swing
         if ritmoIdx == 0 then
-            -- Pad Sostenido Legato (Full Bar Swell)
+            -- Pad Sostenido Legato
             for v = 1, #vocesSuperiores do
                 local nUpper = SV:create("Note")
                 nUpper:setTimeRange(currBlick, durCompasBlicks)
                 nUpper:setPitch(vocesSuperiores[v])
                 nUpper:setLyrics((v % 2 == 0) and "a" or "o")
-                nuevoGroupRef:addNote(nUpper)
+                if groupsVoces[v] then
+                    groupsVoces[v]:addNote(nUpper)
+                end
                 notasCreadas = notasCreadas + 1
             end
         elseif ritmoIdx == 1 then
-            -- Comping Rítmico Sincopado (Negras 1/4)
+            -- Comping Sincopado (Negras con micro-swing en tiempos 2 y 4)
             local durPulso = SV.QUARTER
             for p = 0, 3 do
-                local bPulse = currBlick + (p * durPulso)
+                local offbeatShift = (p % 2 == 1) and math.floor(durPulso * swingAmount * 0.5) or 0
+                local bPulse = currBlick + (p * durPulso) + offbeatShift
                 for v = 1, #vocesSuperiores do
                     local nUpper = SV:create("Note")
                     nUpper:setTimeRange(bPulse, durPulso - 20)
                     nUpper:setPitch(vocesSuperiores[v])
                     nUpper:setLyrics("la")
-                    nuevoGroupRef:addNote(nUpper)
+                    if groupsVoces[v] then
+                        groupsVoces[v]:addNote(nUpper)
+                    end
                     notasCreadas = notasCreadas + 1
                 end
             end
         elseif ritmoIdx == 2 then
-            -- Arpegio Cascadas Fluido (Corcheas 1/8)
+            -- Arpegio Cascadas (Corcheas 1/8 con micro-swing en corcheas débiles)
             local durCorchea = math.floor(SV.QUARTER / 2)
             local totalPasos = 8
             for a = 0, totalPasos - 1 do
-                local bArp = currBlick + (a * durCorchea)
+                local swingShift = (a % 2 == 1) and math.floor(durCorchea * swingAmount) or 0
+                local bArp = currBlick + (a * durCorchea) + swingShift
                 local idxVoz = (a % #vocesSuperiores) + 1
                 local nUpper = SV:create("Note")
                 nUpper:setTimeRange(bArp, durCorchea - 10)
                 nUpper:setPitch(vocesSuperiores[idxVoz])
                 nUpper:setLyrics("lu")
-                nuevoGroupRef:addNote(nUpper)
+                if groupsVoces[idxVoz] then
+                    groupsVoces[idxVoz]:addNote(nUpper)
+                end
                 notasCreadas = notasCreadas + 1
             end
         elseif ritmoIdx == 3 then
-            -- Chop Electrónico Kinetic (Semicorcheas 1/16)
+            -- Chop Semicorcheas con micro-swing kinético
             local durSemi = math.floor(SV.QUARTER / 4)
             local patronChop = { 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1 }
             for s = 0, 15 do
                 if patronChop[s + 1] == 1 then
-                    local bChop = currBlick + (s * durSemi)
+                    local swingShift = (s % 2 == 1) and math.floor(durSemi * swingAmount * 0.8) or 0
+                    local bChop = currBlick + (s * durSemi) + swingShift
                     for v = 1, #vocesSuperiores do
                         local nUpper = SV:create("Note")
                         nUpper:setTimeRange(bChop, durSemi - 15)
                         nUpper:setPitch(vocesSuperiores[v])
                         nUpper:setLyrics("da")
-                        nuevoGroupRef:addNote(nUpper)
+                        if groupsVoces[v] then
+                            groupsVoces[v]:addNote(nUpper)
+                        end
                         notasCreadas = notasCreadas + 1
                     end
                 end
             end
         else
-            -- Bajo Alternado + Acorde Strum
+            -- Bajo Alternado + Strum con micro-swing en acentos
             local durPulso = SV.QUARTER
             for p = 0, 3 do
-                local bPulse = currBlick + (p * durPulso)
+                local swingShift = (p % 2 == 1) and math.floor(durPulso * swingAmount * 0.5) or 0
+                local bPulse = currBlick + (p * durPulso) + swingShift
                 if p == 1 or p == 3 then
                     for v = 1, #vocesSuperiores do
                         local nUpper = SV:create("Note")
                         nUpper:setTimeRange(bPulse, durPulso - 25)
                         nUpper:setPitch(vocesSuperiores[v])
                         nUpper:setLyrics("pa")
-                        nuevoGroupRef:addNote(nUpper)
+                        if groupsVoces[v] then
+                            groupsVoces[v]:addNote(nUpper)
+                        end
                         notasCreadas = notasCreadas + 1
                     end
                 end
@@ -2993,7 +3137,7 @@ local function generarProgresionAcordes(proyecto, pistaBase, progresionIdx, toni
     return notasCreadas
 end
 -- ============================================================================
--- MÓDULO 5: CONTROLADOR PRINCIPAL Y INTERFAZ DE USUARIO (0 GC ALLOC)
+-- MÓDULO 5: CONTROLADOR PRINCIPAL E INTERFAZ DE USUARIO
 -- ============================================================================
 
 local NOTAS_NOMBRES_ARRAY = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }
@@ -3099,7 +3243,7 @@ local function mostrarDialogoPresetPersonalizado(tr, cfgGuardada)
     local defTb = (cfgGuardada and tonumber(cfgGuardada.customTimbre)) or 0
 
     local dialogoCustom = {
-        title = tr.presetChoices[PRESET_PERSONALIZADO_IDX + 1] or "Custom",
+        title = tr.presetChoices and (tr.presetChoices[PRESET_PERSONALIZADO_IDX + 1] or "Custom") or "Custom",
         message = "",
         buttons = "OkCancel",
         widgets = {
@@ -3201,752 +3345,253 @@ local function mostrarDialogoPresetPersonalizado(tr, cfgGuardada)
     }
 end
 
-function main()
-    local cfg = cargarConfiguracionUsuario()
 
-    local idiomaInicial = 0
+-- ============================================================================
+-- DECLARACIÓN DE VARIABLES LOCALES PARA EL PANEL LATERAL (SidePanelSection)
+-- ============================================================================
+local valVistaSeccion, valIdiomaUI, valModo, valPreset, valIntensidad, valDensityStep
+local valModoRitmo, valModoMelodia, valEscalaMelodica, valTonica, valAutoDetectKey
+local valModoArmonia, valPresetCoral, valAntiFaseMs, valAntiFaseCents
+local valEspecieContrapunto, valProgresionAcordes, valRitmoAcordes, valLetra, valBasePitch
+local valNoteDuration, valTargetNotesMode, valArmoniaIntervalosCustom, valRangoNotaMin, valRangoNotaMax
+local valEnableJustIntonation, valEnableVocalModes, valEnableDetune, valEnableExpPad
+local valEnableSmartVibrato, valMergeMode, valLimpiarPrevios, valAdaptarTempo
+local valCompensarGanancia, valProcesarTodosGrupos, valHumanizacion, valRegistro, valFonema
+local valCustomTension, valCustomBreath, valCustomVolume, valCustomGender, valCustomVoicing, valCustomTimbre
+
+
+local valIdiomaUI, valPanel4Modo, valEspecieContrapunto, valProgresionAcordes, valRitmoAcordes
+local panelWidgets = nil
+
+local function leerValorWidget(widget, fallback)
+    if widget and type(widget.getValue) == "function" then
+        local v = widget:getValue()
+        if v ~= nil then
+            return v
+        end
+    end
+    return fallback
+end
+
+local function asegurarWidgetsPanel4(cfg)
+    local idiomaInicial = _G.idiomaDetectado or 0
     if cfg.idiomaUI ~= nil then
         idiomaInicial = tonumber(cfg.idiomaUI) or 0
-    elseif SV and SV.getHostLanguage then
-        pcall(function()
-            local hostLang = string.lower(SV:getHostLanguage() or "")
-            if string.find(hostLang, "en") then
-                idiomaInicial = 1
-            elseif string.find(hostLang, "ja") or string.find(hostLang, "jp") then
-                idiomaInicial = 2
-            elseif string.find(hostLang, "es") then
-                idiomaInicial = 0
-            end
+    end
+
+    if not panelWidgets then
+        panelWidgets = {
+            idiomaUI = SV:create("WidgetValue"),
+            panel4Modo = SV:create("WidgetValue"),
+            especieContrapunto = SV:create("WidgetValue"),
+            progresionAcordes = SV:create("WidgetValue"),
+            ritmoAcordes = SV:create("WidgetValue"),
+            runButton = SV:create("WidgetValue")
+        }
+        panelWidgets.runButton:setValueChangeCallback(function()
+            ejecutarOperacionPrincipal()
         end)
     end
 
-    local idiomaActual = idiomaInicial
-    local textoEjemploModificado = (cfg.letra ~= nil and cfg.letra ~= "")
+    panelWidgets.idiomaUI:setValue(tonumber(cfg.idiomaUI) or idiomaInicial)
+    panelWidgets.panel4Modo:setValue(cfg.panel4Modo ~= nil and tonumber(cfg.panel4Modo) or 1)
+    panelWidgets.especieContrapunto:setValue(cfg.especieContrapunto ~= nil and tonumber(cfg.especieContrapunto) or 0)
+    panelWidgets.progresionAcordes:setValue(cfg.progresionAcordes ~= nil and tonumber(cfg.progresionAcordes) or 0)
+    panelWidgets.ritmoAcordes:setValue(cfg.ritmoAcordes ~= nil and tonumber(cfg.ritmoAcordes) or 0)
 
-    local dialogo = {
-        title = "",
-        message = "",
-        buttons = "OkCancel",
-        widgets = {
-            {
-                name = "vistaSeccion",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.vistaSeccion ~= nil and tonumber(cfg.vistaSeccion) or 0
-            },
-            {
-                name = "idiomaUI",
-                type = "ComboBox",
-                label = "",
-                choices = { "Español", "English", "日本語" },
-                default = cfg.idiomaUI ~= nil and tonumber(cfg.idiomaUI) or idiomaActual
-            },
-            {
-                name = "modo",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.modo ~= nil and tonumber(cfg.modo) or 0
-            },
-            {
-                name = "preset",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.preset ~= nil and tonumber(cfg.preset) or 0
-            },
-            {
-                name = "intensidad",
-                type = "Slider",
-                label = "",
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 200,
-                interval = 5,
-                default = cfg.intensidad ~= nil and tonumber(cfg.intensidad) or 100
-            },
-            {
-                name = "densityStep",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.densityStep ~= nil and tonumber(cfg.densityStep) or 0
-            },
-            {
-                name = "modoRitmo",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.modoRitmo ~= nil and tonumber(cfg.modoRitmo) or 2
-            },
-            {
-                name = "modoMelodia",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.modoMelodia ~= nil and tonumber(cfg.modoMelodia) or 0
-            },
-            {
-                name = "escalaMelodica",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.escalaMelodica ~= nil and tonumber(cfg.escalaMelodica) or 2
-            },
-            {
-                name = "tonica",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.tonica ~= nil and tonumber(cfg.tonica) or 0
-            },
-            {
-                name = "autoDetectKey",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.autoDetectKey == nil or cfg.autoDetectKey == true)
-            },
-            {
-                name = "modoArmonia",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.modoArmonia ~= nil and tonumber(cfg.modoArmonia) or 0
-            },
-            {
-                name = "presetCoral",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.presetCoral ~= nil and tonumber(cfg.presetCoral) or 0
-            },
-            {
-                name = "antiFaseMs",
-                type = "Slider",
-                label = "",
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 50,
-                interval = 2,
-                default = cfg.antiFaseMs ~= nil and tonumber(cfg.antiFaseMs) or 12
-            },
-            {
-                name = "antiFaseCents",
-                type = "Slider",
-                label = "",
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 50,
-                interval = 2,
-                default = cfg.antiFaseCents ~= nil and tonumber(cfg.antiFaseCents) or 10
-            },
-            {
-                name = "especieContrapunto",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.especieContrapunto ~= nil and tonumber(cfg.especieContrapunto) or 0
-            },
-            {
-                name = "progresionAcordes",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.progresionAcordes ~= nil and tonumber(cfg.progresionAcordes) or 0
-            },
-            {
-                name = "ritmoAcordes",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.ritmoAcordes ~= nil and tonumber(cfg.ritmoAcordes) or 0
-            },
-            {
-                name = "letra",
-                type = "TextArea",
-                label = "",
-                default = cfg.letra ~= nil and tostring(cfg.letra) or ""
-            },
-            {
-                name = "basePitch",
-                type = "Slider",
-                label = "",
-                format = "%.0f",
-                minValue = 36,
-                maxValue = 84,
-                interval = 1,
-                default = cfg.basePitch ~= nil and tonumber(cfg.basePitch) or 60
-            },
-            {
-                name = "noteDuration",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.noteDuration ~= nil and tonumber(cfg.noteDuration) or 0
-            },
-            {
-                name = "enableVocalModes",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.enableVocalModes == nil or cfg.enableVocalModes == true)
-            },
-            {
-                name = "enableDetune",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.enableDetune == nil or cfg.enableDetune == true)
-            },
-            {
-                name = "enableExpPad",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.enableExpPad == nil or cfg.enableExpPad == true)
-            },
-            {
-                name = "enableSmartVibrato",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.enableSmartVibrato == nil or cfg.enableSmartVibrato == true)
-            },
-            {
-                name = "mergeMode",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.mergeMode == true)
-            },
-            {
-                name = "limpiarPrevios",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.limpiarPrevios == nil or cfg.limpiarPrevios == true)
-            },
-            {
-                name = "adaptarTempo",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.adaptarTempo == nil or cfg.adaptarTempo == true)
-            },
-            {
-                name = "compensarGanancia",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.compensarGanancia == true)
-            },
-            {
-                name = "procesarTodosGrupos",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.procesarTodosGrupos == true)
-            },
-            {
-                name = "valHumanizacion",
-                type = "Slider",
-                label = "",
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 200,
-                interval = 5,
-                default = cfg.valHumanizacion ~= nil and tonumber(cfg.valHumanizacion) or 100
-            },
-            {
-                name = "valRegistro",
-                type = "Slider",
-                label = "",
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 200,
-                interval = 5,
-                default = cfg.valRegistro ~= nil and tonumber(cfg.valRegistro) or 100
-            },
-            {
-                name = "valFonema",
-                type = "Slider",
-                label = "",
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 200,
-                interval = 5,
-                default = cfg.valFonema ~= nil and tonumber(cfg.valFonema) or 100
-            },
-            {
-                name = "targetNotesMode",
-                type = "ComboBox",
-                label = "",
-                choices = {},
-                default = cfg.targetNotesMode ~= nil and tonumber(cfg.targetNotesMode) or 0
-            },
-            {
-                name = "armoniaIntervalosCustom",
-                type = "TextBox",
-                label = "",
-                default = cfg.armoniaIntervalosCustom ~= nil and tostring(cfg.armoniaIntervalosCustom) or "+3, +7, -5"
-            },
-            {
-                name = "rangoNotaMin",
-                type = "Slider",
-                label = "",
-                format = "%.0f",
-                minValue = 36,
-                maxValue = 84,
-                interval = 1,
-                default = cfg.rangoNotaMin ~= nil and tonumber(cfg.rangoNotaMin) or 48
-            },
-            {
-                name = "rangoNotaMax",
-                type = "Slider",
-                label = "",
-                format = "%.0f",
-                minValue = 36,
-                maxValue = 84,
-                interval = 1,
-                default = cfg.rangoNotaMax ~= nil and tonumber(cfg.rangoNotaMax) or 72
-            },
-            {
-                name = "enableJustIntonation",
-                type = "CheckBox",
-                label = "",
-                default = (cfg.enableJustIntonation == true) -- Por defecto FALSE (Equal Temperament Pop)
+    return panelWidgets
+end
+
+function getSidePanelSectionState()
+    local cfg = cargarConfiguracionUsuario()
+    local idiomaInicial = _G.idiomaDetectado or 0
+
+    local widgets = asegurarWidgetsPanel4(cfg)
+
+    valIdiomaUI = idiomaInicial
+    valPanel4Modo = tonumber(leerValorWidget(widgets.panel4Modo, cfg.panel4Modo ~= nil and tonumber(cfg.panel4Modo) or 1)) or 1
+    valEspecieContrapunto = tonumber(leerValorWidget(widgets.especieContrapunto, cfg.especieContrapunto ~= nil and tonumber(cfg.especieContrapunto) or 0)) or 0
+    valProgresionAcordes = tonumber(leerValorWidget(widgets.progresionAcordes, cfg.progresionAcordes ~= nil and tonumber(cfg.progresionAcordes) or 0)) or 0
+    valRitmoAcordes = tonumber(leerValorWidget(widgets.ritmoAcordes, cfg.ritmoAcordes ~= nil and tonumber(cfg.ritmoAcordes) or 0)) or 0
+
+    local tr = I18N_DATA[valIdiomaUI] or I18N_DATA[0]
+    local modoP4 = valPanel4Modo
+    
+    local choicesModoP4 = { "Contrapunto Fuxiano", "Progresión de Acordes", "Sincronizar Grupos de Coros", "Forzar Afinación Diatónica" }
+    if valIdiomaUI == 1 then
+        choicesModoP4 = { "Fuxian Counterpoint", "Chord Progression", "Synchronize Choir Groups", "Snap to Diatonic Scale" }
+    elseif valIdiomaUI == 2 then
+        choicesModoP4 = { "対位法 (Fuxian)", "コード進行", "コーラスグループ同期", "スケールへのピッチ補正" }
+    end
+
+    local rows = {
+        { type = "Label", text = tr.vistaSeccionChoices[4] or "Counterpoint & Chord Progression" },
+        {
+            type = "Container",
+            columns = {
+                { type = "Label", text = "Algoritmo / Selector" },
+                { type = "ComboBox", choices = choicesModoP4, value = widgets.panel4Modo }
             }
         }
     }
 
-    local resp = {}
-
-    while true do
-        local tr = I18N_DATA[idiomaActual] or I18N_DATA[0]
-
-        -- Definir la lista base de widgets completa
-        local widgetsCompletos = {
-            {
-                name = "vistaSeccion",
-                type = "ComboBox",
-                label = tr.vistaSeccionLabel,
-                choices = tr.vistaSeccionChoices,
-                default = cfg.vistaSeccion or 0
-            },
-            {
-                name = "idiomaUI",
-                type = "ComboBox",
-                label = tr.idiomaLabel,
-                choices = { "Español", "English", "日本語" },
-                default = idiomaActual
-            },
-            {
-                name = "modo",
-                type = "ComboBox",
-                label = tr.modoLabel,
-                choices = tr.modoChoices,
-                default = cfg.modo or 0
-            },
-            {
-                name = "preset",
-                type = "ComboBox",
-                label = tr.presetLabel,
-                choices = tr.presetChoices,
-                default = cfg.preset or 0
-            },
-            {
-                name = "intensidad",
-                type = "Slider",
-                label = tr.intensidadLabel,
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 200,
-                interval = 5,
-                default = cfg.intensidad or 100
-            },
-            {
-                name = "densityStep",
-                type = "ComboBox",
-                label = tr.densityLabel,
-                choices = tr.densityChoices,
-                default = cfg.densityStep or 0
-            },
-            {
-                name = "modoRitmo",
-                type = "ComboBox",
-                label = tr.modoRitmoLabel,
-                choices = tr.modoRitmoChoices,
-                default = cfg.modoRitmo or 2
-            },
-            {
-                name = "modoMelodia",
-                type = "ComboBox",
-                label = tr.modoMelodiaLabel,
-                choices = tr.modoMelodiaChoices,
-                default = cfg.modoMelodia or 0
-            },
-            {
-                name = "escalaMelodica",
-                type = "ComboBox",
-                label = tr.escalaLabel,
-                choices = tr.escalaChoices,
-                default = cfg.escalaMelodica or 2
-            },
-            {
-                name = "tonica",
-                type = "ComboBox",
-                label = tr.tonicaLabel,
-                choices = tr.tonicaChoices,
-                default = cfg.tonica or 0
-            },
-            {
-                name = "autoDetectKey",
-                type = "CheckBox",
-                label = tr.autoDetectKeyLabel,
-                text = tr.autoDetectKeyLabel,
-                default = (cfg.autoDetectKey == nil or cfg.autoDetectKey == true)
-            },
-            {
-                name = "modoArmonia",
-                type = "ComboBox",
-                label = tr.modoArmoniaLabel,
-                choices = tr.modoArmoniaChoices,
-                default = cfg.modoArmonia or 0
-            },
-            {
-                name = "presetCoral",
-                type = "ComboBox",
-                label = tr.presetCoralLabel,
-                choices = tr.presetCoralChoices,
-                default = cfg.presetCoral or 0
-            },
-            {
-                name = "antiFaseMs",
-                type = "Slider",
-                label = tr.antiFaseMsLabel,
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 50,
-                interval = 2,
-                default = cfg.antiFaseMs or 12
-            },
-            {
-                name = "antiFaseCents",
-                type = "Slider",
-                label = tr.antiFaseCentsLabel,
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 50,
-                interval = 2,
-                default = cfg.antiFaseCents or 10
-            },
-            {
-                name = "especieContrapunto",
-                type = "ComboBox",
-                label = tr.especieContrapuntoLabel,
-                choices = tr.especieContrapuntoChoices,
-                default = cfg.especieContrapunto or 0
-            },
-            {
-                name = "progresionAcordes",
-                type = "ComboBox",
-                label = tr.progresionAcordesLabel,
-                choices = tr.progresionAcordesChoices,
-                default = cfg.progresionAcordes or 0
-            },
-            {
-                name = "ritmoAcordes",
-                type = "ComboBox",
-                label = tr.ritmoAcordesLabel,
-                choices = tr.ritmoAcordesChoices,
-                default = cfg.ritmoAcordes or 0
-            },
-            {
-                name = "letra",
-                type = "TextArea",
-                label = tr.letraLabel,
-                default = textoEjemploModificado and cfg.letra or tr.letraDefault
-            },
-            {
-                name = "basePitch",
-                type = "Slider",
-                label = tr.basePitchLabel,
-                format = "%.0f",
-                minValue = 36,
-                maxValue = 84,
-                interval = 1,
-                default = cfg.basePitch or 60
-            },
-            {
-                name = "noteDuration",
-                type = "ComboBox",
-                label = tr.noteDurLabel,
-                choices = tr.durChoices,
-                default = cfg.noteDuration or 0
-            },
-            {
-                name = "enableVocalModes",
-                type = "CheckBox",
-                label = tr.enableVocalModes,
-                text = tr.enableVocalModes,
-                default = (cfg.enableVocalModes == nil or cfg.enableVocalModes == true)
-            },
-            {
-                name = "enableDetune",
-                type = "CheckBox",
-                label = tr.enableDetune,
-                text = tr.enableDetune,
-                default = (cfg.enableDetune == nil or cfg.enableDetune == true)
-            },
-            {
-                name = "enableExpPad",
-                type = "CheckBox",
-                label = tr.enableExpPad,
-                text = tr.enableExpPad,
-                default = (cfg.enableExpPad == nil or cfg.enableExpPad == true)
-            },
-            {
-                name = "enableSmartVibrato",
-                type = "CheckBox",
-                label = tr.enableSmartVibrato,
-                text = tr.enableSmartVibrato,
-                default = (cfg.enableSmartVibrato == nil or cfg.enableSmartVibrato == true)
-            },
-            {
-                name = "mergeMode",
-                type = "CheckBox",
-                label = tr.mergeMode,
-                text = tr.mergeMode,
-                default = (cfg.mergeMode == true)
-            },
-            {
-                name = "limpiarPrevios",
-                type = "CheckBox",
-                label = tr.limpiarPrevios,
-                text = tr.limpiarPrevios,
-                default = (cfg.limpiarPrevios == nil or cfg.limpiarPrevios == true)
-            },
-            {
-                name = "adaptarTempo",
-                type = "CheckBox",
-                label = tr.adaptarTempo,
-                text = tr.adaptarTempo,
-                default = (cfg.adaptarTempo == nil or cfg.adaptarTempo == true)
-            },
-            {
-                name = "compensarGanancia",
-                type = "CheckBox",
-                label = tr.compensarGanancia,
-                text = tr.compensarGanancia,
-                default = (cfg.compensarGanancia == true)
-            },
-            {
-                name = "procesarTodosGrupos",
-                type = "CheckBox",
-                label = tr.procesarTodosGrupos,
-                text = tr.procesarTodosGrupos,
-                default = (cfg.procesarTodosGrupos == true)
-            },
-            {
-                name = "valHumanizacion",
-                type = "Slider",
-                label = tr.humanizeLabel,
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 200,
-                interval = 5,
-                default = cfg.valHumanizacion or 100
-            },
-            {
-                name = "valRegistro",
-                type = "Slider",
-                label = tr.registerScaleLabel,
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 200,
-                interval = 5,
-                default = cfg.valRegistro or 100
-            },
-            {
-                name = "valFonema",
-                type = "Slider",
-                label = tr.phonemeModLabel,
-                format = "%.0f",
-                minValue = 0,
-                maxValue = 200,
-                interval = 5,
-                default = cfg.valFonema or 100
-            },
-            {
-                name = "targetNotesMode",
-                type = "ComboBox",
-                label = tr.targetNotesModeLabel,
-                choices = tr.targetNotesModeChoices,
-                default = cfg.targetNotesMode or 0
-            },
-            {
-                name = "armoniaIntervalosCustom",
-                type = "TextBox",
-                label = tr.armoniaIntervalosCustomLabel,
-                default = cfg.armoniaIntervalosCustom or "+3, +7, -5"
-            },
-            {
-                name = "rangoNotaMin",
-                type = "Slider",
-                label = tr.rangoNotaMinLabel,
-                format = "%.0f",
-                minValue = 36,
-                maxValue = 84,
-                interval = 1,
-                default = cfg.rangoNotaMin or 48
-            },
-            {
-                name = "rangoNotaMax",
-                type = "Slider",
-                label = tr.rangoNotaMaxLabel,
-                format = "%.0f",
-                minValue = 36,
-                maxValue = 84,
-                interval = 1,
-                default = cfg.rangoNotaMax or 72
-            },
-            {
-                name = "enableJustIntonation",
-                type = "CheckBox",
-                label = tr.enableJustIntonation,
-                text = tr.enableJustIntonation,
-                default = (cfg.enableJustIntonation == true)
+    if modoP4 == 0 then
+        -- Contrapunto (Modo 3)
+        table.insert(rows, {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.especieContrapuntoLabel or "Especie" },
+                { type = "ComboBox", choices = tr.especieContrapuntoChoices, value = widgets.especieContrapunto }
             }
-        }
-
-        -- Filtrar widgets dinámicamente según la sección UX activa (vistaSeccion)
-        local seccionUX = cfg.vistaSeccion or 0
-        local widgetsFiltrados = {}
-        
-        -- Los dos primeros widgets siempre van (UX Filtro de Vista y Selección de Idioma)
-        widgetsFiltrados[1] = widgetsCompletos[1]
-        widgetsFiltrados[2] = widgetsCompletos[2]
-        
-        if seccionUX == 0 then
-            -- MODO RÁPIDO (EasyLyric: Letras, Notas, Tempo, Modo, Generación Directa)
-            table.insert(widgetsFiltrados, widgetsCompletos[3])  -- modo
-            table.insert(widgetsFiltrados, widgetsCompletos[19]) -- letra (TextArea)
-            table.insert(widgetsFiltrados, widgetsCompletos[20]) -- basePitch
-            table.insert(widgetsFiltrados, widgetsCompletos[21]) -- noteDuration
-            table.insert(widgetsFiltrados, widgetsCompletos[34]) -- targetNotesMode (Destino)
-        elseif seccionUX == 1 then
-            -- EXPRESIÓN VOCAL Y CURVAS HERMITE (Presets, Intensidad, Detune, XY Pad)
-            table.insert(widgetsFiltrados, widgetsCompletos[3])  -- modo
-            table.insert(widgetsFiltrados, widgetsCompletos[4])  -- preset
-            table.insert(widgetsFiltrados, widgetsCompletos[5])  -- intensidad
-            table.insert(widgetsFiltrados, widgetsCompletos[6])  -- densityStep (Resolución Spline)
-            table.insert(widgetsFiltrados, widgetsCompletos[22]) -- enableVocalModes
-            table.insert(widgetsFiltrados, widgetsCompletos[23]) -- enableDetune
-            table.insert(widgetsFiltrados, widgetsCompletos[24]) -- enableExpPad
-            table.insert(widgetsFiltrados, widgetsCompletos[25]) -- enableSmartVibrato
-        elseif seccionUX == 2 then
-            -- ARMONÍA, COROS Y AFINACIÓN TEMPERADA (Armonías, Coral, Antifase ms/cents, Just Intonation)
-            table.insert(widgetsFiltrados, widgetsCompletos[3])  -- modo
-            table.insert(widgetsFiltrados, widgetsCompletos[12]) -- modoArmonia (Tipo de Armonía)
-            table.insert(widgetsFiltrados, widgetsCompletos[13]) -- presetCoral
-            table.insert(widgetsFiltrados, widgetsCompletos[14]) -- antiFaseMs
-            table.insert(widgetsFiltrados, widgetsCompletos[15]) -- antiFaseCents
-            table.insert(widgetsFiltrados, widgetsCompletos[35]) -- armoniaIntervalosCustom (TextBox)
-            table.insert(widgetsFiltrados, widgetsCompletos[38]) -- enableJustIntonation (CheckBox)
-        elseif seccionUX == 3 then
-            -- CONTRAPUNTO Y PROGRESIÓN DE ACORDES (Fux Species, Progresión de Acordes, Ritmos)
-            table.insert(widgetsFiltrados, widgetsCompletos[3])  -- modo
-            table.insert(widgetsFiltrados, widgetsCompletos[16]) -- especieContrapunto
-            table.insert(widgetsFiltrados, widgetsCompletos[17]) -- progresionAcordes
-            table.insert(widgetsFiltrados, widgetsCompletos[18]) -- ritmoAcordes
-        elseif seccionUX == 4 then
-            -- PARÁMETROS AVANZADOS Y RANGO DE NOTAS (Humanización, Registro, Fonemas, Merge, Rangos Min/Max)
-            table.insert(widgetsFiltrados, widgetsCompletos[3])  -- modo
-            table.insert(widgetsFiltrados, widgetsCompletos[26]) -- mergeMode
-            table.insert(widgetsFiltrados, widgetsCompletos[27]) -- limpiarPrevios
-            table.insert(widgetsFiltrados, widgetsCompletos[28]) -- adaptarTempo
-            table.insert(widgetsFiltrados, widgetsCompletos[29]) -- compensarGanancia
-            table.insert(widgetsFiltrados, widgetsCompletos[30]) -- procesarTodosGrupos
-            table.insert(widgetsFiltrados, widgetsCompletos[31]) -- valHumanizacion (Slider)
-            table.insert(widgetsFiltrados, widgetsCompletos[32]) -- valRegistro (Slider)
-            table.insert(widgetsFiltrados, widgetsCompletos[33]) -- valFonema (Slider)
-            table.insert(widgetsFiltrados, widgetsCompletos[36]) -- rangoNotaMin (Slider)
-            table.insert(widgetsFiltrados, widgetsCompletos[37]) -- rangoNotaMax (Slider)
-        end
-
-        local dialogoDinamico = {
-            title = tr.title,
-            message = tr.message,
-            buttons = "OkCancel",
-            widgets = widgetsFiltrados
-        }
-
-        local resultado = SV:showCustomDialog(dialogoDinamico)
-        if not resultado.status then
-            SV:finish()
-            return
-        end
-
-        resp = resultado.answers or {}
-        
-        -- Guardar y sincronizar respuestas hacia la configuración de sesión
-        for kw, vw in pairs(resp) do
-            cfg[kw] = vw
-        end
-        guardarConfiguracionUsuario(cfg)
-
-        local seleccionadoLang = resp.idiomaUI or idiomaActual
-        local seleccionSeccion = resp.vistaSeccion or 0
-        local seleccionModo = resp.modo or 0
-
-        if seleccionadoLang ~= idiomaActual or seleccionSeccion ~= (cfg.vistaSeccion or 0) or seleccionModo ~= (cfg.modo or 0) then
-            idiomaActual = seleccionadoLang
-            cfg.vistaSeccion = seleccionSeccion
-            cfg.modo = seleccionModo
-        else
-            break
-        end
+        })
+    elseif modoP4 == 1 then
+        -- Acordes (Modo 4)
+        table.insert(rows, {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.progresionAcordesLabel or "Progresión" },
+                { type = "ComboBox", choices = tr.progresionAcordesChoices, value = widgets.progresionAcordes }
+            }
+        })
+        table.insert(rows, {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.ritmoAcordesLabel or "Patrón Rítmico" },
+                { type = "ComboBox", choices = tr.ritmoAcordesChoices, value = widgets.ritmoAcordes }
+            }
+        })
     end
 
-    local langIdx                   = resp.idiomaUI or idiomaActual
+    table.insert(rows, {
+        type = "Container",
+        columns = {
+            {
+                type = "Button",
+                text = tr.applyButtonLabel or "Aplicar",
+                value = widgets.runButton,
+                width = 1.0
+            }
+        }
+    })
+
+    return {
+        title = "Chords & Counterpoint",
+        rows = rows
+    }
+end
+
+function ejecutarOperacionPrincipal()
+    local p4m = valPanel4Modo or (panelWidgets and panelWidgets.panel4Modo and panelWidgets.panel4Modo:getValue()) or 1
+    local modoReal = 4
+    if p4m == 0 then modoReal = 3
+    elseif p4m == 1 then modoReal = 4
+    elseif p4m == 2 then modoReal = 5
+    elseif p4m == 3 then modoReal = 6
+    end
+
+    local cfg = {
+        modo = modoReal,
+        panel4Modo = p4m,
+        idiomaUI = valIdiomaUI or 0,
+        especieContrapunto = valEspecieContrapunto or 0,
+        progresionAcordes = valProgresionAcordes or 0,
+        ritmoAcordes = valRitmoAcordes or 0,
+        intensidad = 100,
+        preset = 0,
+        valHumanizacion = 100,
+        valRegistro = 100,
+        valFonema = 100
+    }
+    guardarConfiguracionUsuario(cfg)
+
+    -- Mapear variables para compatibilidad con el backend
+    local modoOperacion       = cfg.modo
+    local presetIndex         = cfg.preset
+    local valIntensidad       = cfg.intensidad
+    local valIntensidadVal    = cfg.intensidad
+    local factorIntensidad    = valIntensidadVal / 100.0
+    local densityChoice       = 0
+    local modoRitmoIdx        = 0
+    local modoMelodiaIdx      = 0
+    local escalaIdx           = 2
+    local tonicaIdx           = 0
+    local autoDetectKey       = true
+    local modoArmoniaIdx      = 0
+    local presetCoralIdx      = 0
+    local antiFaseMs          = 12
+    local antiFaseCents       = 10
+    local especieContrapuntoIdx = cfg.especieContrapunto
+    local progresionAcordesIdx  = cfg.progresionAcordes
+    local ritmoAcordesIdx       = cfg.ritmoAcordes
+    local activarVocalModes   = true
+    local activarDetune       = true
+    local activarExpPad       = true
+    local activarSmartVibrato = true
+    local mergeMode           = false
+    local limpiarPrevios      = true
+    local adaptarTempo        = true
+    local compensarGanancia   = false
+    local procesarTodosGrupos = false
+    local factorHumanizeMult  = 1.0
+    local factorRegisterMult  = 1.0
+    local factorPhonemeMult   = 1.0
+    local letraRaw            = ""
+    local basePitch           = 60
+    local durationIndex       = 1
+    local targetNotesMode     = 0
+    local armoniaIntervalosCustom = "+3, +7, -5"
+    local rangoNotaMin        = 48
+    local rangoNotaMax        = 72
+    local enableJustIntonation = true
+    local vistaSeccion        = 3
+local langIdx                   = cfg.idiomaUI or 0
     local tr                        = I18N_DATA[langIdx] or I18N_DATA[0]
 
-    local modoOperacion       = resp.modo or 0
-    local presetIndex         = resp.preset or 0
-    local valIntensidad       = resp.intensidad or 100
-    local factorIntensidad    = valIntensidad / 100.0
-    local densityChoice       = resp.densityStep or 0
-    local modoRitmoIdx        = resp.modoRitmo or 0
-    local modoMelodiaIdx      = resp.modoMelodia or 0
-    local escalaIdx           = resp.escalaMelodica or 2
-    local tonicaIdx           = resp.tonica or 0
-    local autoDetectKey       = (resp.autoDetectKey ~= false)
+    local modoOperacion       = cfg.modo
+    local presetIndex         = cfg.preset
+    local valIntensidadVal    = cfg.intensidad
+    local factorIntensidad    = valIntensidadVal / 100.0
+    local densityChoice       = cfg.densityStep or 0
+    local modoRitmoIdx        = cfg.modoRitmo
+    local modoMelodiaIdx      = cfg.modoMelodia
+    local escalaIdx           = cfg.escalaMelodica
+    local tonicaIdx           = cfg.tonica
+    local autoDetectKey       = (cfg.autoDetectKey ~= false)
 
-    local modoArmoniaIdx      = resp.modoArmonia or 0
-    local presetCoralIdx      = resp.presetCoral or 0
-    local antiFaseMs          = resp.antiFaseMs or 12
-    local antiFaseCents       = resp.antiFaseCents or 10
+    local modoArmoniaIdx      = cfg.modoArmonia
+    local presetCoralIdx      = cfg.presetCoral
+    local antiFaseMs          = cfg.antiFaseMs
+    local antiFaseCents       = cfg.antiFaseCents
 
-    local especieContrapuntoIdx = resp.especieContrapunto or 0
-    local progresionAcordesIdx  = resp.progresionAcordes or 0
-    local ritmoAcordesIdx       = resp.ritmoAcordes or 0
+    local especieContrapuntoIdx = cfg.especieContrapunto
+    local progresionAcordesIdx  = cfg.progresionAcordes
+    local ritmoAcordesIdx       = cfg.ritmoAcordes
 
-    local activarVocalModes   = (resp.enableVocalModes ~= false)
-    local activarDetune       = (resp.enableDetune ~= false)
-    local activarExpPad       = (resp.enableExpPad ~= false)
-    local activarSmartVibrato = (resp.enableSmartVibrato ~= false)
-    local mergeMode           = (resp.mergeMode == true)
-    local limpiarPrevios      = (resp.limpiarPrevios ~= false)
-    local adaptarTempo        = (resp.adaptarTempo ~= false)
-    local compensarGanancia   = (resp.compensarGanancia == true)
-    local procesarTodosGrupos = (resp.procesarTodosGrupos == true)
-    local factorHumanizeMult  = (resp.valHumanizacion ~= nil and tonumber(resp.valHumanizacion) or 100) / 100.0
-    local factorRegisterMult  = (resp.valRegistro ~= nil and tonumber(resp.valRegistro) or 100) / 100.0
-    local factorPhonemeMult   = (resp.valFonema ~= nil and tonumber(resp.valFonema) or 100) / 100.0
-    local letraRaw            = resp.letra or tr.letraDefault
+    local activarVocalModes   = (cfg.enableVocalModes ~= false)
+    local activarDetune       = (cfg.enableDetune ~= false)
+    local activarExpPad       = (cfg.enableExpPad ~= false)
+    local activarSmartVibrato = (cfg.enableSmartVibrato ~= false)
+    local mergeMode           = (cfg.mergeMode == true)
+    local limpiarPrevios      = (cfg.limpiarPrevios ~= false)
+    local adaptarTempo        = (cfg.adaptarTempo ~= false)
+    local compensarGanancia   = (cfg.compensarGanancia == true)
+    local procesarTodosGrupos = (cfg.procesarTodosGrupos == true)
+    local factorHumanizeMult  = (cfg.valHumanizacion ~= nil and tonumber(cfg.valHumanizacion) or 100) / 100.0
+    local factorRegisterMult  = (cfg.valRegistro ~= nil and tonumber(cfg.valRegistro) or 100) / 100.0
+    local factorPhonemeMult   = (cfg.valFonema ~= nil and tonumber(cfg.valFonema) or 100) / 100.0
+    local letraRaw            = cfg.letra or tr.letraDefault
 
-    local basePitch           = resp.basePitch or 60
+    local basePitch           = cfg.basePitch or 60
     if basePitch < 36 or basePitch > 84 then basePitch = 60 end
-    local durationIndex       = resp.noteDuration or 1
+    local durationIndex       = cfg.noteDuration or 1
 
-    local targetNotesMode     = resp.targetNotesMode or 0
-    local armoniaIntervalosCustom = resp.armoniaIntervalosCustom or "+3, +7, -5"
-    local rangoNotaMin        = resp.rangoNotaMin or 48
-    local rangoNotaMax        = resp.rangoNotaMax or 72
-    local enableJustIntonation = (resp.enableJustIntonation == true)
-    local vistaSeccion        = resp.vistaSeccion or 0
+    local targetNotesMode     = cfg.targetNotesMode or 0
+    local armoniaIntervalosCustom = cfg.armoniaIntervalosCustom or "+3, +7, -5"
+    local rangoNotaMin        = cfg.rangoNotaMin or 48
+    local rangoNotaMax        = cfg.rangoNotaMax or 72
+    local enableJustIntonation = (cfg.enableJustIntonation == true)
+    local vistaSeccion        = cfg.vistaSeccion or 0
+
 
     local proyecto = SV:getProject()
     local timeAxis = proyecto:getTimeAxis()
@@ -3955,7 +3600,6 @@ function main()
 
     if not pistaActual then
         SV:showMessageBox(tr.errContextTitle, tr.errContextMsg)
-        SV:finish()
         return
     end
 
@@ -4002,7 +3646,7 @@ function main()
     elseif presetIndex == PRESET_PERSONALIZADO_IDX then
         configPreset = mostrarDialogoPresetPersonalizado(tr, cfg)
         if not configPreset then
-            SV:finish()
+            
             return
         end
     else
@@ -4016,7 +3660,7 @@ function main()
 
     -- Confirmación pre-ejecución
     local nomNota, octNota = obtenerNombreNotaMidi(basePitch)
-    local nomPreset = tr.presetChoices[presetIndex + 1] or tr.presetChoices[1]
+    local nomPreset = tr.presetChoices and (tr.presetChoices[presetIndex + 1] or tr.presetChoices[1]) or "Estándar"
     local confirmMsg = ""
 
     if modoOperacion == 0 then
@@ -4050,13 +3694,11 @@ function main()
 
     if rangoNotaMin >= rangoNotaMax then
         SV:showMessageBox(tr.errContextTitle, tr.idiomaUI == 0 and "Rango de nota minimo debe ser menor que el maximo." or "Minimum note range must be lower than maximum.")
-        SV:finish()
         return
     end
 
     local confirmResult = SV:showOkCancelBox(tr.confirmTitle, confirmMsg)
     if not confirmResult then
-        SV:finish()
         return
     end
 
@@ -4084,40 +3726,37 @@ function main()
     if modoOperacion == 2 then
         if not groupRefActivo then
             SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            SV:finish()
+            
             return
         end
 
         local totalArmonias = generarPistasArmonia(proyecto, pistaActual, groupRefActivo, tonicaIdx, escalaIdx, modoArmoniaIdx, presetCoralIdx, antiFaseMs, antiFaseCents, factorIntensidad, configPreset, timeAxis, armoniaIntervalosCustom, enableJustIntonation)
-        local resumenArm = string.format(tr.completedMsg, totalArmonias, nomPreset, valIntensidad, 1)
+        local resumenArm = string.format(tr.completedMsg, (totalArmonias or 0), (nomPreset or ""), (valIntensidad or 0), 1)
         SV:showMessageBox(tr.completedTitle, resumenArm)
-        SV:finish()
         return
 
     elseif modoOperacion == 3 then
         if not groupRefActivo then
             SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            SV:finish()
+            
             return
         end
 
         local totalContra = generarPistaContrapunto(proyecto, pistaActual, groupRefActivo, especieContrapuntoIdx, tonicaIdx, escalaIdx, factorIntensidad, configPreset, timeAxis)
-        local resumenContra = string.format(tr.completedMsg, totalContra, nomPreset, valIntensidad, 1)
+        local resumenContra = string.format(tr.completedMsg, (totalContra or 0), (nomPreset or ""), (valIntensidad or 0), 1)
         SV:showMessageBox(tr.completedTitle, resumenContra)
-        SV:finish()
         return
 
     elseif modoOperacion == 4 then
         local totalAcordes = generarProgresionAcordes(proyecto, pistaActual, progresionAcordesIdx, tonicaIdx, escalaIdx, ritmoAcordesIdx, factorIntensidad, configPreset, timeAxis)
-        local resumenProg = string.format(tr.completedMsg, totalAcordes, nomPreset, valIntensidad, 1)
+        local resumenProg = string.format(tr.completedMsg, (totalAcordes or 0), (nomPreset or ""), (valIntensidad or 0), 1)
         SV:showMessageBox(tr.completedTitle, resumenProg)
-        SV:finish()
         return
 
     elseif modoOperacion == 5 then
         if not groupRefActivo then
             SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            SV:finish()
+            
             return
         end
 
@@ -4125,7 +3764,7 @@ function main()
         local numNotasGuia = grupoGuiaTarget:getNumNotes()
         if numNotasGuia == 0 then
             SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            SV:finish()
+            
             return
         end
 
@@ -4170,13 +3809,12 @@ function main()
 
         local resumenSinc = string.format("Operación de sincronización completada.\nGrupos sincronizados con éxito: %d", totalGruposSincronizados)
         SV:showMessageBox(tr.completedTitle, resumenSinc)
-        SV:finish()
         return
 
     elseif modoOperacion == 6 then
         if not groupRefActivo then
             SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            SV:finish()
+            
             return
         end
 
@@ -4184,7 +3822,7 @@ function main()
         local numNotas = targetGroup:getNumNotes()
         if numNotas == 0 then
             SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-            SV:finish()
+            
             return
         end
 
@@ -4225,7 +3863,6 @@ function main()
 
         local resumenForzar = string.format("Operación de forzado de afinación completada.\nNotas corregidas a la escala diatónica: %d", totalNotasCorregidas)
         SV:showMessageBox(tr.completedTitle, resumenForzar)
-        SV:finish()
         return
     end
 
@@ -4246,7 +3883,6 @@ function main()
     local numGruposAProcesar = #gruposAProcesar
     if numGruposAProcesar == 0 then
         SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-        SV:finish()
         return
     end
 
@@ -4326,7 +3962,7 @@ function main()
 
                 if #notasObjetivo == 0 then
                     SV:showMessageBox(tr.errNoNotesTitle, tr.errNoNotesMsg)
-                    SV:finish()
+                    
                     return
                 end
             else
@@ -4334,7 +3970,7 @@ function main()
                 notasObjetivo = generarNotasDesdeTexto(letraRaw, basePitch, stepBlick, modoMelodiaIdx, escalaIdx, modoRitmoIdx, langIdx, noteGroup, reproductor, rangoNotaMin, rangoNotaMax)
                 if #notasObjetivo == 0 then
                     SV:showMessageBox(tr.errNoSyllablesTitle, tr.errNoSyllablesMsg)
-                    SV:finish()
+                    
                     return
                 end
             end
@@ -4558,7 +4194,6 @@ function main()
         ::continuar_grupo::
     end
 
-    local resumen = string.format(tr.completedMsg, totalNotasProcesadas, nomPreset, valIntensidad, numGruposAProcesar)
+    local resumen = string.format(tr.completedMsg, (totalNotasProcesadas or 0), (nomPreset or ""), (valIntensidad or 0), (numGruposAProcesar or 0))
     SV:showMessageBox(tr.completedTitle, resumen)
-    SV:finish()
-end
+    end

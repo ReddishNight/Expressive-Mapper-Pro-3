@@ -1,5 +1,5 @@
 -- ============================================================================
--- MÓDULO 2: DATOS Y PRESETS DE EXPRESIVIDAD VOCAL (0 GC ALLOC)
+-- MÓDULO 2: DATOS Y PRESETS DE EXPRESIVIDAD VOCAL (LOW GC ALLOC)
 -- ============================================================================
 
 local VOCAL_MODE_NOMBRES = {
@@ -13,7 +13,7 @@ for i = 1, #VOCAL_MODE_NOMBRES do
     VOCAL_MODE_KEYS[i] = "vocalMode_" .. VOCAL_MODE_NOMBRES[i]
 end
 
--- Buffers globales pre-asignados para interpolación Hermite y automatizaciones (0 GC Alloc)
+-- Buffers globales pre-asignados para interpolación Hermite y automatizaciones (Optimización de memoria)
 local EVAL_NODOS = {
     t   = { 0.0, 0.15, 0.50, 0.85, 1.0 },
     val = { 0.0, 0.0, 0.0, 0.0, 0.0 },

@@ -105,7 +105,7 @@ local function mostrarDialogoPresetPersonalizado(tr, cfgGuardada)
     local defTb = (cfgGuardada and tonumber(cfgGuardada.customTimbre)) or 0
 
     local dialogoCustom = {
-        title = tr.presetChoices[PRESET_PERSONALIZADO_IDX + 1] or "Custom",
+        title = tr.presetChoices and (tr.presetChoices[PRESET_PERSONALIZADO_IDX + 1] or "Custom") or "Custom",
         message = "",
         buttons = "OkCancel",
         widgets = {
@@ -221,459 +221,219 @@ local valEnableSmartVibrato, valMergeMode, valLimpiarPrevios, valAdaptarTempo
 local valCompensarGanancia, valProcesarTodosGrupos, valHumanizacion, valRegistro, valFonema
 local valCustomTension, valCustomBreath, valCustomVolume, valCustomGender, valCustomVoicing, valCustomTimbre
 
-local idiomaInicializado = false
 
-function getSidePanelSectionState()
-    if not valVistaSeccion then
-        -- Instanciación segura diferida
-        valVistaSeccion = SV:create("WidgetValue")
-        valIdiomaUI = SV:create("WidgetValue")
-        valModo = SV:create("WidgetValue")
-        valPreset = SV:create("WidgetValue")
-        valIntensidad = SV:create("WidgetValue")
-        valDensityStep = SV:create("WidgetValue")
-        valModoRitmo = SV:create("WidgetValue")
-        valModoMelodia = SV:create("WidgetValue")
-        valEscalaMelodica = SV:create("WidgetValue")
-        valTonica = SV:create("WidgetValue")
-        valAutoDetectKey = SV:create("WidgetValue")
-        valModoArmonia = SV:create("WidgetValue")
-        valPresetCoral = SV:create("WidgetValue")
-        valAntiFaseMs = SV:create("WidgetValue")
-        valAntiFaseCents = SV:create("WidgetValue")
-        valEspecieContrapunto = SV:create("WidgetValue")
-        valProgresionAcordes = SV:create("WidgetValue")
-        valRitmoAcordes = SV:create("WidgetValue")
-        valLetra = SV:create("WidgetValue")
-        valBasePitch = SV:create("WidgetValue")
-        valNoteDuration = SV:create("WidgetValue")
-        valTargetNotesMode = SV:create("WidgetValue")
-        valArmoniaIntervalosCustom = SV:create("WidgetValue")
-        valRangoNotaMin = SV:create("WidgetValue")
-        valRangoNotaMax = SV:create("WidgetValue")
-        valEnableJustIntonation = SV:create("WidgetValue")
-        valEnableVocalModes = SV:create("WidgetValue")
-        valEnableDetune = SV:create("WidgetValue")
-        valEnableExpPad = SV:create("WidgetValue")
-        valEnableSmartVibrato = SV:create("WidgetValue")
-        valMergeMode = SV:create("WidgetValue")
-        valLimpiarPrevios = SV:create("WidgetValue")
-        valAdaptarTempo = SV:create("WidgetValue")
-        valCompensarGanancia = SV:create("WidgetValue")
-        valProcesarTodosGrupos = SV:create("WidgetValue")
-        valHumanizacion = SV:create("WidgetValue")
-        valRegistro = SV:create("WidgetValue")
-        valFonema = SV:create("WidgetValue")
-        valCustomTension = SV:create("WidgetValue")
-        valCustomBreath = SV:create("WidgetValue")
-        valCustomVolume = SV:create("WidgetValue")
-        valCustomGender = SV:create("WidgetValue")
-        valCustomVoicing = SV:create("WidgetValue")
-        valCustomTimbre = SV:create("WidgetValue")
 
-        -- Cargar valores almacenados en config
-        local cfg = cargarConfiguracionUsuario()
-        local idiomaInicial = _G.idiomaDetectado or 0
-        if cfg.idiomaUI ~= nil then
-            idiomaInicial = tonumber(cfg.idiomaUI) or 0
-        elseif SV and SV.getHostLanguage then
-            pcall(function()
-                local hostLang = string.lower(SV:getHostLanguage() or "")
-                if string.find(hostLang, "en") then
-                    idiomaInicial = 1
-                elseif string.find(hostLang, "ja") or string.find(hostLang, "jp") then
-                    idiomaInicial = 2
-                elseif string.find(hostLang, "es") then
-                    idiomaInicial = 0
-                end
-            end)
+local panelWidgets = nil
+
+local function leerValorWidget(widget, fallback)
+    if widget and type(widget.getValue) == "function" then
+        local v = widget:getValue()
+        if v ~= nil then
+            return v
         end
+    end
+    return fallback
+end
 
-        valVistaSeccion:setValue(cfg.vistaSeccion ~= nil and tonumber(cfg.vistaSeccion) or 0)
-        valIdiomaUI:setValue(cfg.idiomaUI ~= nil and tonumber(cfg.idiomaUI) or idiomaInicial)
-        valModo:setValue(cfg.modo ~= nil and tonumber(cfg.modo) or 0)
-        valPreset:setValue(cfg.preset ~= nil and tonumber(cfg.preset) or 0)
-        valIntensidad:setValue(cfg.intensidad ~= nil and tonumber(cfg.intensidad) or 100)
-        valDensityStep:setValue(cfg.densityStep ~= nil and tonumber(cfg.densityStep) or 0)
-        valModoRitmo:setValue(cfg.modoRitmo ~= nil and tonumber(cfg.modoRitmo) or 2)
-        valModoMelodia:setValue(cfg.modoMelodia ~= nil and tonumber(cfg.modoMelodia) or 0)
-        valEscalaMelodica:setValue(cfg.escalaMelodica ~= nil and tonumber(cfg.escalaMelodica) or 2)
-        valTonica:setValue(cfg.tonica ~= nil and tonumber(cfg.tonica) or 0)
-        valAutoDetectKey:setValue(cfg.autoDetectKey == nil and true or (cfg.autoDetectKey == true))
-        valModoArmonia:setValue(cfg.modoArmonia ~= nil and tonumber(cfg.modoArmonia) or 0)
-        valPresetCoral:setValue(cfg.presetCoral ~= nil and tonumber(cfg.presetCoral) or 0)
-        valAntiFaseMs:setValue(cfg.antiFaseMs ~= nil and tonumber(cfg.antiFaseMs) or 12)
-        valAntiFaseCents:setValue(cfg.antiFaseCents ~= nil and tonumber(cfg.antiFaseCents) or 10)
-        valEspecieContrapunto:setValue(cfg.especieContrapunto ~= nil and tonumber(cfg.especieContrapunto) or 0)
-        valProgresionAcordes:setValue(cfg.progresionAcordes ~= nil and tonumber(cfg.progresionAcordes) or 0)
-        valRitmoAcordes:setValue(cfg.ritmoAcordes ~= nil and tonumber(cfg.ritmoAcordes) or 0)
-        valLetra:setValue(cfg.letra ~= nil and tostring(cfg.letra) or "")
-        valBasePitch:setValue(cfg.basePitch ~= nil and tonumber(cfg.basePitch) or 60)
-        valNoteDuration:setValue(cfg.noteDuration ~= nil and tonumber(cfg.noteDuration) or 1)
-        valTargetNotesMode:setValue(cfg.targetNotesMode ~= nil and tonumber(cfg.targetNotesMode) or 0)
-        valArmoniaIntervalosCustom:setValue(cfg.armoniaIntervalosCustom ~= nil and tostring(cfg.armoniaIntervalosCustom) or "+3, +7, -5")
-        valRangoNotaMin:setValue(cfg.rangoNotaMin ~= nil and tonumber(cfg.rangoNotaMin) or 48)
-        valRangoNotaMax:setValue(cfg.rangoNotaMax ~= nil and tonumber(cfg.rangoNotaMax) or 72)
-        valEnableJustIntonation:setValue(cfg.enableJustIntonation == nil and true or (cfg.enableJustIntonation == true))
-        valEnableVocalModes:setValue(cfg.enableVocalModes == nil and true or (cfg.enableVocalModes == true))
-        valEnableDetune:setValue(cfg.enableDetune == nil and true or (cfg.enableDetune == true))
-        valEnableExpPad:setValue(cfg.enableExpPad == nil and true or (cfg.enableExpPad == true))
-        valEnableSmartVibrato:setValue(cfg.enableSmartVibrato == nil and true or (cfg.enableSmartVibrato == true))
-        valMergeMode:setValue(cfg.mergeMode == nil and false or (cfg.mergeMode == true))
-        valLimpiarPrevios:setValue(cfg.limpiarPrevios == nil and true or (cfg.limpiarPrevios == true))
-        valAdaptarTempo:setValue(cfg.adaptarTempo == nil and true or (cfg.adaptarTempo == true))
-        valCompensarGanancia:setValue(cfg.compensarGanancia == nil and false or (cfg.compensarGanancia == true))
-        valProcesarTodosGrupos:setValue(cfg.procesarTodosGrupos == nil and false or (cfg.procesarTodosGrupos == true))
-        valHumanizacion:setValue(cfg.valHumanizacion ~= nil and tonumber(cfg.valHumanizacion) or 100)
-        valRegistro:setValue(cfg.valRegistro ~= nil and tonumber(cfg.valRegistro) or 100)
-        valFonema:setValue(cfg.valFonema ~= nil and tonumber(cfg.valFonema) or 100)
-        valCustomTension:setValue(cfg.customTension ~= nil and tonumber(cfg.customTension) or 0)
-        valCustomBreath:setValue(cfg.customBreath ~= nil and tonumber(cfg.customBreath) or 0)
-        valCustomVolume:setValue(cfg.customVolume ~= nil and tonumber(cfg.customVolume) or 0)
-        valCustomGender:setValue(cfg.customGender ~= nil and tonumber(cfg.customGender) or 0)
-        valCustomVoicing:setValue(cfg.customVoicing ~= nil and tonumber(cfg.customVoicing) or 70)
-        valCustomTimbre:setValue(cfg.customTimbre ~= nil and tonumber(cfg.customTimbre) or 0)
-
-        -- Registrar los callbacks para actualización
-        valVistaSeccion:setValueChangeCallback(function() SV:refreshSidePanel() end)
-        valIdiomaUI:setValueChangeCallback(function() SV:refreshSidePanel() end)
-        valModo:setValueChangeCallback(function() SV:refreshSidePanel() end)
-        valPreset:setValueChangeCallback(function() SV:refreshSidePanel() end)
+local function asegurarWidgetsPanel3(cfg)
+    local idiomaInicial = _G.idiomaDetectado or 0
+    if cfg.idiomaUI ~= nil then
+        idiomaInicial = tonumber(cfg.idiomaUI) or 0
     end
 
-    local tr = I18N_DATA[valIdiomaUI:getValue()] or I18N_DATA[0]
-    local seccionUX = valVistaSeccion:getValue()
+    if not panelWidgets then
+        panelWidgets = {
+            idiomaUI = SV:create("WidgetValue"),
+            modoArmonia = SV:create("WidgetValue"),
+            presetCoral = SV:create("WidgetValue"),
+            antiFaseMs = SV:create("WidgetValue"),
+            antiFaseCents = SV:create("WidgetValue"),
+            armoniaIntervalosCustom = SV:create("WidgetValue"),
+            enableJustIntonation = SV:create("WidgetValue"),
+            escalaMelodica = SV:create("WidgetValue"),
+            tonica = SV:create("WidgetValue"),
+            autoDetectKey = SV:create("WidgetValue"),
+            runButton = SV:create("WidgetValue")
+        }
+        panelWidgets.runButton:setValueChangeCallback(function()
+            ejecutarOperacionPrincipal()
+        end)
+    end
 
+    panelWidgets.idiomaUI:setValue(tonumber(cfg.idiomaUI) or idiomaInicial)
+    panelWidgets.modoArmonia:setValue(cfg.modoArmonia ~= nil and tonumber(cfg.modoArmonia) or 0)
+    panelWidgets.presetCoral:setValue(cfg.presetCoral ~= nil and tonumber(cfg.presetCoral) or 0)
+    panelWidgets.antiFaseMs:setValue(cfg.antiFaseMs ~= nil and tonumber(cfg.antiFaseMs) or 0)
+    panelWidgets.antiFaseCents:setValue(cfg.antiFaseCents ~= nil and tonumber(cfg.antiFaseCents) or 0)
+    panelWidgets.armoniaIntervalosCustom:setValue(cfg.armoniaIntervalosCustom ~= nil and tostring(cfg.armoniaIntervalosCustom) or "+3, +7, -5")
+    panelWidgets.enableJustIntonation:setValue(cfg.enableJustIntonation == nil and true or (cfg.enableJustIntonation == true))
+    panelWidgets.escalaMelodica:setValue(cfg.escalaMelodica ~= nil and tonumber(cfg.escalaMelodica) or 2)
+    panelWidgets.tonica:setValue(cfg.tonica ~= nil and tonumber(cfg.tonica) or 0)
+    panelWidgets.autoDetectKey:setValue(cfg.autoDetectKey == nil and true or (cfg.autoDetectKey == true))
+
+    return panelWidgets
+end
+
+function getSidePanelSectionState()
+    local cfg = cargarConfiguracionUsuario()
+    local idiomaInicial = _G.idiomaDetectado or 0
+
+    local widgets = asegurarWidgetsPanel3(cfg)
+
+    valIdiomaUI = idiomaInicial
+    valModoArmonia = tonumber(leerValorWidget(widgets.modoArmonia, cfg.modoArmonia ~= nil and tonumber(cfg.modoArmonia) or 0)) or 0
+    valPresetCoral = tonumber(leerValorWidget(widgets.presetCoral, cfg.presetCoral ~= nil and tonumber(cfg.presetCoral) or 0)) or 0
+    valAntiFaseMs = tonumber(leerValorWidget(widgets.antiFaseMs, cfg.antiFaseMs ~= nil and tonumber(cfg.antiFaseMs) or 0)) or 0
+    valAntiFaseCents = tonumber(leerValorWidget(widgets.antiFaseCents, cfg.antiFaseCents ~= nil and tonumber(cfg.antiFaseCents) or 0)) or 0
+    valArmoniaIntervalosCustom = tostring(leerValorWidget(widgets.armoniaIntervalosCustom, cfg.armoniaIntervalosCustom ~= nil and tostring(cfg.armoniaIntervalosCustom) or "+3, +7, -5")) or "+3, +7, -5"
+    valEnableJustIntonation = leerValorWidget(widgets.enableJustIntonation, cfg.enableJustIntonation == nil and true or (cfg.enableJustIntonation == true))
+    valEscalaMelodica = widgets.escalaMelodica
+    valTonica = widgets.tonica
+    valAutoDetectKey = widgets.autoDetectKey
+
+    local tr = I18N_DATA[valIdiomaUI] or I18N_DATA[0]
     local rows = {
-        {
-            type = "Label",
-            text = "Expressive Mapper Pro 3 — Control Panel"
-        },
+        { type = "Label", text = tr.vistaSeccionChoices[3] or "Vocal Harmonies & Just Intonation" },
         {
             type = "Container",
             columns = {
-                { type = "Label", text = tr.vistaSeccionLabel or "Sección UX" },
-                { type = "ComboBox", choices = tr.vistaSeccionChoices, value = valVistaSeccion }
+                { type = "Label", text = tr.autoDetectKeyLabel or "Auto-Detectar Tonalidad" },
+                { type = "CheckBox", text = tr.autoDetectKeyLabel or "Auto-Detectar Tonalidad", value = widgets.autoDetectKey }
             }
         },
-
         {
             type = "Container",
             columns = {
-                { type = "Label", text = tr.modoLabel or "Modo" },
-                { type = "ComboBox", choices = tr.modoChoices, value = valModo }
+                { type = "Label", text = tr.tonicaLabel or "Tónica" },
+                { type = "ComboBox", choices = NOTAS_NOMBRES_ARRAY, value = widgets.tonica }
+            }
+        },
+        {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.escalaLabel or "Escala Armónica" },
+                { type = "ComboBox", choices = tr.escalaChoices, value = widgets.escalaMelodica }
+            }
+        },
+        {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.modoArmoniaLabel or "Modo Armonía" },
+                { type = "ComboBox", choices = tr.modoArmoniaChoices, value = widgets.modoArmonia }
+            }
+        },
+        {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.presetCoralLabel or "Preset Coral SATB" },
+                { type = "ComboBox", choices = tr.presetCoralChoices, value = widgets.presetCoral }
+            }
+        },
+        {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.antiFaseMsLabel or "Anti-Fase (ms)" },
+                { type = "Slider", text = tr.antiFaseMsLabel or "Anti-Fase (ms)", minValue = 0, maxValue = 50, interval = 1, value = widgets.antiFaseMs }
+            }
+        },
+        {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.antiFaseCentsLabel or "Anti-Fase (cents)" },
+                { type = "Slider", text = tr.antiFaseCentsLabel or "Anti-Fase (cents)", minValue = 0, maxValue = 30, interval = 1, value = widgets.antiFaseCents }
+            }
+        },
+        {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.armoniaIntervalosCustomLabel or "Intervalos Custom" },
+                { type = "TextBox", value = widgets.armoniaIntervalosCustom, width = 1.0 }
+            }
+        },
+        {
+            type = "Container",
+            columns = {
+                { type = "Label", text = tr.enableJustIntonation or "Entonación Justa" },
+                { type = "CheckBox", text = tr.enableJustIntonation or "Entonación Justa", value = widgets.enableJustIntonation }
+            }
+        },
+        {
+            type = "Container",
+            columns = {
+                {
+                    type = "Button",
+                    text = tr.applyButtonLabel or "Aplicar",
+                    value = widgets.runButton,
+                    width = 1.0
+                }
             }
         }
     }
 
-    if seccionUX == 0 then
-        -- 0. QUICK MODE (EasyLyric: Letra & Melodía)
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.presetLabel or "Preset de Voz" },
-                { type = "ComboBox", choices = tr.presetChoices, value = valPreset }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.intensidadLabel or "Intensidad (%)" },
-                { type = "Slider", text = tr.intensidadLabel or "Intensidad (%)", minValue = 0, maxValue = 200, interval = 5, value = valIntensidad }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.letraLabel or "Letra a Generar" },
-                { type = "TextBox", value = valLetra, width = 1.0 }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.basePitchLabel or "MIDI Base (Quick Mode)" },
-                { type = "Slider", text = tr.basePitchLabel or "MIDI Base (Quick Mode)", minValue = 36, maxValue = 84, interval = 1, value = valBasePitch }
-            }
-        })
-    elseif seccionUX == 1 then
-        -- 1. VOCAL EXPRESSION & Hermite Curves
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.presetLabel or "Preset de Expresión" },
-                { type = "ComboBox", choices = tr.presetChoices, value = valPreset }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.intensidadLabel or "Intensidad (%)" },
-                { type = "Slider", text = tr.intensidadLabel or "Intensidad (%)", minValue = 0, maxValue = 200, interval = 5, value = valIntensidad }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.densityLabel or "Densidad de Curvas" },
-                { type = "ComboBox", choices = tr.densityChoices, value = valDensityStep }
-            }
-        })
-        -- Custom Envelope Parameters (Swell)
-        table.insert(rows, { type = "Label", text = "--- Swell & Custom Envelope Parameters ---" })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.customTensionLabel or "Tension" },
-                { type = "Slider", text = tr.customTensionLabel or "Tension", minValue = -100, maxValue = 100, interval = 5, value = valCustomTension }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.customBreathLabel or "Breathiness" },
-                { type = "Slider", text = tr.customBreathLabel or "Breathiness", minValue = -100, maxValue = 100, interval = 5, value = valCustomBreath }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.customVolumeLabel or "Volume (dB)" },
-                { type = "Slider", text = tr.customVolumeLabel or "Volume (dB)", minValue = -60, maxValue = 60, interval = 5, value = valCustomVolume }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.customGenderLabel or "Gender" },
-                { type = "Slider", text = tr.customGenderLabel or "Gender", minValue = -100, maxValue = 100, interval = 5, value = valCustomGender }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.customVoicingLabel or "Voicing" },
-                { type = "Slider", text = tr.customVoicingLabel or "Voicing", minValue = 0, maxValue = 100, interval = 5, value = valCustomVoicing }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.customTimbreLabel or "Timbre" },
-                { type = "Slider", text = tr.customTimbreLabel or "Timbre", minValue = -100, maxValue = 100, interval = 5, value = valCustomTimbre }
-            }
-        })
-    elseif seccionUX == 2 then
-        -- 2. HARMONY & TUNING
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.modoArmoniaLabel or "Intervalo / Tipo Armonía" },
-                { type = "ComboBox", choices = tr.modoArmoniaChoices, value = valModoArmonia }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.presetCoralLabel or "Preset Coral SATB" },
-                { type = "ComboBox", choices = tr.presetCoralChoices, value = valPresetCoral }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.antiFaseMsLabel or "Desfase Anti-Fase (ms)" },
-                { type = "Slider", text = tr.antiFaseMsLabel or "Desfase Anti-Fase (ms)", minValue = 0, maxValue = 50, interval = 1, value = valAntiFaseMs }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.antiFaseCentsLabel or "Desafinación Anti-Fase (cents)" },
-                { type = "Slider", text = tr.antiFaseCentsLabel or "Desafinación Anti-Fase (cents)", minValue = 0, maxValue = 30, interval = 1, value = valAntiFaseCents }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.armoniaIntervalosCustomLabel or "Intervalos Personalizados" },
-                { type = "TextBox", value = valArmoniaIntervalosCustom, width = 1.0 }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.enableJustIntonation or "Entonación Justa" },
-                { type = "CheckBox", text = tr.enableJustIntonation or "Entonación Justa", value = valEnableJustIntonation }
-            }
-        })
-    elseif seccionUX == 3 then
-        -- 3. CONTRAPUNTO & CHORDS
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.especieContrapuntoLabel or "Especie Contrapunto" },
-                { type = "ComboBox", choices = tr.especieContrapuntoChoices, value = valEspecieContrapunto }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.progresionAcordesLabel or "Progresión de Acordes" },
-                { type = "ComboBox", choices = tr.progresionAcordesChoices, value = valProgresionAcordes }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.ritmoAcordesLabel or "Ritmo / Comping de Acordes" },
-                { type = "ComboBox", choices = tr.ritmoAcordesChoices, value = valRitmoAcordes }
-            }
-        })
-    elseif seccionUX == 4 then
-        -- 4. ADVANCED SETTINGS & RANGES
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.mergeModeLabel or "Merge Mode (Mezclar con Curvas Previas)" },
-                { type = "CheckBox", text = tr.mergeModeLabel or "Merge Mode (Mezclar con Curvas Previas)", value = valMergeMode }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.limpiarPreviosLabel or "Limpiar Parámetros Previos" },
-                { type = "CheckBox", text = tr.limpiarPreviosLabel or "Limpiar Parámetros Previos", value = valLimpiarPrevios }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.adaptarTempoLabel or "Adaptar a Curva de Tempo" },
-                { type = "CheckBox", text = tr.adaptarTempoLabel or "Adaptar a Curva de Tempo", value = valAdaptarTempo }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.compensarGananciaLabel or "Compensar Pérdida de Ganancia" },
-                { type = "CheckBox", text = tr.compensarGananciaLabel or "Compensar Pérdida de Ganancia", value = valCompensarGanancia }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.procesarTodosGruposLabel or "Procesar Todos los Grupos" },
-                { type = "CheckBox", text = tr.procesarTodosGruposLabel or "Procesar Todos los Grupos", value = valProcesarTodosGrupos }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.humanizeLabel or "Humanización (%)" },
-                { type = "Slider", text = tr.humanizeLabel or "Humanización (%)", minValue = 0, maxValue = 200, interval = 5, value = valHumanizacion }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.registerScaleLabel or "Sensibilidad Registro (%)" },
-                { type = "Slider", text = tr.registerScaleLabel or "Sensibilidad Registro (%)", minValue = 0, maxValue = 200, interval = 5, value = valRegistro }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.phonemeModLabel or "Sensibilidad Fonemas (%)" },
-                { type = "Slider", text = tr.phonemeModLabel or "Sensibilidad Fonemas (%)", minValue = 0, maxValue = 200, interval = 5, value = valFonema }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.rangoNotaMinLabel or "Rango Nota Mín" },
-                { type = "Slider", text = tr.rangoNotaMinLabel or "Rango Nota Mín", minValue = 36, maxValue = 84, interval = 1, value = valRangoNotaMin }
-            }
-        })
-        table.insert(rows, {
-            type = "Container",
-            columns = {
-                { type = "Label", text = tr.rangoNotaMaxLabel or "Rango Nota Max" },
-                { type = "Slider", text = tr.rangoNotaMaxLabel or "Rango Nota Max", minValue = 36, maxValue = 84, interval = 1, value = valRangoNotaMax }
-            }
-        })
-    end
-
-    -- Botón de Acción Principal al final del Panel
-    table.insert(rows, {
-        type = "Container",
-        columns = {
-            {
-                type = "Button",
-                text = tr.applyButtonLabel or "Aplicar",
-                onClick = function()
-                    ejecutarOperacionPrincipal()
-                end
-            }
-        }
-    })
-
     return {
-        title = "Expressive Mapper Pro 3",
+        title = "Vocal Harmonies",
         rows = rows
     }
 end
 
 function ejecutarOperacionPrincipal()
     local cfg = {
-        vistaSeccion = valVistaSeccion:getValue(),
-        idiomaUI = valIdiomaUI:getValue(),
-        modo = valModo:getValue(),
-        preset = valPreset:getValue(),
-        intensidad = valIntensidad:getValue(),
-        densityStep = valDensityStep:getValue(),
-        modoRitmo = valModoRitmo:getValue(),
-        modoMelodia = valModoMelodia:getValue(),
-        escalaMelodica = valEscalaMelodica:getValue(),
-        tonica = valTonica:getValue(),
-        autoDetectKey = valAutoDetectKey:getValue(),
-        modoArmonia = valModoArmonia:getValue(),
-        presetCoral = valPresetCoral:getValue(),
-        antiFaseMs = valAntiFaseMs:getValue(),
-        antiFaseCents = valAntiFaseCents:getValue(),
-        especieContrapunto = valEspecieContrapunto:getValue(),
-        progresionAcordes = valProgresionAcordes:getValue(),
-        ritmoAcordes = valRitmoAcordes:getValue(),
-        letra = valLetra:getValue(),
-        basePitch = valBasePitch:getValue(),
-        noteDuration = valNoteDuration:getValue(),
-        targetNotesMode = valTargetNotesMode:getValue(),
-        armoniaIntervalosCustom = valArmoniaIntervalosCustom:getValue(),
-        rangoNotaMin = valRangoNotaMin:getValue(),
-        rangoNotaMax = valRangoNotaMax:getValue(),
-        enableJustIntonation = valEnableJustIntonation:getValue(),
-        enableVocalModes = valEnableVocalModes:getValue(),
-        enableDetune = valEnableDetune:getValue(),
-        enableExpPad = valEnableExpPad:getValue(),
-        enableSmartVibrato = valEnableSmartVibrato:getValue(),
-        mergeMode = valMergeMode:getValue(),
-        limpiarPrevios = valLimpiarPrevios:getValue(),
-        adaptarTempo = valAdaptarTempo:getValue(),
-        compensarGanancia = valCompensarGanancia:getValue(),
-        procesarTodosGrupos = valProcesarTodosGrupos:getValue(),
-        valHumanizacion = valHumanizacion:getValue(),
-        valRegistro = valRegistro:getValue(),
-        valFonema = valFonema:getValue(),
-        customTension = valCustomTension:getValue(),
-        customBreath = valCustomBreath:getValue(),
-        customVolume = valCustomVolume:getValue(),
-        customGender = valCustomGender:getValue(),
-        customVoicing = valCustomVoicing:getValue(),
-        customTimbre = valCustomTimbre:getValue(),
+        modo = 2, -- MODO 2: Armonías vocales
+        idiomaUI = valIdiomaUI or 0,
+        modoArmonia = valModoArmonia or 0,
+        presetCoral = valPresetCoral or 0,
+        antiFaseMs = valAntiFaseMs or 12,
+        antiFaseCents = valAntiFaseCents or 10,
+        armoniaIntervalosCustom = valArmoniaIntervalosCustom or "+3, +7, -5",
+        enableJustIntonation = valEnableJustIntonation == nil and true or valEnableJustIntonation,
+        intensidad = 100,
+        preset = 0,
+        valHumanizacion = 100,
+        valRegistro = 100,
+        valFonema = 100
     }
     guardarConfiguracionUsuario(cfg)
 
-    local langIdx                   = cfg.idiomaUI
+    -- Mapear variables para compatibilidad con el backend
+    local modoOperacion       = cfg.modo
+    local presetIndex         = cfg.preset
+    local valIntensidadVal    = cfg.intensidad
+    local factorIntensidad    = valIntensidadVal / 100.0
+    local densityChoice       = 0
+    local modoRitmoIdx        = 0
+    local modoMelodiaIdx      = 0
+    local escalaIdx           = valEscalaMelodica:getValue()
+    local tonicaIdx           = valTonica:getValue()
+    local autoDetectKey       = valAutoDetectKey:getValue()
+    local modoArmoniaIdx      = cfg.modoArmonia
+    local presetCoralIdx      = cfg.presetCoral
+    local antiFaseMs          = cfg.antiFaseMs
+    local antiFaseCents       = cfg.antiFaseCents
+    local especieContrapuntoIdx = 0
+    local progresionAcordesIdx  = 0
+    local ritmoAcordesIdx       = 0
+    local activarVocalModes   = true
+    local activarDetune       = true
+    local activarExpPad       = true
+    local activarSmartVibrato = true
+    local mergeMode           = false
+    local limpiarPrevios      = true
+    local adaptarTempo        = true
+    local compensarGanancia   = false
+    local procesarTodosGrupos = false
+    local factorHumanizeMult  = 1.0
+    local factorRegisterMult  = 1.0
+    local factorPhonemeMult   = 1.0
+    local letraRaw            = ""
+    local basePitch           = 60
+    local durationIndex       = 1
+    local targetNotesMode     = 0
+    local armoniaIntervalosCustom = cfg.armoniaIntervalosCustom
+    local rangoNotaMin        = 48
+    local rangoNotaMax        = 72
+    local enableJustIntonation = cfg.enableJustIntonation
+    local vistaSeccion        = 2
+local langIdx                   = cfg.idiomaUI or 0
     local tr                        = I18N_DATA[langIdx] or I18N_DATA[0]
 
     local modoOperacion       = cfg.modo
@@ -789,7 +549,7 @@ function ejecutarOperacionPrincipal()
 
     -- Confirmación pre-ejecución
     local nomNota, octNota = obtenerNombreNotaMidi(basePitch)
-    local nomPreset = tr.presetChoices[presetIndex + 1] or tr.presetChoices[1]
+    local nomPreset = tr.presetChoices and (tr.presetChoices[presetIndex + 1] or tr.presetChoices[1]) or "Estándar"
     local confirmMsg = ""
 
     if modoOperacion == 0 then
@@ -1031,7 +791,7 @@ function ejecutarOperacionPrincipal()
             local stepBlick = math.floor(SV.QUARTER * factorDur)
             local reproductor = SV:getPlayback()
 
-            if targetNotesMode == 2 then
+            if targetNotesMode == 1 then
                 -- Reemplazar letra y pitch en las notas seleccionadas actuales
                 local seleccion = editorPrincipal:getSelection()
                 if seleccion:hasSelectedNotes() then
@@ -1095,10 +855,8 @@ function ejecutarOperacionPrincipal()
                     return
                 end
             else
-                -- Crear nuevas notas desde el final de la última nota (evita solapamiento) o playhead
-                local maxEndBlick = obtenerFinUltimaNotaEnPista(pistaActual)
-                local startBlick = (targetNotesMode == 0) and math.max(reproductor:getPlayhead(), maxEndBlick) or reproductor:getPlayhead()
-                notasObjetivo = generarNotasDesdeTexto(letraRaw, basePitch, stepBlick, modoMelodiaIdx, escalaIdx, modoRitmoIdx, langIdx, noteGroup, reproductor, rangoNotaMin, rangoNotaMax, timeAxis, nil, nil, false, startBlick)
+                -- Crear nuevas notas desde el playhead
+                notasObjetivo = generarNotasDesdeTexto(letraRaw, basePitch, stepBlick, modoMelodiaIdx, escalaIdx, modoRitmoIdx, langIdx, noteGroup, reproductor, rangoNotaMin, rangoNotaMax)
                 if #notasObjetivo == 0 then
                     SV:showMessageBox(tr.errNoSyllablesTitle, tr.errNoSyllablesMsg)
                     

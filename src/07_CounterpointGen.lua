@@ -1,5 +1,5 @@
 -- ============================================================================
--- MÓDULO 7: GENERADOR DE CONTRAMELODÍA Y CONTRAPUNTO ALGORÍTMICO (0 GC ALLOC)
+-- MÓDULO 7: GENERADOR DE CONTRAMELODÍA Y CONTRAPUNTO ALGORÍTMICO (5 ESPECIES FUXIANAS)
 -- ============================================================================
 
 --- Intervalos consonantes en semitonos (3ra menor/mayor, 5ta justa, 6ta menor/mayor, 8va)
@@ -135,16 +135,30 @@ local function generarPistaContrapunto(proyecto, pistaBase, groupRefBase, especi
     table.sort(notasBase, function(a, b) return a:getOnset() < b:getOnset() end)
 
     local nuevaPista = SV:create("Track")
-    local nombreEspecie = { [0] = "1ra Especie (1:1)", [1] = "2da Especie (2:1)", [2] = "3ra Especie (4:1)", [3] = "Libre (Rítmico)" }
+    local nombreEspecie = {
+        [0] = "1ra Especie (1:1)",
+        [1] = "2da Especie (2:1)",
+        [2] = "3ra Especie (4:1)",
+        [3] = "4ta Especie (Síncopas)",
+        [4] = "5ta Especie (Florido)",
+        [5] = "Libre (Rítmico)"
+    }
     nuevaPista:setName(pistaBase:getName() .. " - Contramelodía " .. (nombreEspecie[especieIdx] or ""))
 
     proyecto:addTrack(nuevaPista)
+
+    -- Obtener offset y rango visual del grupo guía original
+    local sourceOffset = groupRefBase:getTimeOffset()
+    local sourceOnset  = groupRefBase:getOnset()
+    local sourceDur    = groupRefBase:getDuration()
 
     -- Crear NoteGroup y NoteGroupReference con el flujo correcto de la API
     local nuevoGroupRef = SV:create("NoteGroup")
     proyecto:addNoteGroup(nuevoGroupRef)
     local mainRef = SV:create("NoteGroupReference")
     mainRef:setTarget(nuevoGroupRef)
+    mainRef:setTimeOffset(sourceOffset)
+    mainRef:setTimeRange(sourceOnset, sourceDur)
     nuevaPista:addGroupReference(mainRef)
 
     local tensionParam  = nuevoGroupRef:getParameter("tension")
@@ -157,6 +171,7 @@ local function generarPistaContrapunto(proyecto, pistaBase, groupRefBase, especi
     local maxPitchRegistrado = nil
     local preferenciaArriba = true -- Alternable o configurable para evitar monotonía de dirección
     local notasCreadas = 0
+    local pitchSincopaRetenido = nil
 
     for i = 1, totalNotas do
         local notaCantus = notasBase[i]
@@ -230,8 +245,8 @@ local function generarPistaContrapunto(proyecto, pistaBase, groupRefBase, especi
                 pitchCantusPrev = pitchCantus
                 pitchContraPrev = pitchContra
             end
-        else
-            -- 3ra Especie / Libre: 4 notas por nota base (4:1) o patrón ornamental
+        elseif especieIdx == 2 then
+            -- 3ra Especie: 4 notas por nota base (4:1)
             local durQuarter = math.floor(duration / 4)
             if durQuarter >= math.floor(SV.QUARTER / 16) then
                 local pitchCurr = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
@@ -270,6 +285,129 @@ local function generarPistaContrapunto(proyecto, pistaBase, groupRefBase, especi
                 pitchCantusPrev = pitchCantus
                 pitchContraPrev = pitchContra
             end
+        elseif especieIdx == 3 then
+            -- 4ta Especie: Síncopas / Retardos (Suspensiones ligadas que resuelven descendentemente)
+            local durHalf = math.floor(duration / 2)
+            if durHalf >= math.floor(SV.QUARTER / 8) then
+                local pitchPreparacion = pitchSincopaRetenido or seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                -- Retardo disonante/consonante en tiempo fuerte que resuelve 1 grado abajo paso a paso
+                local pitchResolucion = transponerPorGradosEscala(pitchPreparacion, -1, tonica, escalaIndices)
+
+                local notaRetardo = SV:create("Note")
+                notaRetardo:setTimeRange(onset, durHalf)
+                notaRetardo:setPitch(pitchPreparacion)
+                notaRetardo:setLyrics("so")
+
+                local notaResolucion = SV:create("Note")
+                notaResolucion:setTimeRange(onset + durHalf, duration - durHalf)
+                notaResolucion:setPitch(pitchResolucion)
+                notaResolucion:setLyrics("la")
+
+                nuevoGroupRef:addNote(notaRetardo)
+                nuevoGroupRef:addNote(notaResolucion)
+                notasCreadas = notasCreadas + 2
+
+                pitchSincopaRetenido = pitchResolucion
+                pitchContraAntePrev = pitchPreparacion
+                pitchCantusPrev = pitchCantus
+                pitchContraPrev = pitchResolucion
+            else
+                local pitchContra = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                local nuevaNota = SV:create("Note")
+                nuevaNota:setTimeRange(onset, duration)
+                nuevaNota:setPitch(pitchContra)
+                nuevaNota:setLyrics("lu")
+                nuevoGroupRef:addNote(nuevaNota)
+                notasCreadas = notasCreadas + 1
+
+                pitchCantusPrev = pitchCantus
+                pitchContraPrev = pitchContra
+            end
+        elseif especieIdx == 4 then
+            -- 5ta Especie: Contrapunto Florido / Mixto (Mezcla ornamental de especies con síncopas y bordaduras)
+            local patronFlorido = (i % 3)
+            if patronFlorido == 0 then
+                -- Figura rítmica de 3ra especie con bordadura ornamental (4:1)
+                local durQ = math.floor(duration / 4)
+                if durQ >= math.floor(SV.QUARTER / 16) then
+                    local pBase = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                    local deltasFlorido = { 0, 1, -1, 0 }
+                    for q = 0, 3 do
+                        local nO = onset + q * durQ
+                        local nD = (q == 3) and (duration - 3 * durQ) or durQ
+                        local pFlor = transponerPorGradosEscala(pBase, deltasFlorido[q + 1], tonica, escalaIndices)
+                        local nSub = SV:create("Note")
+                        nSub:setTimeRange(nO, nD)
+                        nSub:setPitch(pFlor)
+                        nSub:setLyrics((q % 2 == 0) and "flo" or "ri")
+                        nuevoGroupRef:addNote(nSub)
+                        notasCreadas = notasCreadas + 1
+                    end
+                    pitchContraPrev = pBase
+                else
+                    local pContra = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                    local nF = SV:create("Note")
+                    nF:setTimeRange(onset, duration)
+                    nF:setPitch(pContra)
+                    nF:setLyrics("flo")
+                    nuevoGroupRef:addNote(nF)
+                    notasCreadas = notasCreadas + 1
+                    pitchContraPrev = pContra
+                end
+            elseif patronFlorido == 1 then
+                -- Síncopa con retardo ligado de 4ta especie (2:1)
+                local durH = math.floor(duration / 2)
+                local pPre = pitchContraPrev or seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                local pRes = transponerPorGradosEscala(pPre, -1, tonica, escalaIndices)
+                local n1 = SV:create("Note")
+                n1:setTimeRange(onset, durH)
+                n1:setPitch(pPre)
+                n1:setLyrics("syn")
+                local n2 = SV:create("Note")
+                n2:setTimeRange(onset + durH, duration - durH)
+                n2:setPitch(pRes)
+                n2:setLyrics("co")
+                nuevoGroupRef:addNote(n1)
+                nuevoGroupRef:addNote(n2)
+                notasCreadas = notasCreadas + 2
+                pitchContraPrev = pRes
+            else
+                -- Blanca con salto consonante y resolución (2da Especie 2:1)
+                local durH = math.floor(duration / 2)
+                local pC1 = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+                local pC2 = transponerPorGradosEscala(pC1, 2, tonica, escalaIndices)
+                local n1 = SV:create("Note")
+                n1:setTimeRange(onset, durH)
+                n1:setPitch(pC1)
+                n1:setLyrics("me")
+                local n2 = SV:create("Note")
+                n2:setTimeRange(onset + durH, duration - durH)
+                n2:setPitch(pC2)
+                n2:setLyrics("los")
+                nuevoGroupRef:addNote(n1)
+                nuevoGroupRef:addNote(n2)
+                notasCreadas = notasCreadas + 2
+                pitchContraPrev = pC2
+            end
+            pitchCantusPrev = pitchCantus
+        else
+            -- Contrapunto Libre (Rítmico / Improv)
+            local pitchContra = seleccionarPitchContrapunto(pitchCantus, pitchCantusPrev, pitchContraPrev, pitchContraAntePrev, tonica, escalaIndices, preferenciaArriba, maxPitchRegistrado)
+            local nuevaNota = SV:create("Note")
+            nuevaNota:setTimeRange(onset, duration)
+            nuevaNota:setPitch(pitchContra)
+            nuevaNota:setLyrics("lu")
+            nuevoGroupRef:addNote(nuevaNota)
+            notasCreadas = notasCreadas + 1
+
+            if pitchContraPrev then
+                pitchContraAntePrev = pitchContraPrev
+            end
+            if not maxPitchRegistrado or pitchContra > maxPitchRegistrado then
+                maxPitchRegistrado = pitchContra
+            end
+            pitchCantusPrev = pitchCantus
+            pitchContraPrev = pitchContra
         end
     end
 
