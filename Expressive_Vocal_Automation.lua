@@ -910,7 +910,7 @@ local function analizarProsodiaSilaba(token, idiomaIdx, indiceNota, totalCantada
         multDurProsodico = 1.00 -- Tempo moraico constante en Japonés
     end
 
-    return deltaPitchProsodico, multDurProsodico
+    return deltaPitchProsodico, multDurProsodico, esTonica
 end
 
 local VOCALES_ABIERTAS = {
@@ -1587,7 +1587,7 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
             local aplicarChopsFX = (soloFonemas == true) or esFonemaExplicito
 
             -- Analizar prosodia por idioma
-            local deltaPitchProsodico, multDurProsodico = analizarProsodiaSilaba(token, idiomaIdx, indiceNota, totalCantadas, esPregunta, esExclamacion)
+            local deltaPitchProsodico, multDurProsodico, esTonica = analizarProsodiaSilaba(token, idiomaIdx, indiceNota, totalCantadas, esPregunta, esExclamacion)
 
             -- Modulador Rítmico de Duración (optimizado para canto fluido humano)
             local multRitmo = 1.0
@@ -1755,6 +1755,24 @@ local function generarNotasDesdeTexto(letraRaw, basePitch, stepBlickBase, modoMe
             nuevaNota:setLyrics(letraLimpia)
             if esFonemaExplicito then
                 nuevaNota:setPhonemes(fonemasLimpios)
+            end
+
+            if esTonica and idiomaIdx == 0 then
+                -- Prosodia RAE de tildes (+20 cents de pitch y +15% de tensión en la nota)
+                local pitchDelta = noteGroup:getParameter("pitchDelta")
+                if pitchDelta then
+                    pitchDelta:remove(currentBlick, currentBlick + activeDurBlick)
+                    pitchDelta:add(currentBlick, 20.0)
+                    pitchDelta:add(currentBlick + activeDurBlick - 1, 20.0)
+                    pitchDelta:add(currentBlick + activeDurBlick, 0.0)
+                end
+                local tension = noteGroup:getParameter("tension")
+                if tension then
+                    tension:remove(currentBlick, currentBlick + activeDurBlick)
+                    tension:add(currentBlick, 0.15)
+                    tension:add(currentBlick + activeDurBlick - 1, 0.15)
+                    tension:add(currentBlick + activeDurBlick, 0.0)
+                end
             end
 
             noteGroup:addNote(nuevaNota)
